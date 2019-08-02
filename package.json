@@ -1,0 +1,255 @@
+{
+    "name": "zosexplorer",
+    "displayName": "Explorer for z/OS",
+    "description": "Explorer for Mainframe",
+    "version": "0.0.1",
+    "publisher": "Broadcom",
+    "license": "EPL-2.0",
+    "engines": {
+        "vscode": "^1.32.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "icon": "resources/logo.png",
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "zosexplorer.refreshConnection",
+                "title": "Refresh",
+                "iconClass": "refresh",
+                "icon": {
+                    "light": "resources/light/refresh.svg",
+                    "dark": "resources/dark/refresh.svg"
+                }
+            },
+            {
+                "command": "zosexplorer.createConnection",
+                "title": "Create Connection",
+                "icon": {
+                    "light": "resources/light/add.svg",
+                    "dark": "resources/dark/add.svg"
+                }
+            },
+            {
+                "command": "zosexplorer.editConnection",
+                "title": "Edit Connection",
+                "icon": {
+                    "light": "resources/light/edit.svg",
+                    "dark": "resources/dark/edit.svg"
+                }
+            },
+            {
+                "command": "zosexplorer.deleteConnection",
+                "title": "Delete Connection",
+                "icon": {
+                    "light": "resources/light/delete.svg",
+                    "dark": "resources/dark/delete.svg"
+                }
+            },
+            {
+                "command": "zosexplorer.createFilter",
+                "title": "Create Filter",
+                "icon": {
+                    "light": "resources/light/add.svg",
+                    "dark": "resources/dark/add.svg"
+                }
+            },
+            {
+                "command": "zosexplorer.deleteFilter",
+                "title": "Delete Filter",
+                "icon": {
+                    "light": "resources/light/delete.svg",
+                    "dark": "resources/dark/delete.svg"
+                }
+            },
+            {
+                "command": "zosexplorer.editFilter",
+                "title": "Edit Filter",
+                "icon": {
+                    "light": "resources/light/edit.svg",
+                    "dark": "resources/dark/edit.svg"
+                }
+            },
+            {
+                "command": "zosexplorer.editMember",
+                "title": "Edit Member"
+            },
+            {
+                "command": "zosexplorer.deleteMember",
+                "title": "Delete Member"
+            },
+            {
+                "command": "zosexplorer.browseMember",
+                "title": "Browse Member"
+            },
+            {
+                "command": "zosexplorer.copyMember",
+                "title": "Copy"
+            },
+            {
+                "command": "zosexplorer.pasteMember",
+                "title": "Paste"
+            },
+            {
+                "command": "zosexplorer.createMember",
+                "title": "Create Member"
+            },
+            {
+                "command": "zosexplorer.dataset.allocateLike",
+                "title": "Allocate Like"
+            }
+        ],
+        "menus": {
+            "view/item/context": [
+                {
+                    "command": "zosexplorer.browseMember",
+                    "when": "view == zosexplorer && viewItem == member"
+                },
+                {
+                    "command": "zosexplorer.editMember",
+                    "when": "view == zosexplorer && viewItem == member"
+                },
+                {
+                    "command": "zosexplorer.deleteMember",
+                    "when": "view == zosexplorer && viewItem == member"
+                },
+                {
+                    "command": "zosexplorer.refreshConnection",
+                    "when": "view == zosexplorer && viewItem == host",
+                    "group": "inline"
+                },
+                {
+                    "command": "zosexplorer.editConnection",
+                    "when": "view == zosexplorer && viewItem == host",
+                    "group": "inline"
+                },
+                {
+                    "command": "zosexplorer.deleteConnection",
+                    "when": "view == zosexplorer && viewItem == host",
+                    "group": "inline"
+                },
+                {
+                    "command": "zosexplorer.createFilter",
+                    "when": "view == zosexplorer && viewItem == datasetsRoot",
+                    "group": "inline"
+                },
+                {
+                    "command": "zosexplorer.deleteFilter",
+                    "when": "view == zosexplorer && viewItem == datasetsFilter",
+                    "group": "inline"
+                },
+                {
+                    "command": "zosexplorer.editFilter",
+                    "when": "view == zosexplorer && viewItem == datasetsFilter",
+                    "group": "inline"
+                },
+                {
+                    "command": "zosexplorer.copyMember",
+                    "when": "view == zosexplorer && viewItem == member",
+                    "group": "9_cutcopypaste"
+                },
+                {
+                    "command": "zosexplorer.pasteMember",
+                    "when": "view == zosexplorer && viewItem =~ /(dataset_PO|dataset_PO_E)/",
+                    "group": "9_cutcopypaste"
+                },
+                {
+                    "command": "zosexplorer.createMember",
+                    "when": "view == zosexplorer && viewItem =~ /(dataset_PO|dataset_PO_E)/"
+                },
+                {
+                    "command": "zosexplorer.dataset.allocateLike",
+                    "when": "view == zosexplorer && viewItem =~ /(dataset_PO|dataset_PS|dataset_PO_E)/"
+                }
+            ]
+        },
+        "configuration": {
+            "title": "Explorer for z/OS",
+            "properties": {
+                "zos.hosts": {
+                    "type": "array",
+                    "title": "Host List",
+                    "items": {
+                        "type": "object",
+                        "title": "Host Configuration",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Connection settings name"
+                            },
+                            "url": {
+                                "type": "string",
+                                "description": "Connection url"
+                            },
+                            "username": {
+                                "type": "string",
+                                "description": "Connection User name"
+                            },
+                            "filters": {
+                                "type": "array",
+                                "description": "List of connection's filters",
+                                "items": {
+                                    "type": "object",
+                                    "title": "Filter",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "description": "Filter settings name"
+                                        },
+                                        "value": {
+                                            "type": "string",
+                                            "description": "Filter value"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "description": "zOS Hosts Configuration"
+                }
+            }
+        },
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "zos-container",
+                    "title": "Explorer for z/OS",
+                    "icon": "resources/zowe.svg"
+                }
+            ]
+        },
+        "views": {
+            "zos-container": [
+                {
+                    "id": "zosexplorer",
+                    "name": "Explorer for z/OS"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^2.2.42",
+        "@types/node": "^10.14.6",
+        "@types/request": "^2.48.1",
+        "sinon": "^7.3.2",
+        "tslint": "^5.16.0",
+        "tslint-sonarts": "^1.9.0",
+        "typescript": "^3.4.5",
+        "vscode": "^1.1.33"
+    },
+    "dependencies": {
+        "request": "^2.88.0"
+    }
+}
