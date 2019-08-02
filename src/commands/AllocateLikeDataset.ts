@@ -34,7 +34,7 @@ export async function allocateLikeDataset(
     mvsDataProvider: MVSDataProvider,
     arg: any,
 ) {
-    if (isDatasetTypeSupported(arg.dataset.dataSetOrganization)) {
+    if (!isDatasetTypeSupported(arg.dataset.dataSetOrganization)) {
         vscode.window.showErrorMessage(
             `Dataset Creation Failed: "Allocate Like" option is not supported for ${
                 arg.dataset.dataSetOrganization
@@ -42,6 +42,15 @@ export async function allocateLikeDataset(
         );
         return false;
     }
+    if (!isDatasetAllocationUnitSupported(arg.dataset.allocationUnit)) {
+        vscode.window.showErrorMessage(
+            `Dataset Creation Failed: "Allocate Like" option is not supported for ${
+                arg.dataset.allocationUnit
+            } dataset allocation unit. z/OS MF connector only supports allocation unit type of track and cylinder`,
+        );
+        return false;
+    }
+
     const datasetName: string | undefined = await askForDatasetName();
     if (!datasetName) {
         return false;
@@ -84,8 +93,11 @@ async function doAllocate(
 }
 
 function isDatasetTypeSupported(organizationType: string): boolean {
-    const supportedDatasetOrganization: string[] = ["PO", "PS", "PO_E"];
-    return !supportedDatasetOrganization.includes(organizationType);
+    return ["PO", "PS", "PO_E"].includes(organizationType);
+}
+
+function isDatasetAllocationUnitSupported(allocationUnit: string) {
+    return ["TRACK", "CYLINDER"].includes(allocationUnit);
 }
 
 /**
