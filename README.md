@@ -1,33 +1,31 @@
-# Explorer for z/OS extension for VS Code
+# Explorer for z/OS Extension
 
-z/OS Explorer for Eclipse Che4z allows you to remotely view and edit the content of physical sequential files and partitioned data sets within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax highlighting for COBOL text by installing the Eclipse Che4z Language Server Protocol.
+Eclipse Che4z Explorer for z/OS allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the Eclipse Che4z Language Server Protocol.
 
-## Contents
+## **Contents**
 
-- Use Cases
-- Prerequisites
-- Configuration and Usage Tips
-- User Guide
-	- Hosts
-	- Filters
-	- Actions
+- [**Use Cases**](#use-cases)
+- [**Prerequisites**](#prerequisites)
+- [**User Guide**](#user-guide)
+	- [**Hosts**](#hosts)
+	- [**Filters**](#filters)
+	- [**Actions**](#actions)
+	- [**Syntax Awareness**](#syntax-awareness)
 	
 ## Use Cases
 
-- As a software engineer, you can use z/OS Explorer to browse and edit mainframe data sets and PDS members. You can also copy and delete PDS members and allocate data sets using the parameters of an existing data set.
+As a modern application developer, you can: 
 
-- You can also create customizable filters including wildcards to produce lists of data sets that match the filter criteria.
+- Use Explorer for z/OS to browse and edit mainframe data sets.
+- Copy and delete PDS members and allocate data sets using the parameters of an existing data set.
+- Create customizable filters including wildcards to produce lists of data sets that match the filter criteria.
 
 ## Prerequisites
 
-Prior to installing the Visual Studio Code extension for z/OS Explorer, ensure that you meet the following prerequisites:
+Before you install the extension for Explorer for z/OS, ensure that you meet the following prerequisites:
 
 - Access to Mainframe
-- Access to Zowe
-
-## Configuration and Usage Tips
-
-- Delete any filters when no longer required. Filters are saved automatically and so the list can become hard to manage.
+- Access to [Zowe](https://www.zowe.org)
 
 ## User Guide
 
@@ -37,12 +35,12 @@ To be able to work with z/OS data sets, a host connection to z/OS is required.
 
 Follow these steps:
 
-1. In z/OS Explorer, click Add connection.
+1. In Explorer for z/OS, click Add connection.
 2. Fill in the following fields:
-	- URL (host:port)
-	- Connection name (identifies the mainframe instance)
+	- **URL** (in the format http://host:port or https://host:port)
+	- **Host name** (identifies the mainframe instance)
 		> **Note:** Ensure the connection name is unique
-	- Mainframe credentials (username and password)
+	- Mainframe credentials (**username** and **password**)
 		> **Note:** The password is only remembered for the session the IDE is opened in. After you restart the IDE you need to provide your password again.
 3. Click Save to validate the connection. If the connection is unreachable, or the credentials are invalid, an error message displays.
 
@@ -56,17 +54,21 @@ The filter creates a new tree which lists all data sets that match the specified
 
 ### Actions
 
-You can perform the following actions in z/OS Explorer:
+You can perform the following actions in Explorer for z/OS:
 
 - **Browse**
-	> Displays the content of a data set or member. You can edit the content but cannot save it. Syntax highlighting for JCL and COBOL files is supported as long as you have an appropriate plugin.
+	> Displays the content of a PDS member. You can edit the content but cannot save it.
 - **Edit**
-	> Displays the content of a data set or member. You can edit the content and save it. Syntax highlighting for JCL and COBOL files is supported as long as you have an appropriate plugin.
+	> Displays the content of a PDS member. You can edit the content and save it on the mainframe by selecting **File** - **Save** or **CTRL+S**. To save the file locally, select **File** - **Save As**.
 - **Create Member**
 	> Creates a new member of a PDS.
-- **Allocate**
-	> Allocates a PDS or physical sequential file using the parameters of an existing data set as a model.
+- **Allocate Like**
+	> Allocates a PDS or physical sequential file using the parameters of an existing data set as a model. The parameters cannot be changed. This functionality is only supported for sequential files that use tracks (TRK) or cylinders (CYL) as the storage unit.
 - **Copy**
 	> Copies members of a PDS to the same data set or a different data set, on the same host or a different host.
 - **Delete**
 	> Deletes a member of a PDS.
+	
+### Syntax Awareness
+
+While browsing and editing PDS members, syntax awareness for JCL and COBOL files is supported as long as you have an appropriate plugin. The PDS must have the extension .JCL (for a JCL) or .COBOL (for COBOL) for syntax awareness to activate.
