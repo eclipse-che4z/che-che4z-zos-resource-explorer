@@ -33,7 +33,7 @@ https://www.eclipse.org/projects/handbook/#resources-commit
 To build project you need to install npm.
 
 Checkout source code of Explorer for z/OS:
-$ git clone https://github.com/eclipse/che-che4z-explorer-for-zos
+$ git clone https://github.com/eclipse/che-che4z-explorer-for-zos.git
 
 To build project run:
 $ npm install && npm run compile
