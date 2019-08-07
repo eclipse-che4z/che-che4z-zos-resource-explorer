@@ -2,7 +2,7 @@
 
 z/OS Explorer for Eclipse Che4z allows you to remotely view and edit the content of physical sequential files and partitioned data sets within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax highlighting for COBOL text by installing the Eclipse Che4z Language Server Protocol.
 
-## Contents
+## Contents 
 
 - Use Cases
 - Prerequisites
