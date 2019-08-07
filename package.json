@@ -2,7 +2,7 @@
     "name": "zosexplorer",
     "displayName": "Explorer for z/OS",
     "description": "Explorer for Mainframe",
-    "version": "0.0.1",
+    "version": "0.8.0",
     "publisher": "BroadcomMFD",
     "license": "EPL-2.0",
     "engines": {
@@ -11,6 +11,13 @@
     "categories": [
         "Other"
     ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/eclipse/che-che4z-explorer-for-zos.git"
+    },
+    "bugs": {
+        "url": "https://github.com/eclipse/che-che4z-explorer-for-zos/issues"
+    },
     "activationEvents": [
         "*"
     ],
