@@ -3,7 +3,7 @@
     "displayName": "Explorer for z/OS",
     "description": "Explorer for Mainframe",
     "version": "0.0.1",
-    "publisher": "Broadcom",
+    "publisher": "BroadcomMFD",
     "license": "EPL-2.0",
     "engines": {
         "vscode": "^1.32.0"
