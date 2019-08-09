@@ -176,6 +176,9 @@ export class DatasetEditManager {
         return false;
     }
     private closeDocument(closedDocument: vscode.TextDocument) {
+        if (!closedDocument.isClosed) {
+            return;
+        }
         let fileName: string;
         // Bug in vscode? workaround
         if (closedDocument.uri.scheme === "git") {
