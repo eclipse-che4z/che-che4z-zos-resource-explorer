@@ -45,7 +45,7 @@ export class DatasetEditManager {
     }
     private editedMemList = {};
 
-    constructor(private rest: ZoweRestClient) {}
+    constructor(private rest: ZoweRestClient) { }
 
     public register(subscriptions: vscode.Disposable[], dataProvider: MVSDataProvider) {
         subscriptions.push(
@@ -90,8 +90,11 @@ export class DatasetEditManager {
                 this.unmarkEditedMember(DatasetEditManager.processFilePath(filePath));
                 return true;
             } catch (error) {
-                const errorText: string = error.error ? error.error : error;
-                await vscode.window.showErrorMessage(errorText);
+                let errorText: string = error.error ? error.error : error;
+                if (error && error.message === "fwrite() error") {
+                    errorText = "Dataset size exceeded. INTERNAL_SERVER_ERROR_500";
+                }
+                await vscode.window.showErrorMessage(errorText + "!");
             }
         }
         return false;
