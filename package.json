@@ -173,6 +173,13 @@
                     "command": "zosexplorer.dataset.allocateLike",
                     "when": "view == zosexplorer && viewItem =~ /(dataset_PO|dataset_PS|dataset_PO_E)/"
                 }
+            ],
+            "view/title": [
+                {
+                    "command": "zosexplorer.createConnection",
+                    "when": "view == zosexplorer",
+                    "group": "navigation"
+                }
             ]
         },
         "configuration": {
