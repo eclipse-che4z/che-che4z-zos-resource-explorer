@@ -236,7 +236,12 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             return result;
         } catch (error) {
-            return this.processZoweError(error, host);
+            let message = error.body;
+            if (error.message && error.message ===
+                "ServletDispatcher failed - received TSO Prompt when expecting TsoServletResponse") {
+                message = "Action failed: Retrieve archived datasets and retry.";
+            }
+            return this.processZoweError(message, host);
         }
     }
 
