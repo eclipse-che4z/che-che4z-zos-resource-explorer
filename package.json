@@ -118,6 +118,10 @@
                     "when": "view == zosexplorer && viewItem == member"
                 },
                 {
+                    "command": "zosexplorer.browseMember",
+                    "when": "view == zosexplorer && viewItem == dataset_PS"
+                },
+                {
                     "command": "zosexplorer.editMember",
                     "when": "view == zosexplorer && viewItem == member"
                 },
