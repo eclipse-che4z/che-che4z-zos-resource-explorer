@@ -90,11 +90,10 @@ export class DatasetEditManager {
                 this.unmarkEditedMember(DatasetEditManager.processFilePath(filePath));
                 return true;
             } catch (error) {
-                let errorText: string = error.error ? error.error : error;
-                if (error && error.message === "fwrite() error") {
-                    errorText = "Action failed: Dataset size exceeded. INTERNAL_SERVER_ERROR_500";
+                if (error.message === "fwrite() error") {
+                    await vscode.window.showErrorMessage("Action failed: Data set size exceeded or file corrupted.");
                 }
-                await vscode.window.showErrorMessage(errorText + "!");
+                await vscode.window.showErrorMessage(error.toString());
             }
         }
         return false;
