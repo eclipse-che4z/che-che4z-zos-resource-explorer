@@ -1,6 +1,6 @@
 # Explorer for z/OS Extension
 
-Eclipse Che4z Explorer for z/OS allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the Eclipse Che4z Language Server Protocol.
+Explorer for z/OS allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the Eclipse Che4z Language Server Protocol.
 
 ## **Contents**
 
