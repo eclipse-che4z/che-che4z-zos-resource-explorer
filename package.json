@@ -261,11 +261,9 @@
     },
     "devDependencies": {
         "@types/jest": "^24.0.18",
-        "@types/mocha": "^2.2.42",
         "@types/node": "^10.14.6",
         "@types/request": "^2.48.1",
         "jest": "^24.9.0",
-        "sinon": "^7.3.2",
         "ts-jest": "^24.0.2",
         "ts-loader": "^6.0.4",
         "tslint": "^5.16.0",

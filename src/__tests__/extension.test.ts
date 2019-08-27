@@ -20,12 +20,20 @@ import { ZoweRestClient } from "../service/ZoweRestClient";
 import { ZNode } from "../ui/tree/DatasetTreeModel";
 
 describe("DatasetCache", () => {
-    it("should return cacheed dataset", () => {
+    it("should return cached objec", () => {
         const cache: DatasetCache = new DatasetCache();
         const path = "element.id";
         const node: ZNode = new ZNode(path);
         cache.cache(path + PATH_SEPARATOR, node);
         expect(cache.loadFromCache(path)).toEqual([node]);
+    });
+    it("should not return cached object after invalidate", () => {
+        const cache: DatasetCache = new DatasetCache();
+        const path = "element.id";
+        const node: ZNode = new ZNode(path);
+        cache.cache(path + PATH_SEPARATOR, node);
+        cache.invalidate([]);
+        expect(cache.loadFromCache(path)).toBeUndefined();
     });
 });
 
