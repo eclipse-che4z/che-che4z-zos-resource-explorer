@@ -38,6 +38,7 @@ export class DatasetCache {
         this._treeState[path] = state;
     }
 
+    // TODO: chack if its possible to remove path from arguments
     public cache(path: string, object: ZNode) {
         this.cached[path] = object;
     }
