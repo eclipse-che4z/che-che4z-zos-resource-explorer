@@ -33,6 +33,7 @@ https://www.eclipse.org/projects/handbook/#resources-commit
 To build project you need to install npm: https://www.npmjs.com/
 
 Checkout source code of Explorer for z/OS reaching the repository at https://github.com/eclipse/che-che4z-explorer-for-zos address.
+* first of all create an issue # detailing the reason of your contribution
 * fork the project
 * then clone or download it
 
@@ -43,7 +44,7 @@ $ npm install && npm run compile
 
 When you finished type the following:
 * $ git add .
-* $ git commit -m "explanation of your work" -s
+* $ git commit -m "explanation of your work and issue# obtained when you create it" -s
 * $ git push
 
 ## Contact
