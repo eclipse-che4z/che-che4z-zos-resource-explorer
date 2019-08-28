@@ -30,14 +30,20 @@ https://www.eclipse.org/projects/handbook/#resources-commit
 
 ## Setting up the Development Environment
 
-To build project you need to install npm.
+To build project you need to install npm: https://www.npmjs.com/
 
-Checkout source code of Explorer for z/OS:
-$ git clone https://github.com/eclipse/che-che4z-explorer-for-zos.git
+Checkout source code of Explorer for z/OS reaching the repository at https://github.com/eclipse/che-che4z-explorer-for-zos address.
+* first of all create an issue # detailing the reason of your contribution
+* fork the project
+* then clone or download it
 
-To build project run:
+Build the project running:
 $ npm install && npm run compile
 
+When you finished type the following:
+* $ git add .
+* $ git commit -m "explanation of your work and issue# obtained when you create it" -s
+* $ git push
 
 ## Contact
 
