@@ -9,7 +9,7 @@ module.exports = {
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "collectCoverage": false,
+    "collectCoverage": true,
     "collectCoverageFrom": [
         "src/**/*.{js,jsx,ts}",
         "resources/**/*.{js,jsx,ts}",

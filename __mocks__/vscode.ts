@@ -132,7 +132,7 @@ export class TreeItem {
 }
 
 export class EventEmitter<T> {
-    public event: Event<T>;
+    public event: undefined;
 }
 
 export interface TextDocumentChangeEvent {
@@ -155,9 +155,17 @@ export namespace workspace {
         readonly index: number;
     }
 
-    export const onDidChangeTextDocument: Event<
-        TextDocumentChangeEvent
-    > = new EventEmitter();
+    export function onDidChangeTextDocument(
+        callback: (event: Event<TextDocumentChangeEvent>) => any,
+    ) {}
+
+    export function onDidCloseTextDocument(
+        callback: (event: Event<TextDocumentChangeEvent>) => any,
+    ) {}
+
+    export function onWillSaveTextDocument(
+        callback: (event: Event<TextDocumentChangeEvent>) => any,
+    ) {}
 
     export interface InputBoxOptions {
         placeholder?: string;
