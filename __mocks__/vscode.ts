@@ -41,6 +41,7 @@ export namespace commands {
     }
     export function executeCommand<T>(_command: string, ...rest: any[]) {
         console.log("Execute command");
+        commandMap[_command](rest);
     }
 }
 
