@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
     const rest: ZoweRestClient = new ZoweRestClient(new DefaultCredentialsService());
     const datasetService: DatasetService = new DatasetService(rest);
     const cache: DatasetCache = new DatasetCache();
-    const datasetEditManager: DatasetEditManager = new DatasetEditManager(rest);
+    const datasetEditManager: DatasetEditManager = new DatasetEditManager(datasetService);
     const mvsDataProvider: MVSDataProvider = new MVSDataProvider(context, datasetEditManager, cache, datasetService);
     const copyPasteService: CopyPasteService = new CopyPasteService(rest, datasetService);
 
