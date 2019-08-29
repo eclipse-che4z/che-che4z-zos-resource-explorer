@@ -84,15 +84,15 @@
             },
             {
                 "command": "zosexplorer.editMember",
-                "title": "Edit Member"
+                "title": "Edit"
             },
             {
                 "command": "zosexplorer.deleteMember",
-                "title": "Delete Member"
+                "title": "Delete"
             },
             {
                 "command": "zosexplorer.browseMember",
-                "title": "Browse Member"
+                "title": "Browse"
             },
             {
                 "command": "zosexplorer.copyMember",
