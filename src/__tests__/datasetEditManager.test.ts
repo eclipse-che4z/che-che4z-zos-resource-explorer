@@ -49,9 +49,10 @@ describe("DatasetEditMember", () => {
     const context: any = {};
     const creds: any = {};
     const rest: ZoweRestClient = new ZoweRestClient(creds);
-    const datasetEditManager: DatasetEditManager = new DatasetEditManager(rest);
-    const cache: DatasetCache = new DatasetCache();
     const datasetService: DatasetService = new DatasetService(rest);
+    const datasetEditManager: DatasetEditManager = new DatasetEditManager(
+        datasetService,
+    );
     it("Should Mark Member as Edited", () => {
         datasetEditManager.register([], context);
         vscode.commands.executeCommand("zosexplorer.editMember", {});

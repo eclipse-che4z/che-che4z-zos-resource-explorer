@@ -20,6 +20,7 @@ import { Connection } from "../model/Connection";
 import { Dataset, Member } from "../model/DSEntities";
 import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
 import { ensureDirectoryExistence, generateTempFileName } from "../utils";
+import { DatasetService } from "./DatasetService";
 import { SettingsFacade } from "./SettingsFacade";
 import { ZoweRestClient } from "./ZoweRestClient";
 
@@ -47,7 +48,7 @@ export class DatasetEditManager {
     }
     private editedMemList = {};
 
-    constructor(private rest: ZoweRestClient) {}
+    constructor(private datasetService: DatasetService) {}
 
     public register(
         subscriptions: vscode.Disposable[],
@@ -183,7 +184,7 @@ export class DatasetEditManager {
         member: Member,
         dataProvider: MVSDataProvider,
     ) {
-        const content = await this.rest.getContent(
+        const content = await this.datasetService.getContent(
             host,
             `${dataset.name}(${member.name})`,
         );
@@ -355,7 +356,7 @@ export class DatasetEditManager {
             );
         }
         await SettingsFacade.requestCredentials(host);
-        await this.rest.putContent(
+        await this.datasetService.putContent(
             host,
             content,
             memberQualifier.datasetName,

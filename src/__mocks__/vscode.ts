@@ -35,12 +35,9 @@ export namespace commands {
         callback: (...args: any[]) => any,
         thisArg?: any,
     ) {
-        console.log("Register command");
         commandMap[command] = callback;
-        console.log("Register command + map: " + commandMap);
     }
     export function executeCommand<T>(_command: string, ...rest: any[]) {
-        console.log("Execute command");
         commandMap[_command](rest);
     }
 }
