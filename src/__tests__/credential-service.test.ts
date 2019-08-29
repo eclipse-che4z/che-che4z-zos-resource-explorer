@@ -16,12 +16,28 @@ import { Connection } from "../model/Connection";
 import { DefaultCredentialsService } from "../service/CredentialsService";
 
 describe("Credentials", () => {
-    it("return a promise with credentials for existing host credentials", async () => {
+    it("Returns a promise with credentials for existing host credentials", async () => {
         const host: Connection = { name: "", url: "", username: "" };
         const service: DefaultCredentialsService = new DefaultCredentialsService();
         const result = await service.requestCredentials(host);
         const expectedResult = {password: "", username: ""};
         expect(result).toEqual(expectedResult);
+    });
+    it("Resets the credentials", () => {
+        const host: Connection = { name: "", url: "", username: "" };
+        const service: DefaultCredentialsService = new DefaultCredentialsService();
+        const mockListener = jest.spyOn(service, "resetPassword");
+        service.resetPassword(host);
+        const callback = mockListener.mock.calls[0][0];
+        expect(callback).toBe(host);
+    });
+    it("Check if show error message works properly", () => {
+        const service: DefaultCredentialsService = new DefaultCredentialsService();
+        const errorMessage = "ErrorMessage";
+        const mockListener = jest.spyOn(service, "showErrorMessage");
+        service.showErrorMessage(errorMessage);
+        const callback = mockListener.mock.calls[0][0];
+        expect(callback).toBe(errorMessage);
     });
 },
  );

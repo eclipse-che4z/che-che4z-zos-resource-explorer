@@ -19,9 +19,12 @@ export class SettingsFacade {
         host: Connection,
     ): Promise<{ username: string; password?: string  }> {
         return {
-            password: host.password,
-            username: host.username,
+            password: "",
+            username: "",
         };
+    }
+    public static  resetPassword(host: Connection): void {
+        host.password = undefined;
     }
     constructor(private creds: any) {
     }
