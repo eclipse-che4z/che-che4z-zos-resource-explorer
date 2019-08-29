@@ -16,6 +16,8 @@ out/
 src/
 .gitignore
 webpack.config.js
+coverage
+jest.config.js
 **/tsconfig.json
 **/tslint.json
 **/*.map
