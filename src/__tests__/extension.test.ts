@@ -11,28 +11,24 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
+jest.mock("../service/ZoweRestClient");
 
-import * as assert from "assert";
-import * as sinon from "sinon";
 import { Connection } from "../model/Connection";
+import { DatasetCache, PATH_SEPARATOR } from "../service/DatasetCache";
 import { DatasetService } from "../service/DatasetService";
 import { ZoweRestClient } from "../service/ZoweRestClient";
+import { ZNode } from "../ui/tree/DatasetTreeModel";
 
-// tslint:disable: only-arrow-functions
-suite("Extension Tests", function() {
+describe("DatasetService", () => {
     const host: Connection = { name: "", url: "", username: "" };
     const filter: string = "";
     const result: string[] = ["M1", "M2", "M3"];
 
-    const restMock = sinon.createStubInstance(ZoweRestClient, {
-        listMembers: sinon
-            .stub()
-            .withArgs(host, filter)
-            .returns(result),
-    });
+    const creds: any = {};
+    const restStub = new ZoweRestClient(creds);
 
-    test("Datasets Service: list dataset members", function() {
-        const datasetService: DatasetService = new DatasetService(restMock);
-        assert.notEqual(datasetService.listMembers(host, filter), result);
+    test("can list dataset members", async () => {
+        const datasetService: DatasetService = new DatasetService(restStub);
+        expect(await datasetService.listMembers(host, filter)).toEqual(result);
     });
 });
