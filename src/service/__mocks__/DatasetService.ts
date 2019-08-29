@@ -11,7 +11,7 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-jest.mock("../service/ZoweRestClient");
+jest.mock("../ZoweRestClient");
 
 import { Connection } from "../../model/Connection";
 import { ZoweRestClient } from "../ZoweRestClient";
