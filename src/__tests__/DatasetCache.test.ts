@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 /*
  * Copyright (c) 2019 Broadcom.
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
@@ -14,7 +12,6 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
->>>>>>> development
 import { Connection } from "../model/Connection";
 import { Dataset, Filter } from "../model/DSEntities";
 import { DatasetCache, PATH_SEPARATOR } from "../service/DatasetCache";
