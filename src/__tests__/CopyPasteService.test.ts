@@ -25,11 +25,17 @@ import { createDummyDataset } from "../utils";
 
 let dataset: Dataset;
 let datasetNode: ZDatasetNode;
-let host: Connection;
-let pathPrefix: string;
-let copyPasteService: CopyPasteService;
+let memberNode: ZMemberNode;
+
 let datasetName: string;
 let memberName: string;
+let host: Connection;
+let pathPrefix: string;
+
+let memberEntity: Member;
+
+let copyPasteService: CopyPasteService;
+let freshCopyPasteService: CopyPasteService;
 
 beforeAll(() => {
     const creds: any = {};
@@ -42,18 +48,19 @@ beforeAll(() => {
     host = { name: "", url: "", username: "" };
     pathPrefix = "PathPrefix";
     copyPasteService = new CopyPasteService(restStub, datasetServiceMocked);
+    freshCopyPasteService = new CopyPasteService(restStub,datasetServiceMocked);
+
+    memberEntity = { name: "Member1" };
+    memberNode = new ZMemberNode(dataset, memberEntity, host, pathPrefix);
 
     datasetName = "TEST.DATASET";
     memberName = "MEM1";
-
 });
 
 describe("Copy member operations", () => {
 
     test("[POSITIVE TEST] Copy operation is available on member node", () => {
-        const memberEntity: Member = { name: "Member1" };
-        const treeMemberNode: ZMemberNode = new ZMemberNode(dataset, memberEntity, host, pathPrefix);
-        expect(copyPasteService.canCopy(treeMemberNode)).toBe(true);
+        expect(copyPasteService.canCopy(memberNode)).toBe(true);
     });
 
     test("[NEGATIVE TEST] Copy operation is not available on dataset node", () => {
@@ -80,11 +87,21 @@ describe("Paste member operations", () => {
         });
     });
 
-    test("Paste operation is not available because user didn't activate copy", () => {
-        expect(2).toBe(2);
+    test("[NEGATIVE TEST] Paste operation is not available because user didn't activate copy", () => {
+        // run paste without having copied member before
+        expect(freshCopyPasteService.canPaste(datasetNode)).toBe(false);
     });
 
-    test("Paste member", () => {
-        expect(2).toBe(2);
+    test("[NEGATIVE TEST] Paste target node is not a dataset", () => {
+
+        expect(copyPasteService.canPaste(memberNode)).toBe(false);
+    });
+
+    test("[POSITIVE TEST] Paste the member from one dataset to another", () => {
+        copyPasteService.paste(host, datasetName).then((arg) => {
+            expect(arg).toBe("SUCCESS!");
+        }).catch((err) => {
+            console.log(err);
+        });
     });
 });

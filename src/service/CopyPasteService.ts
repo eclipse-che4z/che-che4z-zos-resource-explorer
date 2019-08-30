@@ -48,9 +48,7 @@ export class CopyPasteService {
             vscode.window.showErrorMessage("Nothing to paste");
             return false;
         }
-        if (!this.memberName) {
-            return false;
-        }
+
         if (arg.type !== NodeType.DATASET) {
             return false;
         }
