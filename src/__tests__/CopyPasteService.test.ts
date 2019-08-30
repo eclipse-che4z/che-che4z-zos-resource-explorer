@@ -16,7 +16,7 @@ jest.mock("../service/DatasetService");
 jest.mock("../service/CredentialsService");
 
 import { Connection } from "../model/Connection";
-import { Member, Dataset } from "../model/DSEntities";
+import { Dataset, Member } from "../model/DSEntities";
 import { CopyPasteService } from "../service/CopyPasteService";
 import { DatasetService } from "../service/DatasetService";
 import { ZoweRestClient } from "../service/ZoweRestClient";
@@ -54,7 +54,7 @@ beforeAll(() => {
     memberNode = new ZMemberNode(dataset, memberEntity, host, pathPrefix);
 
     datasetName = "TEST.DATASET";
-    memberName = "MEM1";
+    memberName = "MEMBER1";
 });
 
 describe("Copy member operations", () => {
@@ -93,7 +93,6 @@ describe("Paste member operations", () => {
     });
 
     test("[NEGATIVE TEST] Paste target node is not a dataset", () => {
-
         expect(copyPasteService.canPaste(memberNode)).toBe(false);
     });
 
