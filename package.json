@@ -2,8 +2,8 @@
     "name": "zosexplorer",
     "displayName": "Explorer for z/OS",
     "description": "Explorer for Mainframe",
-    "version": "0.0.1",
-    "publisher": "Broadcom",
+    "version": "0.8.0",
+    "publisher": "BroadcomMFD",
     "license": "EPL-2.0",
     "engines": {
         "vscode": "^1.32.0"
@@ -11,11 +11,18 @@
     "categories": [
         "Other"
     ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/eclipse/che-che4z-explorer-for-zos.git"
+    },
+    "bugs": {
+        "url": "https://github.com/eclipse/che-che4z-explorer-for-zos/issues"
+    },
     "activationEvents": [
         "*"
     ],
     "icon": "resources/logo.png",
-    "main": "./out/extension.js",
+    "main": "./dist/extension.js",
     "contributes": {
         "commands": [
             {
@@ -111,6 +118,10 @@
                     "when": "view == zosexplorer && viewItem == member"
                 },
                 {
+                    "command": "zosexplorer.browseMember",
+                    "when": "view == zosexplorer && viewItem == dataset_PS"
+                },
+                {
                     "command": "zosexplorer.editMember",
                     "when": "view == zosexplorer && viewItem == member"
                 },
@@ -165,6 +176,13 @@
                 {
                     "command": "zosexplorer.dataset.allocateLike",
                     "when": "view == zosexplorer && viewItem =~ /(dataset_PO|dataset_PS|dataset_PO_E)/"
+                }
+            ],
+            "view/title": [
+                {
+                    "command": "zosexplorer.createConnection",
+                    "when": "view == zosexplorer",
+                    "group": "navigation"
                 }
             ]
         },
@@ -233,21 +251,27 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run compile",
+        "vscode:prepublish": "webpack --mode production",
+        "webpack": "webpack --mode development",
+        "webpack-dev": "webpack --mode development --watch",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "test": "jest"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.42",
+        "@types/jest": "^24.0.18",
         "@types/node": "^10.14.6",
         "@types/request": "^2.48.1",
-        "sinon": "^7.3.2",
+        "jest": "^24.9.0",
+        "ts-jest": "^24.0.2",
+        "ts-loader": "^6.0.4",
         "tslint": "^5.16.0",
         "tslint-sonarts": "^1.9.0",
         "typescript": "^3.4.5",
-        "vscode": "^1.1.33"
+        "vscode": "^1.1.33",
+        "webpack": "^4.39.2",
+        "webpack-cli": "^3.3.7"
     },
     "dependencies": {
         "request": "^2.88.0"

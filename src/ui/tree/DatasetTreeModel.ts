@@ -26,7 +26,6 @@ export enum NodeType {
     USER_DATASETS = "userDatasets",
     DATASET = "dataset",
     MEMBER = "member",
-    CREATE_CONNECTION = "createConnection",
 }
 
 export class ZNode {

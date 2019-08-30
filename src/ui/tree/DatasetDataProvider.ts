@@ -114,20 +114,12 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             node.collapsibleState = vscode.TreeItemCollapsibleState.None;
         }
-        if (NodeType.CREATE_CONNECTION === element.type) {
-            node.label = "New connection";
-            node.collapsibleState = vscode.TreeItemCollapsibleState.None;
-            node.command = {
-                command: "zosexplorer.createConnection",
-                title: "New connection",
-            };
-        }
         return { ...node, ...element };
     }
     public async getChildren(element?: ZNode): Promise<ZNode[]> {
         if (!element) {
             return new Promise((resolve) => {
-                let hostNodes: ZNode[] = [];
+                const hostNodes: ZNode[] = [];
                 SettingsFacade.listHosts().forEach((host) => {
                     hostNodes.push(new ZHostNode(host));
                 });
@@ -139,9 +131,6 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
                     }
                     return aVar > bVar ? 1 : -1;
                 });
-                const createConnectionNode = new ZNode(NodeType.CREATE_CONNECTION.toString());
-                createConnectionNode.type = NodeType.CREATE_CONNECTION;
-                hostNodes = [createConnectionNode, ...hostNodes];
                 resolve(hostNodes);
             });
         }
@@ -247,7 +236,12 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             return result;
         } catch (error) {
-            return this.processZoweError(error, host);
+            let message = error.body;
+            if (error.message && error.message ===
+                "ServletDispatcher failed - received TSO Prompt when expecting TsoServletResponse") {
+                message = "Cannot list datasets based on current filter. Amend filter to exclude datasets archived by CA Disk.";
+            }
+            return this.processZoweError(message, host);
         }
     }
 

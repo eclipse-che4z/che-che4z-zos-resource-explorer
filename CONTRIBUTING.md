@@ -30,7 +30,7 @@ https://www.eclipse.org/projects/handbook/#resources-commit
 
 ## Setting up the Development Environment
 
-To build the project you need to install npm: https://www.npmjs.com/
+Ensure that you have [npm](https://www.npmjs.com/) installed before proceeding.
 
 To create a contribution, follow these steps:
 
