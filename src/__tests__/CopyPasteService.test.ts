@@ -61,9 +61,6 @@ describe("Copy member operations", () => {
     });
 
     test("[POSITIVE TEST] Member content is stored internally ready for paste operation", () => {
-        const datasetName: string = "TEST.DATASET";
-        const memberName: string = "MEM1";
-
         copyPasteService.copy(host, datasetName, memberName).then(() => {
             expect(copyPasteService.getMemberName()).toBe(memberName);
         }).catch((err) => {
@@ -76,9 +73,6 @@ describe("Copy member operations", () => {
 describe("Paste member operations", () => {
 
     test("[POSITIVE TEST] Paste operation is available on member node", () => {
-        // launch copy functionality to have the content data ready for paste
-
-
         copyPasteService.copy(host, datasetName, memberName).then(() => {
             expect(copyPasteService.canPaste(datasetNode)).toBe(true);
         }).catch((err) => {
@@ -86,7 +80,7 @@ describe("Paste member operations", () => {
         });
     });
 
-    test("Paste operation is not available", () => {
+    test("Paste operation is not available because user didn't activate copy", () => {
         expect(2).toBe(2);
     });
 
