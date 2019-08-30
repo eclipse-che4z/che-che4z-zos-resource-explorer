@@ -16,54 +16,74 @@ jest.mock("../service/DatasetService");
 jest.mock("../service/CredentialsService");
 
 import { Connection } from "../model/Connection";
-import { Member } from "../model/DSEntities";
+import { Member, Dataset } from "../model/DSEntities";
 import { CopyPasteService } from "../service/CopyPasteService";
 import { DatasetService } from "../service/DatasetService";
 import { ZoweRestClient } from "../service/ZoweRestClient";
 import { ZDatasetNode, ZMemberNode } from "../ui/tree/DatasetTreeModel";
 import { createDummyDataset } from "../utils";
 
-describe("Copy member operations", () => {
-    const dataset = createDummyDataset();
-    const host: Connection = { name: "", url: "", username: "" };
+let dataset: Dataset;
+let datasetNode: ZDatasetNode;
+let host: Connection;
+let pathPrefix: string;
+let copyPasteService: CopyPasteService;
+let datasetName: string;
+let memberName: string;
 
-    // create separate method that fullfill these objects
+beforeAll(() => {
     const creds: any = {};
     const restStub = new ZoweRestClient(creds);
     const datasetServiceMocked: DatasetService = new DatasetService(restStub);
 
-    const pathPrefix: string = "PathPrefix";
+    dataset = createDummyDataset();
+    datasetNode = new ZDatasetNode(dataset, host, pathPrefix);
+
+    host = { name: "", url: "", username: "" };
+    pathPrefix = "PathPrefix";
+    copyPasteService = new CopyPasteService(restStub, datasetServiceMocked);
+
+    datasetName = "TEST.DATASET";
+    memberName = "MEM1";
+
+});
+
+describe("Copy member operations", () => {
 
     test("[POSITIVE TEST] Copy operation is available on member node", () => {
-        const memberName: Member = { name: "Member1" };
-        const treeMemberNode: ZMemberNode = new ZMemberNode(dataset, memberName, host, pathPrefix);
-        const copyPasteService: CopyPasteService = new CopyPasteService(restStub, datasetServiceMocked);
-
+        const memberEntity: Member = { name: "Member1" };
+        const treeMemberNode: ZMemberNode = new ZMemberNode(dataset, memberEntity, host, pathPrefix);
         expect(copyPasteService.canCopy(treeMemberNode)).toBe(true);
     });
 
     test("[NEGATIVE TEST] Copy operation is not available on dataset node", () => {
-        const treeDatasetNode: ZDatasetNode = new ZDatasetNode(dataset, host, pathPrefix);
-        const copyPasteService: CopyPasteService = new CopyPasteService(restStub, datasetServiceMocked);
-
-        expect(copyPasteService.canCopy(treeDatasetNode)).toBe(false);
+        expect(copyPasteService.canCopy(datasetNode)).toBe(false);
     });
 
     test("[POSITIVE TEST] Member content is stored internally ready for paste operation", () => {
         const datasetName: string = "TEST.DATASET";
         const memberName: string = "MEM1";
-        const copyPasteService: CopyPasteService = new CopyPasteService(restStub, datasetServiceMocked);
 
         copyPasteService.copy(host, datasetName, memberName).then(() => {
             expect(copyPasteService.getMemberName()).toBe(memberName);
+        }).catch((err) => {
+            console.log(err);
         });
     });
 
 });
 
 describe("Paste member operations", () => {
-    test("Paste operation is available", () => {
-        expect(2).toBe(2);
+
+    test("[POSITIVE TEST] Paste operation is available on member node", () => {
+        // launch copy functionality to have the content data ready for paste
+
+
+        copyPasteService.copy(host, datasetName, memberName).then(() => {
+            expect(copyPasteService.canPaste(datasetNode)).toBe(true);
+        }).catch((err) => {
+            console.log(err);
+        });
     });
 
     test("Paste operation is not available", () => {
