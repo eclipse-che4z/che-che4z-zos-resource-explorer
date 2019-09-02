@@ -18,13 +18,13 @@ import { Dataset } from "../../model/DSEntities";
  * Create a dummy dataset.
  * @return A dummy dataset.
  */
-export function createDummyDataset(): Dataset {
+export function createDummyDataset(name: string = "ICFCAT.MV3B.CATALOGA"): Dataset {
     return {
         allocatedSize: 15,
         allocationUnit: "BLOCK",
         averageBlock: 0,
         blockSize: 6160,
-        catalogName: "ICFCAT.MV3B.CATALOGA",
+        catalogName: name,
         creationDate: "2017/07/25",
         dataSetOrganization: "PO",
         deviceType: "3390",

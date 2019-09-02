@@ -29,6 +29,7 @@ import {
     ZSubsystemNode,
     ZUserDatasetNode,
 } from "../ui/tree/DatasetTreeModel";
+import { createDummyDataset } from "./utils/DatasetUtils";
 
 // tslint:disable: no-big-function
 describe("DatasetDataProvider", () => {
@@ -80,7 +81,7 @@ describe("DatasetDataProvider", () => {
         });
 
         describe("Dataset nodes", () => {
-            const dataset: Dataset = generateDataset("USERS.DATASET");
+            const dataset: Dataset = createDummyDataset("USERS.DATASET");
             it("should map dataset PS node to tree item", () => {
                 dataset.dataSetOrganization = DSOrg.PS;
                 const datasetNode: ZDatasetNode = new ZDatasetNode(dataset, connection, "");
@@ -124,7 +125,7 @@ describe("DatasetDataProvider", () => {
         });
         describe("Dataset member nodes", () => {
             it("should map dataset membernode to tree item", () => {
-                const dataset: Dataset = generateDataset("USERS.DATASET");
+                const dataset: Dataset = createDummyDataset("USERS.DATASET");
                 const member: Member = { name: "MEMBER1" };
                 const memberNode: ZMemberNode = new ZMemberNode(dataset, member, connection, "");
                 const item: vscode.TreeItem = dsp.getTreeItem(memberNode);
@@ -187,7 +188,7 @@ describe("DatasetDataProvider", () => {
         });
 
         it("should return datasets under filter node", async () => {
-            const dataset: Dataset = generateDataset(filter.value + ".DATASET");
+            const dataset: Dataset = createDummyDataset(filter.value + ".DATASET");
             const datasetService = {
                 listDatasets: jest.fn().mockReturnValueOnce(Promise.resolve([dataset])),
             };
@@ -204,7 +205,7 @@ describe("DatasetDataProvider", () => {
         });
 
         it("should return datasets under default filter node", async () => {
-            const dataset: Dataset = generateDataset(connectionWithoutFilter.username + ".DATASET");
+            const dataset: Dataset = createDummyDataset(connectionWithoutFilter.username + ".DATASET");
             const datasetService = {
                 listDatasets: jest.fn().mockReturnValueOnce(Promise.resolve([dataset])),
             };
@@ -220,7 +221,7 @@ describe("DatasetDataProvider", () => {
         });
 
         it("should return members under dataset node", async () => {
-            const dataset: Dataset = generateDataset(connectionWithoutFilter.username + ".DATASET");
+            const dataset: Dataset = createDummyDataset(connectionWithoutFilter.username + ".DATASET");
             const member: Member = { name: "MEMBER" };
             const datasetService = {
                 listMembers: jest.fn().mockReturnValue(Promise.resolve([member.name])),
@@ -246,29 +247,6 @@ function generateConnection(name: string): Connection {
         name,
         url: "https://" + name + ":65534/",
         username: "username",
-    };
-}
-
-function generateDataset(name: string): Dataset {
-    return {
-        allocatedSize: 0,
-        allocationUnit: "",
-        averageBlock: 0,
-        blockSize: 0,
-        catalogName: "",
-        creationDate: "",
-        dataSetOrganization: "",
-        deviceType: "",
-        directoryBlocks: 0,
-        expirationDate: "",
-        migrated: false,
-        name,
-        primary: 0,
-        recordFormat: "",
-        recordLength: 0,
-        secondary: 0,
-        used: 0,
-        volumeSerial: "",
     };
 }
 
