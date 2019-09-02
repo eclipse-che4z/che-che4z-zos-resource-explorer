@@ -31,11 +31,7 @@ import {
     ZUserDatasetNode,
 } from "./DatasetTreeModel";
 
-export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
-    // TODO rework it
-    get cache() {
-        return this.datasetCache;
-    }
+export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
     // tslint:disable-next-line: variable-name
     private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
     // tslint:disable-next-line: member-ordering

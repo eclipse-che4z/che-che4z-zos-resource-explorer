@@ -18,7 +18,7 @@ import * as vscode from "vscode";
 import { Connection } from "../../model/Connection";
 import { SettingsFacade } from "../../service/SettingsFacade";
 import { ZoweRestClient } from "../../service/ZoweRestClient";
-import { MVSDataProvider } from "../tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../tree/DatasetDataProvider";
 
 export class HostPanel {
     public static readonly viewType = "zosHostPanel";
@@ -26,7 +26,7 @@ export class HostPanel {
     public static editHost(
         context: vscode.ExtensionContext,
         host: Connection,
-        dataProvider: MVSDataProvider,
+        dataProvider: DatasetDataProvider,
         rest: ZoweRestClient,
     ) {
         const panel = vscode.window.createWebviewPanel(
