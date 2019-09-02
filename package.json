@@ -202,7 +202,7 @@
                             },
                             "url": {
                                 "type": "string",
-                                "description": "Connection url"
+                                "description": "Connection URL"
                             },
                             "username": {
                                 "type": "string",
