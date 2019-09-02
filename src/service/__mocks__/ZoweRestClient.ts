@@ -34,6 +34,6 @@ export class ZoweRestClient {
 
     public async getContent(host: Connection, dataSetName: string): Promise<string> {
         // const url = this.urlPrefix(host) + encodeURIComponent(dataSetName) + "/content";
-        return JSON.parse("{ records: '' }").body!.records;
+        return "TEST";
     }
 }
