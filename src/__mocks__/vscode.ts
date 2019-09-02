@@ -12,6 +12,7 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
+// tslint:disable: max-classes-per-file no-namespace
 export enum TreeItemCollapsibleState {
     /**
      * Determines an item can be neither collapsed nor expanded. Implies it has no children.
@@ -171,5 +172,11 @@ export namespace workspace {
 
     export interface TextDocument {
         fileName?: string;
+    }
+}
+
+export class ExtensionContext {
+    public asAbsolutePath(relativePath: string): string {
+        return "";
     }
 }
