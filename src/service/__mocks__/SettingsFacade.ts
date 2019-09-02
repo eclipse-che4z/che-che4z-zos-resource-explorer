@@ -11,22 +11,37 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
+import * as vscode from "vscode";
 import { Connection } from "../../model/Connection";
 
 export class SettingsFacade {
-
     public static async requestCredentials(
         host: Connection,
-    ): Promise<{ username: string; password?: string  }> {
+    ): Promise<{ username: string; password?: string }> {
         return {
             password: "",
             username: "",
         };
     }
-    public static  resetPassword(host: Connection): void {
+    public static resetPassword(host: Connection): void {
         host.password = undefined;
     }
-    constructor(private creds: any) {
+
+    public static findHostByName(
+        name: string,
+        hosts: Connection[],
+    ): Connection | undefined {
+        for (const host of hosts) {
+            if (host.name === name) {
+                return host;
+            }
+        }
+        return undefined;
     }
 
+    public static listHosts(): Connection[] {
+        return [];
+    }
+
+    constructor(private creds: any) {}
 }

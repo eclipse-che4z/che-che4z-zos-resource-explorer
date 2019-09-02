@@ -11,9 +11,15 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
+"use strict";
 
-export class ZoweRestClient {
-    public async listMembers(host, datasetName): Promise<any> {
-        return ["M1", "M2", "M3"];
-    }
+const fs = jest.genMockFromModule("fs");
+
+function readFileSync(path) {
+    return "CONTENT";
 }
+
+// tslint:disable-next-line: no-string-literal
+fs["readFileSync"] = readFileSync;
+
+module.exports = fs;

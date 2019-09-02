@@ -27,6 +27,7 @@ export enum TreeItemCollapsibleState {
     Expanded = 2,
 }
 
+// tslint:disable-next-line: no-namespace
 export namespace commands {
     const commandMap = {};
 
@@ -37,8 +38,8 @@ export namespace commands {
     ) {
         commandMap[command] = callback;
     }
-    export function executeCommand<T>(_command: string, ...rest: any[]) {
-        commandMap[_command](rest);
+    export function executeCommand<T>(command: string, ...rest: any[]) {
+        commandMap[command](...rest);
     }
 }
 
@@ -51,11 +52,7 @@ export type ProviderResult<T> =
 interface Thenable<T> {
     then<TResult>(
         onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-        onrejected?: (reason: any) => TResult | Thenable<TResult>,
-    ): Thenable<TResult>;
-    then<TResult>(
-        onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-        onrejected?: (reason: any) => void,
+        onrejected?: (reason: any) => TResult | Thenable<TResult> | void,
     ): Thenable<TResult>;
 }
 
@@ -70,6 +67,7 @@ export interface CancellationToken {
     onCancellationRequested: Event<any>;
 }
 
+// tslint:disable-next-line: no-namespace
 export namespace window {
     export function showInformationMessage(
         message: string,
@@ -84,6 +82,13 @@ export namespace window {
     ): undefined {
         return undefined;
     }
+    export function showWarningMessage(
+        message: string,
+        ...items: string[]
+    ): undefined {
+        return undefined;
+    }
+
     export interface MessageOptions {
         modal?: boolean;
     }
@@ -92,9 +97,19 @@ export namespace window {
         title: string;
         isCloseAffordance?: boolean;
     }
+
+    export function showTextDocument(
+        document: any,
+        column?: any,
+        // tslint:disable-next-line: bool-param-default
+        preserveFocus?: boolean,
+    ): undefined {
+        return undefined;
+    }
 }
 
 export class Disposable {
+    // tslint:disable-next-line: no-empty
     constructor() {}
 }
 
@@ -114,6 +129,7 @@ export interface TreeDataProvider<T> {
     getParent?(element: T): ProviderResult<T>;
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class TreeItem {
     public label?: string;
 
@@ -129,7 +145,8 @@ export class TreeItem {
     }
 }
 
-export class EventEmitter<T> {
+// tslint:disable-next-line: max-classes-per-file
+export class EventEmitter {
     public event: undefined;
 }
 
@@ -145,6 +162,7 @@ export interface TextDocumentChangeEvent {
     contentChanges: [];
 }
 
+// tslint:disable-next-line: no-namespace
 export namespace workspace {
     export let rootPath: string | undefined;
 
@@ -155,15 +173,22 @@ export namespace workspace {
 
     export function onDidChangeTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
+        // tslint:disable-next-line: no-empty
     ) {}
 
     export function onDidCloseTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
+        // tslint:disable-next-line: no-empty
     ) {}
 
     export function onWillSaveTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
+        // tslint:disable-next-line: no-empty
     ) {}
+
+    export function openTextDocument(uri: any): undefined {
+        return undefined;
+    }
 
     export interface InputBoxOptions {
         placeholder?: string;

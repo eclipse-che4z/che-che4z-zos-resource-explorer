@@ -22,7 +22,6 @@ import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
 import { ensureDirectoryExistence, generateTempFileName } from "../utils";
 import { DatasetService } from "./DatasetService";
 import { SettingsFacade } from "./SettingsFacade";
-import { ZoweRestClient } from "./ZoweRestClient";
 
 const DEFAULT_ENCODING: string = "utf8";
 
@@ -124,7 +123,9 @@ export class DatasetEditManager {
                 return true;
             } catch (error) {
                 if (error.message === "fwrite() error") {
-                    await vscode.window.showErrorMessage("Action failed: Data set size exceeded or file corrupted.");
+                    await vscode.window.showErrorMessage(
+                        "Action failed: Data set size exceeded or file corrupted.",
+                    );
                 }
                 await vscode.window.showErrorMessage(error.toString());
             }
