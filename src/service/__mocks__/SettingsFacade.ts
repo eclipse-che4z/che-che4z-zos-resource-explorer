@@ -11,7 +11,6 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-import * as vscode from "vscode";
 import { Connection } from "../../model/Connection";
 
 export class SettingsFacade {

@@ -16,14 +16,14 @@ import * as vscode from "vscode";
 import { CopyPasteService } from "../service/CopyPasteService";
 import { DatasetCache } from "../service/DatasetCache";
 import { DatasetService } from "../service/DatasetService";
-import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { validateMemberName } from "../utils";
 
 export async function pasteMember(
     datasetService: DatasetService,
     copyPasteService: CopyPasteService,
     cache: DatasetCache,
-    mvsDataProvider: MVSDataProvider,
+    datasetDataProvider: DatasetDataProvider,
     arg: any,
 ) {
     if (copyPasteService.canPaste(arg)) {
@@ -47,7 +47,7 @@ export async function pasteMember(
             return;
         }
         cache.resetDataset(arg.host, arg.dataset);
-        mvsDataProvider.refresh();
+        datasetDataProvider.refresh();
     }
 }
 

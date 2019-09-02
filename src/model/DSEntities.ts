@@ -24,7 +24,7 @@ export interface Dataset {
     blockSize: number;
     catalogName: string;
     creationDate: string;
-    dataSetOrganization: string;
+    dataSetOrganization?: string;
     deviceType: string;
     directoryBlocks: number;
     expirationDate: string;

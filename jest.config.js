@@ -5,6 +5,7 @@ module.exports = {
     "modulePathIgnorePatterns": [
       "<rootDir>/out",
       "<rootDir>/dist",
+      "<rootDir>/src/__tests__/utils"
     ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"

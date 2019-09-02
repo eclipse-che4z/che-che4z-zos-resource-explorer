@@ -18,7 +18,7 @@ import path = require("path");
 import * as vscode from "vscode";
 import { Connection } from "../model/Connection";
 import { Dataset, Member } from "../model/DSEntities";
-import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { ensureDirectoryExistence, generateTempFileName } from "../utils";
 import { DatasetService } from "./DatasetService";
 import { SettingsFacade } from "./SettingsFacade";
@@ -51,7 +51,7 @@ export class DatasetEditManager {
 
     public register(
         subscriptions: vscode.Disposable[],
-        dataProvider: MVSDataProvider,
+        dataProvider: DatasetDataProvider,
     ) {
         subscriptions.push(
             vscode.commands.registerCommand(
@@ -181,7 +181,7 @@ export class DatasetEditManager {
         host: Connection,
         dataset: Dataset,
         member: Member,
-        dataProvider: MVSDataProvider,
+        dataProvider: DatasetDataProvider,
     ) {
         const content = await this.datasetService.getContent(
             host,
@@ -216,7 +216,7 @@ export class DatasetEditManager {
 
     private async saveDocument(
         savedDoc: vscode.TextDocument,
-        dataProvider: MVSDataProvider,
+        dataProvider: DatasetDataProvider,
     ) {
         const memberQualifier: MemberQualifier = DatasetEditManager.processFilePath(
             savedDoc.fileName,

@@ -12,8 +12,34 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
+import { Connection } from "../../model/Connection";
+import { CredentialsService } from "../CredentialsService";
+
 export class ZoweRestClient {
+    constructor(private credentialsService: CredentialsService) {
+        // no-op
+    }
+
     public async listMembers(host, datasetName): Promise<any> {
         return ["M1", "M2", "M3"];
+    }
+
+    public async putContent(
+        host: Connection,
+        content: string,
+        dataSetName: string,
+        member: string,
+    ): Promise<string> {
+        // const target: string = member ? `${dataSetName}(${member})` : dataSetName;
+        // const url = this.urlPrefix(host) + encodeURIComponent(target) + "/content";
+        return "SUCCESS!";
+    }
+
+    public async getContent(
+        host: Connection,
+        dataSetName: string,
+    ): Promise<string> {
+        // const url = this.urlPrefix(host) + encodeURIComponent(dataSetName) + "/content";
+        return "TEST";
     }
 }
