@@ -31,11 +31,7 @@ import {
     ZUserDatasetNode,
 } from "./DatasetTreeModel";
 
-export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
-    // TODO rework it
-    get cache() {
-        return this.datasetCache;
-    }
+export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
     // tslint:disable-next-line: variable-name
     private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
     // tslint:disable-next-line: member-ordering
@@ -239,7 +235,7 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
             let message = error.body;
             if (error.message && error.message ===
                 "ServletDispatcher failed - received TSO Prompt when expecting TsoServletResponse") {
-                message = "Action failed: Retrieve archived datasets and retry.";
+                message = "Cannot list datasets based on current filter. Amend filter to exclude datasets archived by CA Disk.";
             }
             return this.processZoweError(message, host);
         }

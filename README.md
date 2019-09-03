@@ -1,6 +1,6 @@
 # Explorer for z/OS Extension
 
-Eclipse Che4z Explorer for z/OS allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the Eclipse Che4z Language Server Protocol.
+Explorer for z/OS allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the Eclipse Che4z Language Server Protocol.
 
 ## **Contents**
 
@@ -11,10 +11,10 @@ Eclipse Che4z Explorer for z/OS allows you to remotely view and edit the content
 	- [**Filters**](#filters)
 	- [**Actions**](#actions)
 	- [**Syntax Awareness**](#syntax-awareness)
-	
+
 ## Use Cases
 
-As a modern application developer, you can: 
+As a modern application developer, you can:
 
 - Use Explorer for z/OS to browse and edit mainframe data sets.
 - Copy and delete PDS members and allocate data sets using the parameters of an existing data set.
@@ -68,7 +68,7 @@ You can perform the following actions in Explorer for z/OS:
 	> Copies members of a PDS to the same data set or a different data set, on the same host or a different host.
 - **Delete**
 	> Deletes a member of a PDS.
-	
+
 ### Syntax Awareness
 
 While browsing and editing PDS members, syntax awareness for JCL and COBOL files is supported as long as you have an appropriate plugin. The PDS must have the extension .JCL (for a JCL) or .COBOL (for COBOL) for syntax awareness to activate.
