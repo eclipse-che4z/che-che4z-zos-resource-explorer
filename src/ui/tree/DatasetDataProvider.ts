@@ -24,6 +24,7 @@ import {
     NodeType,
     ZDatasetFilterNode,
     ZDatasetNode,
+    ZEmptyDatasetNode,
     ZEmptyNode,
     ZHostNode,
     ZMemberNode,
@@ -113,6 +114,11 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
                     light: this.context.asAbsolutePath(path.join("resources", "light", "PS_icon.svg")),
                 };
             }
+            node.collapsibleState = vscode.TreeItemCollapsibleState.None;
+        }
+        if (NodeType.NONE === element.type) {
+            node.tooltip = "This dataset does not exist";
+            node.label = "<Invalid Path>";
             node.collapsibleState = vscode.TreeItemCollapsibleState.None;
         }
         return { ...node, ...element };
@@ -234,6 +240,7 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (result.length === 0) {
                 vscode.window.showWarningMessage("No dataset found.");
+                result.push(new ZEmptyDatasetNode());
             }
             return result;
         } catch (error) {
@@ -266,7 +273,7 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (resultNodes.length === 0) {
                 vscode.window.showInformationMessage("No member found.");
-                return [new ZEmptyNode(dataset, { name: "Empty" }, host)];
+                return [new ZEmptyNode(dataset, { name: "<Empty>" }, host)];
             }
             return resultNodes;
         } catch (error) {
