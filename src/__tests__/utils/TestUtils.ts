@@ -13,7 +13,7 @@ import { Connection } from "../../model/Connection";
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-export function generateConnection(name: string): Connection {
+export function generateConnection(name: string = "some connection"): Connection {
     return {
         name,
         url: "https://" + name + ":65534/",

@@ -14,10 +14,8 @@
 jest.mock("../service/ZoweRestClient");
 
 import { Connection } from "../model/Connection";
-import { DatasetCache, PATH_SEPARATOR } from "../service/DatasetCache";
 import { DatasetService } from "../service/DatasetService";
 import { ZoweRestClient } from "../service/ZoweRestClient";
-import { ZNode } from "../ui/tree/DatasetTreeModel";
 
 describe("DatasetService", () => {
     const host: Connection = { name: "", url: "", username: "" };
