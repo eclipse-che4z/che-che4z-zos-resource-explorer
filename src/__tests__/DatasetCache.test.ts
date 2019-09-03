@@ -16,6 +16,7 @@ import { Connection } from "../model/Connection";
 import { Dataset, Filter } from "../model/DSEntities";
 import { DatasetCache, PATH_SEPARATOR } from "../service/DatasetCache";
 import { createFilterPath, ZDatasetNode, ZNode } from "../ui/tree/DatasetTreeModel";
+import { createDummyDataset } from "./utils/DatasetUtils";
 
 describe("DatasetCache", () => {
     describe("Base Logic", () => {
@@ -55,7 +56,7 @@ describe("DatasetCache", () => {
             username: "userName",
         };
         const prefix: string = createFilterPath(connection, filter);
-        const dataset: Dataset = generateDataset("TEST.DS");
+        const dataset: Dataset = createDummyDataset("TEST.DS");
         const datasetNode: ZDatasetNode = new ZDatasetNode(dataset, connection, prefix);
 
         it("should return cached object after invalidate if connection was not removed", () => {
@@ -78,33 +79,3 @@ describe("DatasetCache", () => {
         });
     });
 });
-
-// TODO remove
-function generateDataset(name: string): Dataset {
-    return {
-        allocatedSize: 0,
-        allocationUnit: "",
-        averageBlock: 0,
-        blockSize: 0,
-        catalogName: "",
-        creationDate: "",
-        dataSetOrganization: "",
-        deviceType: "",
-        directoryBlocks: 0,
-        expirationDate: "",
-        migrated: false,
-        name,
-        primary: 0,
-        recordFormat: "",
-        recordLength: 0,
-        secondary: 0,
-        used: 0,
-        volumeSerial: "",
-    };
-}
-// public getItemCollapsState(path: string) {
-//     return this._treeState[path] ? this._treeState[path] : vscode.TreeItemCollapsibleState.Collapsed;
-// }
-// public setCollapsState(path: string, state: vscode.TreeItemCollapsibleState): void {
-//     this._treeState[path] = state;
-// }
