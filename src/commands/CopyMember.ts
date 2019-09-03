@@ -23,13 +23,13 @@ export async function copyMember(copyPasteService: CopyPasteService, arg: any) {
                 location: vscode.ProgressLocation.Notification,
                 title: `Loading ${arg.dataset.name}(${arg.member.name})`,
             },
-            async (process) => {
+            async (progress) => {
                 try {
                     await copyPasteService.copy(arg.host, arg.dataset.name, arg.member.name);
                 } catch (error) {
                     vscode.window.showErrorMessage("Copy member error: " + error);
                 } finally {
-                    process.report({ increment: 100, message: "done" });
+                    progress.report({ increment: 100, message: "done" });
                 }
             },
         );
