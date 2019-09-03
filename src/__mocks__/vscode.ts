@@ -1,3 +1,6 @@
+import { InputBoxOptions, ProgressOptions, Progress } from "vscode";
+import { exec } from "child_process";
+
 /*
  * Copyright (c) 2019 Broadcom.
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
@@ -93,6 +96,16 @@ export namespace window {
         title: string;
         isCloseAffordance?: boolean;
     }
+
+    export function showInputBox(options?: InputBoxOptions,
+        token?: CancellationToken): Thenable<string | undefined>{
+        return Promise.resolve("NameOfMember");
+    }
+
+    export function withProgress<R>(options: ProgressOptions,
+         task: () => any) {
+        return task();
+    }
 }
 
 export class Disposable {
@@ -179,4 +192,10 @@ export class ExtensionContext {
     public asAbsolutePath(relativePath: string): string {
         return "";
     }
+}
+
+export enum ProgressLocation {
+    SourceControl = 1,
+    Window = 10,
+    Notification = 15,
 }
