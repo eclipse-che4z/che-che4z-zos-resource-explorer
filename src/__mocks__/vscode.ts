@@ -12,6 +12,7 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
+// tslint:disable: max-classes-per-file no-namespace
 export enum TreeItemCollapsibleState {
     /**
      * Determines an item can be neither collapsed nor expanded. Implies it has no children.
@@ -91,6 +92,16 @@ export namespace window {
     export interface MessageItem {
         title: string;
         isCloseAffordance?: boolean;
+    }
+
+    export function showInputBox(options?: InputBoxOptions,
+        token?: CancellationToken): Thenable<string | undefined>{
+        return Promise.resolve("NameOfMember");
+    }
+
+    export function withProgress<R>(options: ProgressOptions,
+                                    task: (progress?: Progress) => any) {
+        return task({report: jest.fn()} as any);
     }
 }
 
@@ -172,4 +183,36 @@ export namespace workspace {
     export interface TextDocument {
         fileName?: string;
     }
+}
+
+export class ExtensionContext {
+    public asAbsolutePath(relativePath: string): string {
+        return "";
+    }
+}
+
+export enum ProgressLocation {
+    SourceControl = 1,
+    Window = 10,
+    Notification = 15,
+}
+
+export interface InputBoxOptions {
+    value?: string;
+    valueSelection?: [number, number];
+    prompt?: string;
+    placeHolder?: string;
+    password?: boolean;
+    ignoreFocusOut?: boolean;
+    validateInput?(value: string): string | undefined | null | Thenable<string | undefined | null>;
+}
+
+export interface ProgressOptions {
+    location: ProgressLocation;
+    title?: string;
+    cancellable?: boolean;
+}
+
+export interface Progress {
+    report(value): void;
 }
