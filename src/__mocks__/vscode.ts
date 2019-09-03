@@ -100,8 +100,8 @@ export namespace window {
     }
 
     export function withProgress<R>(options: ProgressOptions,
-         task: () => any) {
-        return task();
+                                    task: (progress?: Progress) => any) {
+        return task({report: jest.fn()} as any);
     }
 }
 
@@ -211,4 +211,8 @@ export interface ProgressOptions {
     location: ProgressLocation;
     title?: string;
     cancellable?: boolean;
+}
+
+export interface Progress {
+    report(value): void;
 }
