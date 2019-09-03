@@ -76,6 +76,13 @@ export class ZMemberNode extends ZNode {
     }
 }
 
+export class ZEmptyNode extends ZNode {
+    constructor(public dataset: Dataset, public member: Member, public host: Connection) {
+        super("Empty");
+        this.type = NodeType.MEMBER;
+    }
+}
+
 export function createHostPath(host: Connection): string {
     return host.url + host.username;
 }
