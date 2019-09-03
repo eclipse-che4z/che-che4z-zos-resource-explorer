@@ -93,6 +93,16 @@ export namespace window {
         title: string;
         isCloseAffordance?: boolean;
     }
+
+    export function showInputBox(options?: InputBoxOptions,
+        token?: CancellationToken): Thenable<string | undefined>{
+        return Promise.resolve("NameOfMember");
+    }
+
+    export function withProgress<R>(options: ProgressOptions,
+         task: () => any) {
+        return task();
+    }
 }
 
 export class Disposable {
@@ -179,4 +189,26 @@ export class ExtensionContext {
     public asAbsolutePath(relativePath: string): string {
         return "";
     }
+}
+
+export enum ProgressLocation {
+    SourceControl = 1,
+    Window = 10,
+    Notification = 15,
+}
+
+export interface InputBoxOptions {
+    value?: string;
+    valueSelection?: [number, number];
+    prompt?: string;
+    placeHolder?: string;
+    password?: boolean;
+    ignoreFocusOut?: boolean;
+    validateInput?(value: string): string | undefined | null | Thenable<string | undefined | null>;
+}
+
+export interface ProgressOptions {
+    location: ProgressLocation;
+    title?: string;
+    cancellable?: boolean;
 }

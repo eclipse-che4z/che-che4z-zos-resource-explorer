@@ -34,4 +34,12 @@ export class DatasetService {
     ): Promise<string> {
         return this.rest.getContent(connection, datasetName);
     }
+
+    public async createMember(connection: Connection, datasetName: string, memberName: string, data?: string) {
+
+    }
+
+    public async isMemberExists(connection: Connection, datasetName: string, memberName: string): Promise<boolean> {
+        return Promise.resolve(false);
+    }
 }
