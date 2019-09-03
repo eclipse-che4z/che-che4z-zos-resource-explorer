@@ -1,6 +1,3 @@
-import { InputBoxOptions, ProgressOptions, Progress } from "vscode";
-import { exec } from "child_process";
-
 /*
  * Copyright (c) 2019 Broadcom.
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
@@ -198,4 +195,20 @@ export enum ProgressLocation {
     SourceControl = 1,
     Window = 10,
     Notification = 15,
+}
+
+export interface InputBoxOptions {
+    value?: string;
+    valueSelection?: [number, number];
+    prompt?: string;
+    placeHolder?: string;
+    password?: boolean;
+    ignoreFocusOut?: boolean;
+    validateInput?(value: string): string | undefined | null | Thenable<string | undefined | null>;
+}
+
+export interface ProgressOptions {
+    location: ProgressLocation;
+    title?: string;
+    cancellable?: boolean;
 }
