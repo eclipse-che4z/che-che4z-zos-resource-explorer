@@ -14,17 +14,17 @@
 
 import * as vscode from "vscode";
 import { ZoweRestClient } from "../service/ZoweRestClient";
-import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { HostPanel } from "../ui/views/HostPanel";
 
 export async function editConnection(
     context: vscode.ExtensionContext,
-    mvsDataProvider: MVSDataProvider,
+    datasetDataProvider: DatasetDataProvider,
     rest: ZoweRestClient,
     arg: any,
 ) {
     if (arg.host) {
-        HostPanel.editHost(context, arg.host, mvsDataProvider, rest);
+        HostPanel.editHost(context, arg.host, datasetDataProvider, rest);
     } else {
         HostPanel.createHost(context, rest);
     }

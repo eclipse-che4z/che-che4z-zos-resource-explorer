@@ -18,14 +18,14 @@ import { DatasetCache } from "../service/DatasetCache";
 import { DatasetEditManager } from "../service/DatasetEditManager";
 import { DatasetService } from "../service/DatasetService";
 import { SettingsFacade } from "../service/SettingsFacade";
-import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { NodeType, ZMemberNode } from "../ui/tree/DatasetTreeModel";
 
 export async function deleteMember(
     datasetService: DatasetService,
     datasetEditManager: DatasetEditManager,
     cache: DatasetCache,
-    mvsDataProvider: MVSDataProvider,
+    datasetDataProvider: DatasetDataProvider,
     arg: any,
 ) {
     if (arg.type !== NodeType.MEMBER) {
@@ -53,5 +53,5 @@ export async function deleteMember(
         vscode.window.showErrorMessage("Delete member error: " + error);
     }
     cache.resetMember(arg.host, arg.dataset, memberNode.member);
-    mvsDataProvider.refresh();
+    datasetDataProvider.refresh();
 }

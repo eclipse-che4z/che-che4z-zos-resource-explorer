@@ -44,8 +44,8 @@ export class ZoweRestClient {
      * [PUT] /api/v1/datasets/{dataSetName}/content
      */
     public async putContent(host: Connection, content: string, dataSetName: string, member: string): Promise<string> {
-        const terget: string = member ? `${dataSetName}(${member})` : dataSetName;
-        const url = this.urlPrefix(host) + encodeURIComponent(terget) + "/content";
+        const target: string = member ? `${dataSetName}(${member})` : dataSetName;
+        const url = this.urlPrefix(host) + encodeURIComponent(target) + "/content";
         return (await this.request(host, "PUT", url, JSON.stringify({ records: content }))).body!;
     }
 

@@ -38,6 +38,7 @@ export class DatasetCache {
         this._treeState[path] = state;
     }
 
+    // TODO: chack if its possible to remove path from arguments
     public cache(path: string, object: ZNode) {
         this.cached[path] = object;
     }
@@ -113,20 +114,37 @@ export class DatasetCache {
                 newPaths.add(createHostPath(h));
             }
         });
+        // tslint:disable-next-line: forin
         for (const key in this.cached) {
-            // host => DATASET_ROOT_PATH => filter.value
             const segments: string[] = key.split(PATH_SEPARATOR);
             const hostSegment: string = segments[0];
-            const hostAnsFilterSegment: string | undefined = segments.length > 2 ? segments[2] : undefined;
-            if (!newPaths.has(hostSegment) || (hostAnsFilterSegment && !newPaths.has(hostAnsFilterSegment))) {
+            if (newPaths.has(hostSegment)) {
+                continue;
+            }
+            if (segments.length < 3) {
+                this.del(key);
+                continue;
+            }
+            // host => DATASET_ROOT_PATH => filter.value
+            const hostAndFilterSegment: string = segments.slice(0, 3).join(PATH_SEPARATOR);
+            if (!newPaths.has(hostAndFilterSegment)) {
                 this.del(key);
             }
         }
+        // tslint:disable-next-line: forin
         for (const key in this._treeState) {
             const segments: string[] = key.split(PATH_SEPARATOR);
             const hostSegment: string = segments[0];
-            const hostAnsFilterSegment: string | undefined = segments.length > 2 ? segments[2] : undefined;
-            if (!newPaths.has(hostSegment) || (hostAnsFilterSegment && !newPaths.has(hostAnsFilterSegment))) {
+            if (newPaths.has(hostSegment)) {
+                continue;
+            }
+            if (segments.length < 3) {
+                delete this._treeState[key];
+                continue;
+            }
+            // host => DATASET_ROOT_PATH => filter.value
+            const hostAndFilterSegment: string = segments.slice(0, 3).join(PATH_SEPARATOR);
+            if (!newPaths.has(hostAndFilterSegment)) {
                 delete this._treeState[key];
             }
         }

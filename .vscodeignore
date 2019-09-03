@@ -11,10 +11,13 @@
 #   Broadcom, Inc. - initial API and implementation
 .vscode/**
 .vscode-test/**
-out/test/**
-src/**
+node_modules/
+out/
+src/
 .gitignore
-vsc-extension-quickstart.md
+webpack.config.js
+coverage
+jest.config.js
 **/tsconfig.json
 **/tslint.json
 **/*.map

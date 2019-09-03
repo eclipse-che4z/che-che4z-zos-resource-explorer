@@ -11,12 +11,17 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
+import { Connection } from "../model/Connection";
 
-import { DatasetCache } from "../service/DatasetCache";
-import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
-import { createHostPath } from "../ui/tree/DatasetTreeModel";
+export async function createPhysicalDocument(
+    datasetName: string,
+    memberName: string,
+    host: Connection,
+    content: string,
+) {
 
-export async function refreshConnection(cache: DatasetCache, datasetDataProvider: DatasetDataProvider, hostNode: any) {
-    cache.reset(createHostPath(hostNode));
-    datasetDataProvider.refresh();
+}
+
+export function validateMemberName(inputValue: string): string | undefined {
+    return inputValue;
 }
