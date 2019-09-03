@@ -103,6 +103,9 @@ export namespace window {
                                     task: (progress?: Progress) => any) {
         return task({report: jest.fn()} as any);
     }
+    export async function showTextDocument(document, column?, preserveFocus?) {
+        return Promise.resolve(null);
+    }
 }
 
 export class Disposable {
