@@ -103,6 +103,9 @@ export namespace window {
          task: () => any) {
         return task();
     }
+    export async function showTextDocument(document, column?, preserveFocus?) {
+        return Promise.resolve(null);
+    }
 }
 
 export class Disposable {
