@@ -24,6 +24,7 @@ import {
     NodeType,
     ZDatasetFilterNode,
     ZDatasetNode,
+    ZEmptyNode,
     ZHostNode,
     ZMemberNode,
     ZNode,
@@ -265,6 +266,7 @@ export class MVSDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (resultNodes.length === 0) {
                 vscode.window.showInformationMessage("No member found.");
+                return [new ZEmptyNode(dataset, { name: "Empty" }, host)];
             }
             return resultNodes;
         } catch (error) {
