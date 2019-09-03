@@ -13,19 +13,41 @@
  */
 
 import * as vscode from "vscode";
-import { ZoweRestClient } from "../service/ZoweRestClient";
+import { Connection } from "../model/Connection";
+import { SettingsFacade } from "../service/SettingsFacade";
 import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
-import { HostPanel } from "../ui/views/HostPanel";
 
-export async function editConnection(
-    context: vscode.ExtensionContext,
-    datasetDataProvider: DatasetDataProvider,
-    rest: ZoweRestClient,
-    arg: any,
-) {
-    if (arg.host) {
-        HostPanel.editHost(context, arg.host, datasetDataProvider, rest);
-    } else {
-        HostPanel.createHost(context, rest);
+export async function editConnection(datasetDataProvider: DatasetDataProvider, arg: any) {
+    const newHostName =  await vscode.window.showInputBox({
+        ignoreFocusOut: true,
+        placeHolder: "Host Name",
+        prompt: "Enter the Host Name ",
+        validateInput: (text: string) => (text !== "" ? "" : "Host Name must not be empty"),
+        value: arg.host.name,
+    });
+
+    if (newHostName === undefined) {
+        return undefined;
+    }
+
+    const isExistingHostName = (name: string): boolean => {
+        for (const host of SettingsFacade.listHosts()) {
+            if (host.name === name) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    if (isExistingHostName(newHostName)) {
+        vscode.window.showErrorMessage(`Host with name ${newHostName} already exists.`);
+        return;
+    }
+    const hosts: Connection[] = SettingsFacade.listHosts();
+    const targetHost: Connection | undefined = SettingsFacade.findHostByName(arg.host.name, hosts);
+    if (targetHost) {
+        targetHost.name = newHostName;
+        await SettingsFacade.updateHosts(hosts);
+        datasetDataProvider.refresh();
     }
 }

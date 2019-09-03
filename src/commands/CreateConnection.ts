@@ -13,9 +13,32 @@
  */
 
 import * as vscode from "vscode";
-import { ZoweRestClient } from "../service/ZoweRestClient";
-import { HostPanel } from "../ui/views/HostPanel";
+import { Connection } from "../model/Connection";
+import { SettingsFacade } from "../service/SettingsFacade";
 
-export async function createConnection(context: vscode.ExtensionContext, rest: ZoweRestClient) {
-    HostPanel.createHost(context, rest);
+export async function createConnection() {
+    const pattern = new RegExp("^(https?:\\/\\/)?" + // protocol
+                        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+|" + // domain name
+                        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+                        "(\\:\\d{1,5})(\\/[-a-z\\d%_.~+]*)*" + // port and path
+                        "(\\?[;&a-z\\d%_.~+=-]*)?" + // query string
+                        "(\\#[-a-z\\d_]*)?$", "i"); // fragment locator
+
+    const url = await vscode.window.showInputBox({
+        ignoreFocusOut: true,
+        placeHolder: "URL",
+        prompt: "Enter the URL",
+        validateInput: (text: string) => (pattern.test(text) ? "" : "Please enter valid URL."),
+    });
+    if (url === undefined) {
+        return undefined;
+    }
+    const hosts: Connection[] = SettingsFacade.listHosts();
+    hosts.push({
+        name: url,
+        password: "",
+        url,
+        username: "",
+    });
+    SettingsFacade.updateHosts(hosts);
 }
