@@ -49,7 +49,7 @@ export class DatasetEditManager {
 
     public register(subscriptions: vscode.Disposable[], dataProvider: MVSDataProvider) {
         subscriptions.push(
-            vscode.commands.registerCommand("zosexplorer.editMember", async (arg) => {
+            vscode.commands.registerCommand("zosexplorer.edit", async (arg) => {
                 try {
                     await this.editMember(arg.host, arg.dataset, arg.member, dataProvider);
                 } catch (error) {

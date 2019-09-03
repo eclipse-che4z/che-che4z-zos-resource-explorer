@@ -134,12 +134,12 @@ function registerCommands(
 
     // Members
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.copyMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.copy", async (arg: any) => {
             await copyMember(copyPasteService, arg);
         }),
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.pasteMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.paste", async (arg: any) => {
             await pasteMember(datasetService, copyPasteService, cache, mvsDataProvider, arg);
         }),
     );
@@ -149,12 +149,12 @@ function registerCommands(
         }),
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.browseMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.browse", async (arg: any) => {
             await browseMember(datasetService, arg);
         }),
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.deleteMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.delete", async (arg: any) => {
             await deleteMember(datasetService, datasetEditManager, cache, mvsDataProvider, arg);
         }),
     );
