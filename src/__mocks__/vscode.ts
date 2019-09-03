@@ -216,3 +216,7 @@ export interface ProgressOptions {
 export interface Progress {
     report(value): void;
 }
+
+export enum ConfigurationTarget {
+    Global = 1,
+}
