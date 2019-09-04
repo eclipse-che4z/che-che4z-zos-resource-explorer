@@ -13,6 +13,8 @@
  */
 
 // tslint:disable: max-classes-per-file no-namespace
+import { TextDocument, TextDocumentShowOptions } from "vscode";
+
 export enum TreeItemCollapsibleState {
     /**
      * Determines an item can be neither collapsed nor expanded. Implies it has no children.
@@ -75,8 +77,8 @@ export namespace window {
     export function showInformationMessage(
         message: string,
         ...items: string[]
-    ): undefined {
-        return undefined;
+    ): Thenable<string | undefined>{
+        return Promise.resolve(message);
     }
 
     export function showErrorMessage(
@@ -102,6 +104,10 @@ export namespace window {
     export function withProgress<R>(options: ProgressOptions,
          task: () => any) {
         return task();
+    }
+
+    export function showTextDocument(document: TextDocument, options?: TextDocumentShowOptions): Thenable<string>{
+        return Promise.resolve("NameOfDocument");
     }
 }
 
@@ -175,6 +181,11 @@ export namespace workspace {
     export function onWillSaveTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
     ) {}
+
+    export function openTextDocument(fileName: string) {
+        const document: any = {};
+        return Promise.resolve(document);
+    }
 
     export interface InputBoxOptions {
         placeholder?: string;
