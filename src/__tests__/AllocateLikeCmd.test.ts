@@ -11,46 +11,27 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-jest.mock("../service/DatasetService");
-jest.mock("../service/ZoweRestClient");
-jest.mock("../service/DatasetCache");
 
 import * as vscode from "vscode";
 import { allocateLikeDataset } from "../commands/AllocateLikeDataset";
-import { DatasetService } from "../service/DatasetService";
-import { ZoweRestClient } from "../service/ZoweRestClient";
-
-import { Connection } from "../model/Connection";
 import { Dataset } from "../model/DSEntities";
 import { createDummyDataset } from "./utils/DatasetUtils";
+import { generateArgs, generateDataserviceMock } from "./utils/TestUtils";
 
-const datasetName: string = "DATASET.TEST";
-const trackUnit: string = "TRACK";
-const cylinderUnit: string = "CYLINDER";
-const blocksUnit: string = "BLOCKS";
-const vsamOrganization: string = "VSAM";
-const poOrganization: string = "PO";
-const psOrganization: string = "PS";
-const poeOrganization: string = "PO_E";
+const DATASET_NAME: string = "DATASET.TEST";
+const TRK_UNIT: string = "TRACK";
+const BLK_UNIT: string = "BLK";
+const VSM_ORG: string = "VSAM";
+const PO_ORG: string = "PO";
 
-let cache;
-let host: Connection;
-
-let mvsDatasetProviderMock;
+let cache: any;
+let mvsDatasetProviderMock: any;
+let withProgressListener: any;
 
 beforeAll(() => {
-    const creds: any = {};
-    const restStub = new ZoweRestClient(creds);
-    host = { name: "", url: "", username: "" };
-
-    /*
-    datasetServiceMock = {
-        allocateDatasetLike: jest.fn().mockReturnValue(Promise.resolve(false)),
-        isDatasetExists: jest.fn().mockReturnValue(Promise.resolve()),
-    };
-    */
-
-
+    // VS Code mock for showInput and showProgress
+    vscode.window.showInputBox = jest.fn().mockReturnValue(Promise.resolve("DATASET.TEST"));
+    withProgressListener = jest.spyOn(vscode.window, "withProgress");
 
     cache = {
         reset: jest.fn().mockReturnValue(""),
@@ -59,21 +40,20 @@ beforeAll(() => {
     mvsDatasetProviderMock = {
         refresh: jest.fn().mockReturnValue(""),
     };
-
-    // put in method
-    vscode.window.showInputBox = jest.fn().mockReturnValue(Promise.resolve("DATASET.TEST"));
-    vscode.window.withProgress = jest.fn().mockReturnValue(Promise.resolve(true));
 });
 
 describe("[POSITIVE TESTS] Allocate like command", () => {
-
-    const dummyDatasetOrg: Dataset = { name: datasetName, dataSetOrganization: "PO" };
+    const dummyDatasetOrg: Dataset = { name: DATASET_NAME, dataSetOrganization: PO_ORG, allocationUnit: TRK_UNIT };
     const dataset: Dataset = createDummyDataset(dummyDatasetOrg);
 
-
-
     test("Allocate like a valid kind of dataset", async () => {
-        expect(1).toBe(1);
+        /*
+        - DESC: A PO dataset with an valid allocation unit (track) is created.
+        - DATASET_SERVICE_MOCK: Dataset didn't already exsist --> generateDataserviceMock(FALSE).
+        - EXPECTED RESULT: The unit test will trigger the showInformationMessage(`Dataset created.`).
+        */
+        await allocateLikeDataset(generateDataserviceMock(false) as any, cache, mvsDatasetProviderMock, generateArgs(dataset));
+        expect(withProgressListener).toHaveReturned();
     });
 
 });
@@ -81,64 +61,39 @@ describe("[POSITIVE TESTS] Allocate like command", () => {
 describe("[NEGATIVE TESTS] Allocate like command", () => {
 
     test("Allocate like a VSAM dataset - not allowed", async () => {
-        const dummyDatasetOrg: Dataset = { name: datasetName, dataSetOrganization: "VSAM" };
+        /*
+        - DESC: A VSAM dataset with an valid allocation unit (track) is created.
+        - DATASET_SERVICE_MOCK: Dataset didn't already exsist --> generateDataserviceMock(FALSE).
+        - EXPECTED RESULT: The unit test will return FALSE because dataset type VSAM is not supported.
+        */
+        const dummyDatasetOrg: Dataset = { name: DATASET_NAME, dataSetOrganization: VSM_ORG, allocationUnit: TRK_UNIT };
         const dataset: Dataset = createDummyDataset(dummyDatasetOrg);
 
-        const args: object = {
-            dataset,
-            host,
-            path: "",
-        };
-        expect(1).toBe(1);
-        // expect(await allocateLikeDataset(datasetServiceMock, cache, mvsDatasetProviderMock, args)).toBe(false);
+        expect(await allocateLikeDataset(generateDataserviceMock(false) as any, cache, mvsDatasetProviderMock, generateArgs(dataset))).toBe(false);
     });
 
     test("Allocate like a BLOCKS unit dataset", async () => {
-        const dummyDatasetOrg: Dataset = { name: datasetName, dataSetOrganization: "PO", allocationUnit: "BLK" };
+        /*
+        - DESC: A PO dataset with an invalid allocation unit (blk) is created.
+        - DATASET_SERVICE_MOCK: Dataset didn't already exsist --> generateDataserviceMock(FALSE).
+        - EXPECTED RESULT: The unit test will return FALSE because allcation unit BLOCK is not supported.
+        */
+        const dummyDatasetOrg: Dataset = { name: DATASET_NAME, dataSetOrganization: PO_ORG, allocationUnit: BLK_UNIT };
         const dataset: Dataset = createDummyDataset(dummyDatasetOrg);
 
-        const args: object = {
-            dataset,
-            host,
-            path: "",
-        };
-        expect(1).toBe(1);
-        // expect(await allocateLikeDataset(datasetServiceMock, cache, mvsDatasetProviderMock, args)).toBe(false);
+        expect(await allocateLikeDataset(generateDataserviceMock(false) as any, cache, mvsDatasetProviderMock, generateArgs(dataset))).toBe(false);
 
     });
 
     test("Allocate like an already defined dataset", async () => {
         /*
-        For test purpose a PO dataset with a valid allocation unit is created.
-        The dataset service is mocked in order to return that the dataset defined
-        already exist and the unit test will verify that allocate like method will
-        return with the expected result
+        - DESC: A PO dataset with a valid allocation unit (track) is created.
+        - DATASET_SERVICE_MOCK: The target dataset already exsist --> generateDataserviceMock(TRUE).
+        - EXPECTED RESULT: The unit test will return FALSE because another dataset with the same name already exists.
         */
-
-        const dummyDatasetOrg: Dataset = { name: datasetName, dataSetOrganization: "PO", allocationUnit: "TRACK" };
+        const dummyDatasetOrg: Dataset = { name: DATASET_NAME, dataSetOrganization: PO_ORG, allocationUnit: TRK_UNIT };
         const dataset: Dataset = createDummyDataset(dummyDatasetOrg);
 
-        const args: object = {
-            dataset,
-            host,
-            path: "",
-        };
-
-        expect(await allocateLikeDataset(generateDataserviceMock(false,true) as any, cache, mvsDatasetProviderMock, generateArgs(dataset))).toBe(false);
+        expect(await allocateLikeDataset(generateDataserviceMock(true) as any, cache, mvsDatasetProviderMock, generateArgs(dataset))).toBe(false);
     });
 });
-
-function generateArgs(dataset: Dataset) {
-    return {
-        dataset,
-        host,
-        path: "",
-    };
-}
-
-function generateDataserviceMock(isSuccessfullyCreated: boolean, isDatasetExists: boolean) {
-    return {
-        allocateDatasetLike: jest.fn().mockReturnValue(Promise.resolve(isSuccessfullyCreated)),
-        isDatasetExists: jest.fn().mockReturnValue(Promise.resolve(isDatasetExists)),
-    };
-}
