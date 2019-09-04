@@ -12,13 +12,13 @@ pipeline {
 
         stage('Install') {
             steps {
-                sh 'yarn'
+                sh '/shared/common/yarn/1.15.2/bin/yarn install'
             }
         }
 
         stage('Compile') {
             steps {
-                sh 'yarn run compile'
+                sh '/shared/common/yarn/1.15.2/bin/yarn run compile'
             }
         }
     }
