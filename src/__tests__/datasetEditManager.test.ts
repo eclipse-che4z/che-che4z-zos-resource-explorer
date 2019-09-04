@@ -56,6 +56,7 @@ describe("DatasetEditMember", () => {
     const datasetEditManager: DatasetEditManager = new DatasetEditManager(
         datasetService,
     );
+    const link = "https://mock.com";
 
     beforeEach(() => {
         require("fs");
@@ -70,15 +71,76 @@ describe("DatasetEditMember", () => {
         });
     });
 
-    it("Save to Mainframe", () => {
-        const a = vscode.window.showWarningMessage;
-        // const b = SettingsFacade.findHostByName;
-        vscode.window.showWarningMessage = jest.fn().mockReturnValue("Save");
-        // SettingsFacade.findHostByName = jest.fn().mockReturnValue(undefined);
-        datasetEditManager.saveToMainframe(
-            "C:HarddriveMyHostFILE.COBOL_FILE.cbl",
-        );
-        vscode.window.showWarningMessage = a;
-        // SettingsFacade.findHostByName = b;
+    it("Mark Member", () => {
+        datasetEditManager.markedMember({
+            datasetName: "Mark_Member",
+            hostName: "MyHost",
+            memberName: "Member1",
+        });
+        datasetEditManager.markedMember({
+            datasetName: "Mark_Member",
+            hostName: "MyHost",
+            memberName: "Member2",
+        });
+        datasetEditManager.markedMember({
+            datasetName: "Mark_Member",
+            hostName: "MyHost",
+            memberName: "Member2",
+        });
     });
+
+    it("Save to Mainframe with no marked dataset", () => {
+        const connection: Connection = {
+            name: "RealMock",
+            url: link,
+            username: "USERNAME",
+        };
+        saveToMainframe(
+            connection,
+            "C:HarddriveMyHostFILE\\RealMock\\USERNAME.COBOL_FILE",
+        );
+    });
+
+    it("Save to Mainframe with different dataset", () => {
+        const connection: Connection = {
+            name: "Mocky",
+            url: link,
+            username: "USERNAME",
+        };
+        datasetEditManager.markedMember({
+            datasetName: "DATASET2",
+            hostName: connection.name,
+            memberName: "FILE",
+        });
+        saveToMainframe(
+            connection,
+            "C:HarddriveMyHostFILE\\Mocky\\DATASET_FILE.cbl",
+        );
+    });
+
+    it("Save to Mainframe with marked dataset", () => {
+        const connection: Connection = {
+            name: "Mocky",
+            url: link,
+            username: "USERNAME",
+        };
+        datasetEditManager.markedMember({
+            datasetName: "DATASET",
+            hostName: connection.name,
+            memberName: "FILE",
+        });
+        saveToMainframe(
+            connection,
+            "C:HarddriveMyHostFILE\\Mocky\\DATASET_FILE.cbl",
+        );
+    });
+
+    function saveToMainframe(connection: Connection, uri: string) {
+        const a = vscode.window.showWarningMessage;
+
+        vscode.window.showWarningMessage = jest.fn().mockReturnValue("Save");
+        SettingsFacade.listHosts = jest.fn().mockReturnValue([connection]);
+        datasetEditManager.saveToMainframe(uri);
+        vscode.window.showWarningMessage = a;
+    }
 });

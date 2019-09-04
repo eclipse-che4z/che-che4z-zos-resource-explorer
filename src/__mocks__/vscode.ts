@@ -12,7 +12,6 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-// tslint:disable: max-classes-per-file no-namespace
 export enum TreeItemCollapsibleState {
     /**
      * Determines an item can be neither collapsed nor expanded. Implies it has no children.
@@ -147,8 +146,31 @@ export class TreeItem {
 }
 
 // tslint:disable-next-line: max-classes-per-file
-export class EventEmitter {
+// export class EventEmitter {
+//     public event: undefined;
+// }
+
+// tslint:disable-next-line: max-classes-per-file
+export class EventEmitter<T> {
+    /**
+     * The event listeners can subscribe to.
+     */
     public event: undefined;
+
+    /**
+     * Notify all subscribers of the [event](#EventEmitter.event). Failure
+     * of one or more listener will not fail this function call.
+     *
+     * @param data The event object.
+     */
+    // tslint:disable-next-line: no-empty
+    public fire(data?: T): void {}
+
+    /**
+     * Dispose this object and free resources.
+     */
+    // tslint:disable-next-line: no-empty
+    public dispose(): void {}
 }
 
 export interface TextDocumentChangeEvent {
@@ -164,44 +186,71 @@ export interface TextDocumentChangeEvent {
 }
 
 // tslint:disable-next-line: no-namespace
-export namespace workspace {
-    export let rootPath: string | undefined;
+// export namespace workspace {
+//     export let rootPath: string | undefined;
 
-    export interface WorkspaceFolder {
-        readonly name: string;
-        readonly index: number;
-    }
+//     export interface WorkspaceFolder {
+//         readonly name: string;
+//         readonly index: number;
+//     }
 
-    export function onDidChangeTextDocument(
-        callback: (event: Event<TextDocumentChangeEvent>) => any,
-        // tslint:disable-next-line: no-empty
-    ) {}
+//     export function onDidChangeTextDocument(
+//         callback: (event: Event<TextDocumentChangeEvent>) => any,
+//         // tslint:disable-next-line: no-empty
+//     ) {}
 
-    export function onDidCloseTextDocument(
-        callback: (event: Event<TextDocumentChangeEvent>) => any,
-        // tslint:disable-next-line: no-empty
-    ) {}
+//     export function onDidCloseTextDocument(
+//         callback: (event: Event<TextDocumentChangeEvent>) => any,
+//         // tslint:disable-next-line: no-empty
+//     ) {}
 
-    export function onWillSaveTextDocument(
-        callback: (event: Event<TextDocumentChangeEvent>) => any,
-        // tslint:disable-next-line: no-empty
-    ) {}
+//     export function onWillSaveTextDocument(
+//         callback: (event: Event<TextDocumentChangeEvent>) => any,
+//         // tslint:disable-next-line: no-empty
+//     ) {}
 
-    export function openTextDocument(uri: any): undefined {
-        return undefined;
-    }
+//     export function openTextDocument(uri: any): undefined {
+//         return undefined;
+//     }
 
-    export interface InputBoxOptions {
-        placeholder?: string;
-    }
+//     export interface InputBoxOptions {
+//         placeholder?: string;
+//     }
 
-    export interface TextDocument {
-        fileName?: string;
-    }
-}
+//     export interface TextDocument {
+//         fileName?: string;
+//     }
+// }
 
+export const workspace = {
+    getConfiguration: jest.fn(),
+    getWorkspaceFolder: jest.fn(),
+    workspaceFolders: [],
+
+    onDidChangeConfiguration: jest.fn(),
+    onDidChangeTextDocument: jest
+        .fn()
+        .mockReturnValue(new EventEmitter<TextDocumentChangeEvent>()),
+    onDidChangeWorkspaceFolders: jest.fn(),
+    onDidCloseTextDocument: jest.fn(),
+    onWillSaveTextDocument: jest.fn(),
+};
+
+// tslint:disable-next-line: max-classes-per-file
 export class ExtensionContext {
     public asAbsolutePath(relativePath: string): string {
         return "";
     }
+}
+
+export interface TextDocumentChangeEvent {
+    /**
+     * The affected document.
+     */
+    document: undefined;
+
+    /**
+     * An array of content changes.
+     */
+    contentChanges: [];
 }

@@ -78,7 +78,7 @@ export class DatasetEditManager {
                     if (
                         this.isDataSetFile(event.document.fileName) &&
                         event.document.isDirty &&
-                        this.markEditedMember(
+                        this.markedMember(
                             DatasetEditManager.processFilePath(
                                 event.document.fileName,
                             ),
@@ -175,6 +175,9 @@ export class DatasetEditManager {
         memberName: string,
     ) {
         this.unmarkEditedMember({ datasetName, hostName, memberName });
+    }
+    public markedMember(memberQualifier: MemberQualifier): boolean {
+        return this.markEditedMember(memberQualifier);
     }
 
     private async editMember(
