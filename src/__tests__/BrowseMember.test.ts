@@ -65,7 +65,7 @@ describe("BrowseMember Command", () => {
     });
     // tslint:disable-next-line: no-identical-functions
     it("should change language id (JCL) based on dataset name on browse member", async () => {
-        const dataset = createDummyDataset({name: "UNIT.TEST.COBOL"});
+        const dataset = createDummyDataset({name: "UNIT.TEST.JCL"});
         const member: Member = { name: "COBOL" };
         const arg = { host: connection, dataset, member };
         try {
@@ -76,7 +76,7 @@ describe("BrowseMember Command", () => {
         expect(vscode.workspace.openTextDocument).toBeCalledWith({ language: "JCL", content });
     });
 
-    it("should show error messafe on error", async () => {
+    it("should show error message on error", async () => {
         const error = "Test error";
         const badDatasetService = {
             getContent: jest.fn().mockRejectedValue(error),
