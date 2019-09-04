@@ -1,7 +1,22 @@
 #!groovy
 
+def kubernetes_config = """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: node
+    image: node:8.12
+    tty: true
+"""
+
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            label 'explorer-for-zos'
+            yaml kubernetes_config
+        }
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -12,13 +27,13 @@ pipeline {
 
         stage('Install') {
             steps {
-                sh '/shared/common/yarn/1.15.2/bin/yarn install'
+                sh 'npm ci'
             }
         }
 
         stage('Compile') {
             steps {
-                sh '/shared/common/yarn/1.15.2/bin/yarn run compile'
+                sh 'npm run compile'
             }
         }
     }
