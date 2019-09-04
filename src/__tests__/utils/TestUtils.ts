@@ -1,4 +1,5 @@
 import { Connection } from "../../model/Connection";
+import { Dataset } from "../../model/DSEntities";
 
 /*
  * Copyright (c) 2019 Broadcom.
@@ -23,4 +24,22 @@ export function generateConnection(name: string = "some connection"): Connection
 
 export function generateDefaultFilter(connection: Connection) {
     return { name: "My Data Sets", value: connection.username.toLocaleUpperCase() };
+}
+
+export function generateArgs(dataset: Dataset) {
+    const host: Connection = generateConnection("some connection");
+
+    return {
+        dataset,
+        host,
+        path: "",
+    };
+}
+
+export function generateDataserviceMock(isDatasetExists: boolean) {
+    return {
+        // forced to be true
+        allocateDatasetLike: jest.fn().mockReturnValue(Promise.resolve(true)),
+        isDatasetExists: jest.fn().mockReturnValue(Promise.resolve(isDatasetExists)),
+    };
 }
