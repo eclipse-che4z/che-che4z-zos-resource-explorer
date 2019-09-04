@@ -28,4 +28,11 @@ export class SettingsFacade {
     public static listHosts(): Connection[] {
         return [];
     }
+
+    public static findHostByName(name: string, hosts: Connection[]): Connection | undefined {
+        if (name === "OK") {
+            return {name: "", url: "", username: ""};
+        }
+        return undefined;
+    }
 }
