@@ -11,12 +11,10 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-
-import { DatasetCache } from "../service/DatasetCache";
-import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
-import { createHostPath } from "../ui/tree/DatasetTreeModel";
-
-export async function refreshConnection(cache: DatasetCache, datasetDataProvider: DatasetDataProvider, hostNode: any) {
-    cache.reset(createHostPath(hostNode));
-    datasetDataProvider.refresh();
+{
+    "recommendations": [
+        "ms-vscode.vscode-typescript-tslint-plugin",
+        "esbenp.prettier-vscode",
+        "editorconfig.editorconfig"
+    ]
 }

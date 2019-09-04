@@ -1,3 +1,5 @@
+import { Connection } from "../../model/Connection";
+
 /*
  * Copyright (c) 2019 Broadcom.
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
@@ -11,12 +13,14 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
+export function generateConnection(name: string = "some connection"): Connection {
+    return {
+        name,
+        url: "https://" + name + ":65534/",
+        username: "username",
+    };
+}
 
-import { DatasetCache } from "../service/DatasetCache";
-import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
-import { createHostPath } from "../ui/tree/DatasetTreeModel";
-
-export async function refreshConnection(cache: DatasetCache, datasetDataProvider: DatasetDataProvider, hostNode: any) {
-    cache.reset(createHostPath(hostNode));
-    datasetDataProvider.refresh();
+export function generateDefaultFilter(connection: Connection) {
+    return { name: "My Data Sets", value: connection.username.toLocaleUpperCase() };
 }
