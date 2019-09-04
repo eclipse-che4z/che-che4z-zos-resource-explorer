@@ -17,11 +17,13 @@ import os = require("os");
 import path = require("path");
 import * as vscode from "vscode";
 import { Connection } from "../model/Connection";
+import { DSOrg } from "../model/DSEntities";
 import { Dataset, Member } from "../model/DSEntities";
 import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { ensureDirectoryExistence, generateTempFileName } from "../utils";
 import { DatasetService } from "./DatasetService";
 import { SettingsFacade } from "./SettingsFacade";
+import { memberExpression } from "@babel/types";
 
 const DEFAULT_ENCODING: string = "utf8";
 
@@ -55,14 +57,22 @@ export class DatasetEditManager {
     ) {
         subscriptions.push(
             vscode.commands.registerCommand(
-                "zosexplorer.editMember",
+                "zosexplorer.edit",
                 async (arg) => {
+                    let passedMember: Member = { name: ""};
+                    const DSO: string = arg.dataset.dataSetOrganization;
+                    if (DSO === DSOrg.PO) {
+                        passedMember = arg.member;
+                    } else {
+                        passedMember.name = arg.dataset.name;
+                    }
                     try {
                         await this.editMember(
                             arg.host,
                             arg.dataset,
-                            arg.member,
+                            passedMember,
                             dataProvider,
+                            DSO,
                         );
                     } catch (error) {
                         vscode.window.showErrorMessage(
@@ -180,10 +190,11 @@ export class DatasetEditManager {
         dataset: Dataset,
         member: Member,
         dataProvider: DatasetDataProvider,
+        DSO: string,
     ) {
         const content = await this.datasetService.getContent(
             host,
-            `${dataset.name}(${member.name})`,
+            (DSO === DSOrg.PO) ? `${dataset.name}(${member.name})` : `${dataset.name}`,
         );
         const filePath: string = generateTempFileName(host, dataset, member);
         ensureDirectoryExistence(filePath);
