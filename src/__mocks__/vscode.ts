@@ -32,14 +32,15 @@ export namespace commands {
     const commandMap = {};
 
     export function registerCommand(
-        command: string,
+        commandId: string,
         callback: (...args: any[]) => any,
         thisArg?: any,
     ) {
-        commandMap[command] = callback;
+        commandMap[commandId] = callback;
     }
-    export function executeCommand<T>(_command: string, ...rest: any[]) {
-        commandMap[_command](rest);
+
+    export function executeCommand<T>(command: string, ...rest: any[]) {
+        commandMap[command](rest);
     }
 }
 
@@ -100,8 +101,11 @@ export namespace window {
     }
 
     export function withProgress<R>(options: ProgressOptions,
-         task: () => any) {
-        return task();
+                                    task: (progress?: Progress) => any) {
+        return task({report: jest.fn()} as any);
+    }
+    export async function showTextDocument(document, column?, preserveFocus?) {
+        return Promise.resolve(null);
     }
 }
 
@@ -211,4 +215,12 @@ export interface ProgressOptions {
     location: ProgressLocation;
     title?: string;
     cancellable?: boolean;
+}
+
+export interface Progress {
+    report(value): void;
+}
+
+export enum ConfigurationTarget {
+    Global = 1,
 }

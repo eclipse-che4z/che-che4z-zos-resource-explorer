@@ -31,7 +31,7 @@ export function createDummyDataset(name: string = "ICFCAT.MV3B.CATALOGA"): Datas
         directoryBlocks: 10,
         expirationDate: "2020/07/25",
         migrated: false,
-        name: "TEST.DATASET",
+        name,
         primary: 10,
         recordFormat: "FB",
         recordLength: 80,
