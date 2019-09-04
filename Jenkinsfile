@@ -4,21 +4,29 @@ pipeline {
     agent any
     stages {
         stage('Checkout') {
-            // Checkout code from repository
-            checkout scm
+            steps {
+                // Checkout code from repository
+                checkout scm
+            }
         }
 
         stage('Install') {
-            sh 'npm ci'
+            steps {
+                sh 'npm ci'
+            }
         }
 
         stage('Compile') {
-            sh 'npm run compile'
+            steps {
+                sh 'npm run compile'
+            }
         }
 
         stage('Package') {
-            sh 'vsce package'
-            archiveArtifacts '*.vsix'
+            steps {
+                sh 'vsce package'
+                archiveArtifacts '*.vsix'
+            }
         }
     }
 }
