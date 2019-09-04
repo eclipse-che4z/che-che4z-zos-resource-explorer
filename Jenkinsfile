@@ -6,16 +6,19 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:12
+    image: node:8.12-alpine
     tty: true
 """
 
 pipeline {
-    agent {
+agent {
         kubernetes {
-            label 'explorer-for-zos'
+            label label 'explorer-for-zos-pod'
             yaml kubernetes_config
         }
+    }
+    options {
+        buildDiscarder logRotator(numToKeepStr: '15')
     }
     stages {
         stage('Build') {
