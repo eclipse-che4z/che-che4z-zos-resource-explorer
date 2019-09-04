@@ -55,7 +55,7 @@ export class DatasetEditManager {
     ) {
         subscriptions.push(
             vscode.commands.registerCommand(
-                "zosexplorer.editMember",
+                "zosexplorer.edit",
                 async (arg) => {
                     try {
                         await this.editMember(
