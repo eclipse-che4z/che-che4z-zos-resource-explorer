@@ -24,8 +24,8 @@ pipeline {
                 YARN_ARGS = "--cache-folder ${env.WORKSPACE}/yarn-cache --global-folder ${env.WORKSPACE}/yarn-global"
             }
             steps {
-                sh 'yarn ${env.YARN_ARGS} install'
-                sh 'yarn ${env.YARN_ARGS} test'
+                sh "yarn ${env.YARN_ARGS} install"
+                sh "yarn ${env.YARN_ARGS} test"
             }
         }
     }
