@@ -11,10 +11,18 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-
+import * as vscode from "vscode";
 export class DefaultCredentialsService {
     public requestCredentials(connection) {
             // tslint:disable-next-line: no-hardcoded-credentials
             return Promise.resolve({ username: "username", password: "password" });
+    }
+
+    public resetPassword(): void {
+
+    }
+
+    public async showErrorMessage(message: string): Promise<void> {
+         vscode.window.showErrorMessage(message);
     }
 }

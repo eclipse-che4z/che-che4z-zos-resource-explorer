@@ -14,7 +14,6 @@
 import { Connection } from "../../model/Connection";
 
 export class SettingsFacade {
-
     public static async requestCredentials(
         host: Connection,
     ): Promise<{ username: string; password?: string  }> {
@@ -26,7 +25,7 @@ export class SettingsFacade {
     public static  resetPassword(host: Connection): void {
         host.password = undefined;
     }
-    constructor(private creds: any) {
+    public static listHosts(): Connection[] {
+        return [];
     }
-
 }
