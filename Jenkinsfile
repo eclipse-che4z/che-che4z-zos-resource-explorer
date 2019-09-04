@@ -2,9 +2,6 @@
 
 pipeline {
     agent any
-    tools {
-        node 'node-v10.15.3-linux-x64'
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -15,20 +12,13 @@ pipeline {
 
         stage('Install') {
             steps {
-                sh 'npm ci'
+                sh 'yarn'
             }
         }
 
         stage('Compile') {
             steps {
-                sh 'npm run compile'
-            }
-        }
-
-        stage('Package') {
-            steps {
-                sh 'vsce package'
-                archiveArtifacts '*.vsix'
+                sh 'yarn run compile'
             }
         }
     }
