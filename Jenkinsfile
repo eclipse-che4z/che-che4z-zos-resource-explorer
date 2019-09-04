@@ -6,7 +6,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:12.9-alpine
+    image: node:12.9.1-alpine
     tty: true
 """
 
@@ -20,7 +20,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                container(node) {
+                container('node') {
                     sh "npm ci"
                     sh "npm t"
                 }
