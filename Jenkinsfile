@@ -13,7 +13,7 @@ spec:
 pipeline {
     agent {
         kubernetes {
-            label label 'explorer-for-zos-pod'
+            label 'explorer-for-zos-pod'
             yaml kubernetes_config
         }
     }
