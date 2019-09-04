@@ -6,7 +6,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:8.12
+    image: node:12
     tty: true
 """
 
@@ -27,13 +27,13 @@ pipeline {
 
         stage('Install') {
             steps {
-                sh 'npm ci'
+                sh 'yarn install'
             }
         }
 
         stage('Compile') {
             steps {
-                sh 'npm run compile'
+                sh 'yarn run compile'
             }
         }
     }
