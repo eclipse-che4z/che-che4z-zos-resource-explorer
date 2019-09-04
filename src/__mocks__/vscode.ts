@@ -86,6 +86,10 @@ export namespace window {
     ): undefined {
         return undefined;
     }
+
+    export function showWarningMessage(message: string, ...items: string[]): Thenable <string | undefined> {
+        return Promise.resolve("OK");
+    }
     export interface MessageOptions {
         modal?: boolean;
     }
