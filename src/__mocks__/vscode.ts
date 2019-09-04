@@ -98,13 +98,21 @@ export namespace window {
         isCloseAffordance?: boolean;
     }
 
-    export function showTextDocument(
-        document: any,
-        column?: any,
-        // tslint:disable-next-line: bool-param-default
-        preserveFocus?: boolean,
-    ): undefined {
-        return undefined;
+    export function showInputBox(
+        options?: InputBoxOptions,
+        token?: CancellationToken,
+    ) {
+        return Promise.resolve("NameOfMember");
+    }
+
+    export function withProgress<R>(
+        options: ProgressOptions,
+        task: (progress?: Progress) => any,
+    ) {
+        return task({ report: jest.fn() } as any);
+    }
+    export async function showTextDocument(document, column?, preserveFocus?) {
+        return Promise.resolve(null);
     }
 }
 
@@ -185,6 +193,58 @@ export interface TextDocumentChangeEvent {
     contentChanges: [];
 }
 
+// tslint:disable-next-line: max-classes-per-file
+export class ExtensionContext {
+    public asAbsolutePath(relativePath: string): string {
+        return "";
+    }
+}
+
+export interface TextDocumentChangeEvent {
+    /**
+     * The affected document.
+     */
+    document: undefined;
+
+    /**
+     * An array of content changes.
+     */
+    contentChanges: [];
+}
+
+export enum ProgressLocation {
+    SourceControl = 1,
+    Window = 10,
+    Notification = 15,
+}
+
+export interface InputBoxOptions {
+    value?: string;
+    valueSelection?: [number, number];
+    prompt?: string;
+    placeHolder?: string;
+    password?: boolean;
+    ignoreFocusOut?: boolean;
+    validateInput?(
+        value: string,
+    ): // tslint:disable-next-line: max-union-size
+    string | undefined | null | Thenable<string | undefined | null>;
+}
+
+export interface ProgressOptions {
+    location: ProgressLocation;
+    title?: string;
+    cancellable?: boolean;
+}
+
+export interface Progress {
+    report(value): void;
+}
+
+export enum ConfigurationTarget {
+    Global = 1,
+}
+
 // tslint:disable-next-line: no-namespace
 // export namespace workspace {
 //     export let rootPath: string | undefined;
@@ -235,22 +295,3 @@ export const workspace = {
     onDidCloseTextDocument: jest.fn(),
     onWillSaveTextDocument: jest.fn(),
 };
-
-// tslint:disable-next-line: max-classes-per-file
-export class ExtensionContext {
-    public asAbsolutePath(relativePath: string): string {
-        return "";
-    }
-}
-
-export interface TextDocumentChangeEvent {
-    /**
-     * The affected document.
-     */
-    document: undefined;
-
-    /**
-     * An array of content changes.
-     */
-    contentChanges: [];
-}

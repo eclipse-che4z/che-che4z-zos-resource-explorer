@@ -33,4 +33,12 @@ export class DatasetService {
     ) {
         return "CONTENT FOR OUR MOCK IMPLEMENTATION";
     }
+
+    public async createMember(connection: Connection, datasetName: string, memberName: string, data?: string) {
+
+    }
+
+    public async isMemberExists(connection: Connection, datasetName: string, memberName: string): Promise<boolean> {
+        return Promise.resolve(false);
+    }
 }

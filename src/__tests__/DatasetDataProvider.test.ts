@@ -30,6 +30,7 @@ import {
     ZUserDatasetNode,
 } from "../ui/tree/DatasetTreeModel";
 import { createDummyDataset } from "./utils/DatasetUtils";
+import { generateDefaultFilter, generateConnection } from "./utils/TestUtils";
 
 // tslint:disable: no-big-function
 describe("DatasetDataProvider", () => {
@@ -241,15 +242,3 @@ describe("DatasetDataProvider", () => {
     });
 });
 
-// TODO extract
-function generateConnection(name: string): Connection {
-    return {
-        name,
-        url: "https://" + name + ":65534/",
-        username: "username",
-    };
-}
-
-function generateDefaultFilter(connection: Connection) {
-    return { name: "My Data Sets", value: connection.username.toLocaleUpperCase() };
-}
