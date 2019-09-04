@@ -18,22 +18,14 @@ pipeline {
         }
     }
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout code from repository
-                checkout scm
+        stage('Build') {
+            environment {
+                SPAWN_WRAP_SHIM_ROOT = "${env.WORKSPACE}"
+                YARN_ARGS = "--cache-folder ${env.WORKSPACE}/yarn-cache --global-folder ${env.WORKSPACE}/yarn-global"
             }
-        }
-
-        stage('Install') {
             steps {
-                sh 'yarn install'
-            }
-        }
-
-        stage('Compile') {
-            steps {
-                sh 'yarn run compile'
+                sh 'yarn ${env.YARN_ARGS} install'
+                sh 'yarn ${env.YARN_ARGS} test'
             }
         }
     }
