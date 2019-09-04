@@ -18,161 +18,96 @@ jest.mock("../utils");
 import * as vscode from "vscode";
 import { pasteMember } from "../commands/PasteMember";
 
+let cache: any;
+let datasetDataProvider: any;
+const args: any = {host: "", dataset: "", memberName: ""};
+
+beforeEach(() => {
+        cache = {
+            resetDataset: jest.fn(),
+        };
+        datasetDataProvider = {
+            refresh: jest.fn(),
+        };
+    });
+
 describe("Paste member", () => {
-    const args: any = {host: "", dataset: "", memberName: ""};
     it("Pastes a member", async () => {
          const copyPasteService: any = {
              canPaste: jest.fn().mockReturnValue(true),
              getMemberName: jest.fn().mockReturnValue("member"),
-             paste: jest.fn().mockImplementation(() => {
-                return ;
-            }),
-             setMemberName: jest.fn().mockImplementation(() => {
-                 return ;
-             }),
+             paste: jest.fn(),
+             setMemberName: jest.fn(),
          };
          const datasetService: any = {
              isMemberExists: jest.fn().mockReturnValue(false),
-
         };
-         const cache: any = {
-            resetDataset: jest.fn().mockImplementation(() => {
-                return;
-            }),
-        };
-         const datasetDataProvider: any = {
-            refresh: jest.fn().mockImplementation(() => {
-                return;
-            }),
-        };
-         const canPasteListener = jest.spyOn(copyPasteService, "canPaste");
-         const pasteListener = jest.spyOn(copyPasteService, "paste");
-         const isMemberExistsListener = jest.spyOn(datasetService, "isMemberExists");
-         const resetDatasetListener = jest.spyOn(cache, "resetDataset");
-         const refreshListener = jest.spyOn(datasetDataProvider, "refresh");
          await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-         expect(canPasteListener).toHaveReturned();
-         expect(isMemberExistsListener).toHaveReturned();
-         expect(pasteListener).toHaveReturned();
-         expect(resetDatasetListener).toHaveReturned();
-         expect(refreshListener).toHaveReturned();
+         expect(copyPasteService.canPaste).toHaveReturned();
+         expect(datasetService.isMemberExists).toHaveReturned();
+         expect(copyPasteService.paste).toHaveReturned();
+         expect(cache.resetDataset).toHaveReturned();
+         expect(datasetDataProvider.refresh).toHaveReturned();
      });
     it("Cannot copy", async () => {
         const copyPasteService: any = {
             canPaste: jest.fn().mockReturnValue(false),
             getMemberName: jest.fn().mockReturnValue("member"),
-            paste: jest.fn().mockImplementation(() => {
-               return ;
-           }),
-            setMemberName: jest.fn().mockImplementation(() => {
-                return ;
-            }),
+            paste: jest.fn(),
+            setMemberName: jest.fn(),
         };
         const datasetService: any = {
             isMemberExists: jest.fn().mockReturnValue(false),
        };
-        const cache: any = {
-        resetDataset: jest.fn().mockImplementation(() => {
-            return;
-        }),
-    };
-        const datasetDataProvider: any = {
-        refresh: jest.fn().mockImplementation(() => {
-            return;
-        }),
-    };
-        const canPasteListener = jest.spyOn(copyPasteService, "canPaste");
-        const pasteListener = jest.spyOn(copyPasteService, "paste");
-        const isMemberExistsListener = jest.spyOn(datasetService, "isMemberExists");
-        const resetDatasetListener = jest.spyOn(cache, "resetDataset");
-        const refreshListener = jest.spyOn(datasetDataProvider, "refresh");
         await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-        expect(canPasteListener).toHaveReturnedWith(false);
-        expect(isMemberExistsListener).toHaveReturnedTimes(0);
-        expect(pasteListener).toHaveReturnedTimes(0);
-        expect(resetDatasetListener).toHaveReturnedTimes(0);
-        expect(refreshListener).toHaveReturnedTimes(0);
+        expect(copyPasteService.canPaste).toHaveReturnedWith(false);
+        expect(datasetService.isMemberExists).toHaveReturnedTimes(0);
+        expect(copyPasteService.paste).toHaveReturnedTimes(0);
+        expect(cache.resetDataset).toHaveReturnedTimes(0);
+        expect(datasetDataProvider.refresh).toHaveReturnedTimes(0);
      });
     it("Throws error", async () => {
         const copyPasteService: any = {
             canPaste: jest.fn().mockReturnValue(true),
             getMemberName: jest.fn().mockReturnValue("member"),
-            paste: jest.fn().mockImplementation(() => {
-               return ;
-           }),
-            setMemberName: jest.fn().mockImplementation(() => {
-                return ;
-            }),
+            paste: jest.fn(),
+            setMemberName: jest.fn(),
         };
         const datasetService: any = {
             isMemberExists: jest.fn().mockImplementation(() => {
                 throw new Error();
             }),
        };
-        const cache: any = {
-        resetDataset: jest.fn().mockImplementation(() => {
-            return;
-        }),
-    };
-        const datasetDataProvider: any = {
-        refresh: jest.fn().mockImplementation(() => {
-            return;
-        }),
-    };
-        const canPasteListener = jest.spyOn(copyPasteService, "canPaste");
-        const pasteListener = jest.spyOn(copyPasteService, "paste");
-        const isMemberExistsListener = jest.spyOn(datasetService, "isMemberExists");
         const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
-        const resetDatasetListener = jest.spyOn(cache, "resetDataset");
-        const refreshListener = jest.spyOn(datasetDataProvider, "refresh");
         await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-        expect(canPasteListener).toHaveReturnedWith(true);
-        expect(isMemberExistsListener).toHaveReturnedTimes(0);
-        expect(pasteListener).toHaveReturnedTimes(0);
+        expect(copyPasteService.canPaste).toHaveReturnedWith(true);
+        expect(datasetService.isMemberExists).toHaveReturnedTimes(0);
+        expect(copyPasteService.paste).toHaveReturnedTimes(0);
         expect(showErrorMessageListener).toHaveReturned();
-        expect(resetDatasetListener).toHaveReturnedTimes(0);
-        expect(refreshListener).toHaveReturnedTimes(0);
+        expect(cache.resetDataset).toHaveReturnedTimes(0);
+        expect(datasetDataProvider.refresh).toHaveReturnedTimes(0);
      });
     it("Member already exists", async () => {
         const copyPasteService: any = {
             canPaste: jest.fn().mockReturnValue(true),
             getMemberName: jest.fn().mockReturnValue("member"),
-            paste: jest.fn().mockImplementation(() => {
-               return ;
-           }),
-            setMemberName: jest.fn().mockImplementation(() => {
-                return ;
-            }),
+            paste: jest.fn(),
+            setMemberName: jest.fn(),
         };
         const datasetService: any = {
             isMemberExists: jest.fn()
             .mockReturnValueOnce(true)
             .mockReturnValueOnce(false),
        };
-        const cache: any = {
-        resetDataset: jest.fn().mockImplementation(() => {
-            return;
-        }),
-    };
-        const datasetDataProvider: any = {
-        refresh: jest.fn().mockImplementation(() => {
-            return;
-        }),
-    };
-        const canPasteListener = jest.spyOn(copyPasteService, "canPaste");
-        const pasteListener = jest.spyOn(copyPasteService, "paste");
-        const isMemberExistsListener = jest.spyOn(datasetService, "isMemberExists");
         const showInputBoxListener = jest.spyOn(vscode.window, "showInputBox");
         const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
-        const resetDatasetListener = jest.spyOn(cache, "resetDataset");
-        const refreshListener = jest.spyOn(datasetDataProvider, "refresh");
         await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-        expect(canPasteListener).toHaveReturned();
-        expect(isMemberExistsListener).toHaveReturned();
-        expect(pasteListener).toHaveReturned();
+        expect(copyPasteService.canPaste).toHaveReturned();
+        expect(datasetService.isMemberExists).toHaveReturned();
+        expect(copyPasteService.paste).toHaveReturned();
         expect(showInputBoxListener).toHaveReturned();
         expect(showErrorMessageListener).toHaveReturned();
-        expect(resetDatasetListener).toHaveReturned();
-        expect(refreshListener).toHaveReturned();
+        expect(cache.resetDataset).toHaveReturned();
+        expect(datasetDataProvider.refresh).toHaveReturned();
      });
  });
