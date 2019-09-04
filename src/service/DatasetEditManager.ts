@@ -54,23 +54,20 @@ export class DatasetEditManager {
         dataProvider: DatasetDataProvider,
     ) {
         subscriptions.push(
-            vscode.commands.registerCommand(
-                "zosexplorer.edit",
-                async (arg) => {
-                    try {
-                        await this.editMember(
-                            arg.host,
-                            arg.dataset,
-                            arg.member,
-                            dataProvider,
-                        );
-                    } catch (error) {
-                        vscode.window.showErrorMessage(
-                            "Edit member error: " + error,
-                        );
-                    }
-                },
-            ),
+            vscode.commands.registerCommand("zosexplorer.edit", async (arg) => {
+                try {
+                    await this.editMember(
+                        arg.host,
+                        arg.dataset,
+                        arg.member,
+                        dataProvider,
+                    );
+                } catch (error) {
+                    vscode.window.showErrorMessage(
+                        "Edit member error: " + error,
+                    );
+                }
+            }),
         );
         subscriptions.push(
             vscode.workspace.onDidChangeTextDocument(
@@ -180,6 +177,10 @@ export class DatasetEditManager {
         return this.markEditedMember(memberQualifier);
     }
 
+    public closeFileDocument(closedDocument: vscode.TextDocument) {
+        return this.closeDocument(closedDocument);
+    }
+
     private async editMember(
         host: Connection,
         dataset: Dataset,
@@ -250,6 +251,7 @@ export class DatasetEditManager {
         }
         return false;
     }
+
     private closeDocument(closedDocument: vscode.TextDocument) {
         if (!closedDocument.isClosed) {
             return;

@@ -16,36 +16,20 @@ jest.mock("../service/DatasetService");
 jest.mock("../service/SettingsFacade");
 jest.mock("fs");
 
+import { anyTypeAnnotation } from "@babel/types";
 import * as vscode from "vscode";
+import { TextDocument, Uri } from "../__mocks__/vscode";
 import { Connection } from "../model/Connection";
 import { Dataset, Member } from "../model/DSEntities";
 import { DatasetEditManager } from "../service/DatasetEditManager";
 import { DatasetService } from "../service/DatasetService";
 import { SettingsFacade } from "../service/SettingsFacade";
 import { ZoweRestClient } from "../service/ZoweRestClient";
+import { createDummyDataset } from "./utils/DatasetUtils";
 
 describe("DatasetEditMember", () => {
     const host: Connection = { name: "", url: "", username: "" };
-    const dataset: Dataset = {
-        allocatedSize: 50,
-        allocationUnit: "",
-        averageBlock: 2,
-        blockSize: 50,
-        catalogName: "",
-        creationDate: "",
-        dataSetOrganization: "",
-        deviceType: "",
-        directoryBlocks: 1,
-        expirationDate: "",
-        migrated: false,
-        name: "",
-        primary: 1,
-        recordFormat: "",
-        recordLength: 20,
-        secondary: 10,
-        used: 1,
-        volumeSerial: "",
-    };
+    const dataset: Dataset = createDummyDataset();
     const member: Member = {
         name: "",
     };
@@ -57,6 +41,41 @@ describe("DatasetEditMember", () => {
         datasetService,
     );
     const link = "https://mock.com";
+    const textDocument: TextDocument = {
+        eol: undefined,
+        fileName: "",
+        isClosed: true,
+        isDirty: true,
+        isUntitled: true,
+        languageId: "COBOL",
+        lineCount: 12,
+        uri: new Uri("", "", "", "", "", ""),
+        version: 1,
+        save() {
+            return undefined;
+        },
+        lineAt(line: number) {
+            return undefined;
+        },
+        offsetAt(position: any) {
+            return undefined;
+        },
+        positionAt(offset: number) {
+            return undefined;
+        },
+        getText(range?: any) {
+            return "undefined";
+        },
+        getWordRangeAtPosition(position: any, regex?: RegExp) {
+            return undefined;
+        },
+        validateRange(range: any) {
+            return undefined;
+        },
+        validatePosition(position: any) {
+            return undefined;
+        },
+    };
 
     beforeEach(() => {
         require("fs");
@@ -133,6 +152,10 @@ describe("DatasetEditMember", () => {
             connection,
             "C:HarddriveMyHostFILE\\Mocky\\DATASET_FILE.cbl",
         );
+    });
+
+    it("Close document", () => {
+        datasetEditManager.closeFileDocument(textDocument);
     });
 
     function saveToMainframe(connection: Connection, uri: string) {

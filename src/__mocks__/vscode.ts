@@ -56,6 +56,67 @@ interface Thenable<T> {
     ): Thenable<TResult>;
 }
 
+export interface TextDocument {
+    readonly uri: Uri;
+    readonly fileName: string;
+    readonly isUntitled: boolean;
+    readonly languageId: string;
+    readonly version: number;
+    readonly isDirty: boolean;
+    readonly isClosed: boolean;
+    readonly eol: any;
+    readonly lineCount: number;
+    save(): any;
+    lineAt(line: number): any;
+    lineAt(position: any): any;
+    offsetAt(position: any): any;
+    positionAt(offset: number): any;
+    getText(range?: any): string;
+    getWordRangeAtPosition(position: any, regex?: RegExp): any | undefined;
+    validateRange(range: any): any;
+    validatePosition(position: any): any;
+}
+
+export class Uri {
+    public readonly scheme: string;
+    public readonly authority: string;
+    public readonly path: string;
+    public readonly query: string;
+    public readonly fragment: string;
+    public readonly fsPath: string;
+
+    public constructor(
+        scheme: string,
+        authority: string,
+        path: string,
+        query: string,
+        fragment: string,
+        fsPath: string,
+    ) {
+        this.authority = authority;
+        this.scheme = scheme;
+        this.path = path;
+        this.query = query;
+        this.fragment = fragment;
+        this.fsPath = fsPath;
+    }
+    public with(change: {
+        scheme?: string;
+        authority?: string;
+        path?: string;
+        query?: string;
+        fragment?: string;
+    }): any {
+        return undefined;
+    }
+    public toString(skipEncoding?: boolean): string {
+        return this.path;
+    }
+    public toJSON(): any {
+        return undefined;
+    }
+}
+
 export type Event<T> = (
     listener: (e: T) => any,
     thisArgs?: any,
@@ -98,6 +159,10 @@ export namespace window {
         isCloseAffordance?: boolean;
     }
 
+    export interface InputBoxOptions {
+        placeholder?: string;
+    }
+
     export function showInputBox(
         options?: InputBoxOptions,
         token?: CancellationToken,
@@ -116,6 +181,7 @@ export namespace window {
     }
 }
 
+// tslint:disable-next-line: max-classes-per-file
 export class Disposable {
     // tslint:disable-next-line: no-empty
     constructor() {}
@@ -218,19 +284,6 @@ export enum ProgressLocation {
     Notification = 15,
 }
 
-export interface InputBoxOptions {
-    value?: string;
-    valueSelection?: [number, number];
-    prompt?: string;
-    placeHolder?: string;
-    password?: boolean;
-    ignoreFocusOut?: boolean;
-    validateInput?(
-        value: string,
-    ): // tslint:disable-next-line: max-union-size
-    string | undefined | null | Thenable<string | undefined | null>;
-}
-
 export interface ProgressOptions {
     location: ProgressLocation;
     title?: string;
@@ -246,52 +299,30 @@ export enum ConfigurationTarget {
 }
 
 // tslint:disable-next-line: no-namespace
-// export namespace workspace {
-//     export let rootPath: string | undefined;
+export namespace workspace {
+    export let rootPath: string | undefined;
 
-//     export interface WorkspaceFolder {
-//         readonly name: string;
-//         readonly index: number;
-//     }
+    export interface WorkspaceFolder {
+        readonly name: string;
+        readonly index: number;
+    }
 
-//     export function onDidChangeTextDocument(
-//         callback: (event: Event<TextDocumentChangeEvent>) => any,
-//         // tslint:disable-next-line: no-empty
-//     ) {}
+    export function onDidChangeTextDocument(
+        callback: (event: Event<TextDocumentChangeEvent>) => any,
+        // tslint:disable-next-line: no-empty
+    ) {}
 
-//     export function onDidCloseTextDocument(
-//         callback: (event: Event<TextDocumentChangeEvent>) => any,
-//         // tslint:disable-next-line: no-empty
-//     ) {}
+    export function onDidCloseTextDocument(
+        callback: (event: Event<TextDocumentChangeEvent>) => any,
+        // tslint:disable-next-line: no-empty
+    ) {}
 
-//     export function onWillSaveTextDocument(
-//         callback: (event: Event<TextDocumentChangeEvent>) => any,
-//         // tslint:disable-next-line: no-empty
-//     ) {}
+    export function onWillSaveTextDocument(
+        callback: (event: Event<TextDocumentChangeEvent>) => any,
+        // tslint:disable-next-line: no-empty
+    ) {}
 
-//     export function openTextDocument(uri: any): undefined {
-//         return undefined;
-//     }
-
-//     export interface InputBoxOptions {
-//         placeholder?: string;
-//     }
-
-//     export interface TextDocument {
-//         fileName?: string;
-//     }
-// }
-
-export const workspace = {
-    getConfiguration: jest.fn(),
-    getWorkspaceFolder: jest.fn(),
-    workspaceFolders: [],
-
-    onDidChangeConfiguration: jest.fn(),
-    onDidChangeTextDocument: jest
-        .fn()
-        .mockReturnValue(new EventEmitter<TextDocumentChangeEvent>()),
-    onDidChangeWorkspaceFolders: jest.fn(),
-    onDidCloseTextDocument: jest.fn(),
-    onWillSaveTextDocument: jest.fn(),
-};
+    export function openTextDocument(uri: any): undefined {
+        return undefined;
+    }
+}

@@ -19,6 +19,10 @@ function readFileSync(path) {
     return "CONTENT";
 }
 
+function existsSync(path) {
+    return true;
+}
+
 // tslint:disable-next-line: no-string-literal
 fs["readFileSync"] = readFileSync;
 
