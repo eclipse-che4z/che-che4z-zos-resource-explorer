@@ -32,11 +32,11 @@ export namespace commands {
     const commandMap = {};
 
     export function registerCommand(
-        command: string,
+        commandId: string,
         callback: (...args: any[]) => any,
         thisArg?: any,
     ) {
-        commandMap[command] = callback;
+        commandMap[commandId] = callback;
     }
     export function executeCommand<T>(command: string, ...rest: any[]) {
         commandMap[command](...rest);

@@ -64,7 +64,7 @@ describe("DatasetEditMember", () => {
 
     it("Should Mark Member as Edited", () => {
         datasetEditManager.register([], context);
-        vscode.commands.executeCommand("zosexplorer.editMember", {
+        vscode.commands.executeCommand("zosexplorer.edit", {
             dataset,
             host,
             member,
