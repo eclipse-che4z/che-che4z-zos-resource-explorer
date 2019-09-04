@@ -56,7 +56,7 @@ describe("DatasetCache", () => {
             username: "userName",
         };
         const prefix: string = createFilterPath(connection, filter);
-        const dataset: Dataset = createDummyDataset("TEST.DS");
+        const dataset: Dataset = createDummyDataset({ name: "TEST.DS"});
         const datasetNode: ZDatasetNode = new ZDatasetNode(dataset, connection, prefix);
 
         it("should return cached object after invalidate if connection was not removed", () => {
