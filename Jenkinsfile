@@ -19,10 +19,14 @@ pipeline {
     }
     stages {
         stage('Build') {
+            environment {
+                SPAWN_WRAP_SHIM_ROOT = "${env.WORKSPACE}"
+                YARN_ARGS = "--cache-folder ${env.WORKSPACE}/yarn-cache --global-folder ${env.WORKSPACE}/yarn-global"
+            }
             steps {
                 container('node') {
-                    sh "npm ci"
-                    sh "npm t"
+                    sh "yarn ${env.YARN_ARGS} install"
+                    sh "yarn ${env.YARN_ARGS} test"
                 }
             }
         }
