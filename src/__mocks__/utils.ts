@@ -23,6 +23,5 @@ export async function createPhysicalDocument(
 }
 
 export function validateMemberName(inputValue: string): string | undefined {
-    console.log("here i am");
     return inputValue;
 }
