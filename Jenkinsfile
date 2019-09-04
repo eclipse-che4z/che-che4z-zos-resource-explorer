@@ -6,7 +6,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:8.12-alpine
+    image: node:12.9-alpine
     tty: true
 """
 
@@ -27,8 +27,10 @@ agent {
                 YARN_ARGS = "--cache-folder ${env.WORKSPACE}/yarn-cache --global-folder ${env.WORKSPACE}/yarn-global"
             }
             steps {
-                sh "yarn ${env.YARN_ARGS} install"
-                sh "yarn ${env.YARN_ARGS} test"
+                container(node) {
+                    sh "yarn ${env.YARN_ARGS} install"
+                    sh "yarn ${env.YARN_ARGS} test"
+                }
             }
         }
     }
