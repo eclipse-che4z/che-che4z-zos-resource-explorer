@@ -35,7 +35,6 @@ import { generateDefaultFilter, generateConnection } from "./utils/TestUtils";
 // tslint:disable: no-big-function
 describe("DatasetDataProvider", () => {
     const context: any = new ExtensionContext();
-
     describe("Object convertion", () => {
         const cache = {
             getItemCollapsState: jest.fn().mockReturnValue(vscode.TreeItemCollapsibleState.Collapsed),
@@ -82,7 +81,7 @@ describe("DatasetDataProvider", () => {
         });
 
         describe("Dataset nodes", () => {
-            const dataset: Dataset = createDummyDataset("USERS.DATASET");
+            const dataset: Dataset = createDummyDataset({ name: "UNIT.TEST.COBOL" });
             it("should map dataset PS node to tree item", () => {
                 dataset.dataSetOrganization = DSOrg.PS;
                 const datasetNode: ZDatasetNode = new ZDatasetNode(dataset, connection, "");
@@ -126,7 +125,7 @@ describe("DatasetDataProvider", () => {
         });
         describe("Dataset member nodes", () => {
             it("should map dataset membernode to tree item", () => {
-                const dataset: Dataset = createDummyDataset("USERS.DATASET");
+                const dataset: Dataset = createDummyDataset({ name: "UNIT.TEST.COBOL" });
                 const member: Member = { name: "MEMBER1" };
                 const memberNode: ZMemberNode = new ZMemberNode(dataset, member, connection, "");
                 const item: vscode.TreeItem = dsp.getTreeItem(memberNode);
@@ -189,7 +188,7 @@ describe("DatasetDataProvider", () => {
         });
 
         it("should return datasets under filter node", async () => {
-            const dataset: Dataset = createDummyDataset(filter.value + ".DATASET");
+            const dataset: Dataset = createDummyDataset({ name: filter.value + ".DATASET" });
             const datasetService = {
                 listDatasets: jest.fn().mockReturnValueOnce(Promise.resolve([dataset])),
             };
@@ -206,7 +205,7 @@ describe("DatasetDataProvider", () => {
         });
 
         it("should return datasets under default filter node", async () => {
-            const dataset: Dataset = createDummyDataset(connectionWithoutFilter.username + ".DATASET");
+            const dataset: Dataset = createDummyDataset({ name: connectionWithoutFilter.username + ".DATASET" });
             const datasetService = {
                 listDatasets: jest.fn().mockReturnValueOnce(Promise.resolve([dataset])),
             };
@@ -222,7 +221,7 @@ describe("DatasetDataProvider", () => {
         });
 
         it("should return members under dataset node", async () => {
-            const dataset: Dataset = createDummyDataset(connectionWithoutFilter.username + ".DATASET");
+            const dataset: Dataset = createDummyDataset({ name: connectionWithoutFilter.username + ".DATASET" });
             const member: Member = { name: "MEMBER" };
             const datasetService = {
                 listMembers: jest.fn().mockReturnValue(Promise.resolve([member.name])),

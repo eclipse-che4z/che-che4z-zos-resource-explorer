@@ -67,8 +67,7 @@ export interface TextDocument {
     readonly eol: any;
     readonly lineCount: number;
     save(): any;
-    lineAt(line: number): any;
-    lineAt(position: any): any;
+    lineAt(line: number | any): any;
     offsetAt(position: any): any;
     positionAt(offset: number): any;
     getText(range?: any): string;
@@ -109,6 +108,7 @@ export class Uri {
     }): any {
         return undefined;
     }
+    // tslint:disable-next-line: bool-param-default
     public toString(skipEncoding?: boolean): string {
         return this.path;
     }
@@ -133,8 +133,8 @@ export namespace window {
     export function showInformationMessage(
         message: string,
         ...items: string[]
-    ): undefined {
-        return undefined;
+    ) {
+        return Promise.resolve(message);
     }
 
     export function showErrorMessage(
@@ -143,13 +143,10 @@ export namespace window {
     ): undefined {
         return undefined;
     }
-    export function showWarningMessage(
-        message: string,
-        ...items: string[]
-    ): undefined {
-        return undefined;
-    }
 
+    export function showWarningMessage(message: string, ...items: string[]) {
+        return Promise.resolve("OK");
+    }
     export interface MessageOptions {
         modal?: boolean;
     }
@@ -176,8 +173,9 @@ export namespace window {
     ) {
         return task({ report: jest.fn() } as any);
     }
-    export async function showTextDocument(document, column?, preserveFocus?) {
-        return Promise.resolve(null);
+
+    export async function showTextDocument(document, options?) {
+        return Promise.resolve("NameOfDocument");
     }
 }
 
@@ -300,6 +298,15 @@ export enum ConfigurationTarget {
 
 // tslint:disable-next-line: no-namespace
 export namespace workspace {
+    export function openTextDocument(fileName: string) {
+        const document: any = {};
+        return Promise.resolve(document);
+    }
+
+    export interface InputBoxOptions {
+        placeholder?: string;
+    }
+
     export let rootPath: string | undefined;
 
     export interface WorkspaceFolder {
@@ -321,8 +328,4 @@ export namespace workspace {
         callback: (event: Event<TextDocumentChangeEvent>) => any,
         // tslint:disable-next-line: no-empty
     ) {}
-
-    export function openTextDocument(uri: any): undefined {
-        return undefined;
-    }
 }

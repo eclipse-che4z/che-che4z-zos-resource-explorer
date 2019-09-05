@@ -16,7 +16,6 @@ jest.mock("../service/DatasetService");
 jest.mock("../service/SettingsFacade");
 jest.mock("fs");
 
-import { anyTypeAnnotation } from "@babel/types";
 import * as vscode from "vscode";
 import { TextDocument, Uri } from "../__mocks__/vscode";
 import { Connection } from "../model/Connection";
@@ -25,6 +24,7 @@ import { DatasetEditManager } from "../service/DatasetEditManager";
 import { DatasetService } from "../service/DatasetService";
 import { SettingsFacade } from "../service/SettingsFacade";
 import { ZoweRestClient } from "../service/ZoweRestClient";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { createDummyDataset } from "./utils/DatasetUtils";
 
 describe("DatasetEditMember", () => {
@@ -33,13 +33,22 @@ describe("DatasetEditMember", () => {
     const member: Member = {
         name: "",
     };
-    const context: any = {};
+    const context: any = {
+        asAbsolutePath() {
+            return undefined;
+        },
+    };
     const creds: any = {};
     const rest: ZoweRestClient = new ZoweRestClient(creds);
     const datasetService: DatasetService = new DatasetService(rest);
     const datasetEditManager: DatasetEditManager = new DatasetEditManager(
         datasetService,
     );
+    const cache = {
+        getItemCollapsState: jest
+            .fn()
+            .mockReturnValue(vscode.TreeItemCollapsibleState.Collapsed),
+    };
     const link = "https://mock.com";
     const textDocument: TextDocument = {
         eol: undefined,
@@ -156,6 +165,20 @@ describe("DatasetEditMember", () => {
 
     it("Close document", () => {
         datasetEditManager.closeFileDocument(textDocument);
+    });
+
+    it("Clean edited member", () => {
+        datasetEditManager.cleanEditedMember(host, dataset, member);
+    });
+
+    it("Save Document", () => {
+        const datasetDataProvider: DatasetDataProvider = new DatasetDataProvider(
+            context,
+            datasetEditManager as any,
+            cache as any,
+            datasetService,
+        );
+        datasetEditManager.saveDocumentFile(textDocument, datasetDataProvider);
     });
 
     function saveToMainframe(connection: Connection, uri: string) {

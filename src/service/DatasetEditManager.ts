@@ -181,6 +181,13 @@ export class DatasetEditManager {
         return this.closeDocument(closedDocument);
     }
 
+    public saveDocumentFile(
+        savedDoc: vscode.TextDocument,
+        dataProvider: DatasetDataProvider,
+    ) {
+        return this.saveDocument(savedDoc, dataProvider);
+    }
+
     private async editMember(
         host: Connection,
         dataset: Dataset,

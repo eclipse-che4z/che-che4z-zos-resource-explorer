@@ -15,15 +15,23 @@
 
 const fs = jest.genMockFromModule("fs");
 
+type PathLike = any | undefined;
+
 function readFileSync(path) {
     return "CONTENT";
 }
 
-function existsSync(path) {
+function existsSync(path: PathLike): boolean {
     return true;
+}
+
+function unlinkSync(path: PathLike): void {
+    return undefined;
 }
 
 // tslint:disable-next-line: no-string-literal
 fs["readFileSync"] = readFileSync;
+// tslint:disable-next-line: no-string-literal
+fs["existsSync"] = existsSync;
 
 module.exports = fs;
