@@ -18,12 +18,15 @@ jest.mock("../service/SettingsFacade");
 
 import * as vscode from "vscode";
 import { createFilter } from "../commands/CreateFilter";
+import { SettingsFacade } from "../service/SettingsFacade";
 
 describe("Create filter", () => {
     it("Creates a filter", async () => {
         const args: any = {host: {name: "", url: "", username: ""}};
         const showInputBoxListener = jest.spyOn(vscode.window, "showInputBox");
+        const createFilterListener = jest.spyOn(SettingsFacade, "createFilter");
         await createFilter(args);
         expect(showInputBoxListener).toHaveBeenCalled();
+        expect(createFilterListener).toHaveBeenCalled();
     });
 });
