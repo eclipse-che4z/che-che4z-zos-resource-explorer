@@ -16,13 +16,13 @@ import * as vscode from "vscode";
 import { Connection } from "../model/Connection";
 import { DatasetCache } from "../service/DatasetCache";
 import { DatasetService } from "../service/DatasetService";
-import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { createPhysicalDocument, validateMemberName } from "../utils";
 
 export async function createMember(
     datasetService: DatasetService,
     cache: DatasetCache,
-    mvsDataProvider: MVSDataProvider,
+    datasetDataProvider: DatasetDataProvider,
     arg: any,
 ) {
     let memberName: string | undefined;
@@ -52,7 +52,7 @@ export async function createMember(
         () => doCreate(datasetService, arg.host, arg.dataset.name, memberName!),
     );
     cache.resetDataset(arg.host, arg.dataset);
-    mvsDataProvider.refresh();
+    datasetDataProvider.refresh();
 }
 
 async function doCreate(
