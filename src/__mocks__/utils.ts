@@ -25,3 +25,10 @@ export async function createPhysicalDocument(
 export function validateMemberName(inputValue: string): string | undefined {
     return inputValue;
 }
+
+export function checkFilterString(host: Connection, input: string): string | undefined {
+    if (host.name === "notOk") {
+        return "notOk";
+    }
+    return undefined;
+}

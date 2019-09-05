@@ -35,4 +35,8 @@ export class SettingsFacade {
         }
         return undefined;
     }
+
+    public static createFilter(host: Connection, filterValue: string) {
+        return ;
+    }
 }
