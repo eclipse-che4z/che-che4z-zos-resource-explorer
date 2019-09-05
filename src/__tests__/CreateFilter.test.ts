@@ -23,10 +23,10 @@ import { SettingsFacade } from "../service/SettingsFacade";
 describe("Create filter", () => {
     it("Creates a filter", async () => {
         const args: any = {host: {name: "", url: "", username: ""}};
-        const showInputBoxListener = jest.spyOn(vscode.window, "showInputBox");
-        const createFilterListener = jest.spyOn(SettingsFacade, "createFilter");
+        vscode.window.showInputBox = jest.fn().mockReturnValue(Promise.resolve("NameOfMember"));
+        SettingsFacade.createFilter = jest.fn();
         await createFilter(args);
-        expect(showInputBoxListener).toHaveBeenCalled();
-        expect(createFilterListener).toHaveBeenCalled();
+        expect(vscode.window.showInputBox).toHaveBeenCalled();
+        expect(SettingsFacade.createFilter).toHaveBeenCalled();
     });
 });
