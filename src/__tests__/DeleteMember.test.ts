@@ -23,8 +23,8 @@ import { createDummyDataset } from "../utils";
 let cache: any;
 let datasetDataProvider: any;
 const args: any = {
-    host: { name: "OK" },
     dataset: createDummyDataset(),
+    host: { name: "OK" },
     member: { name: "name" },
     type: "member",
 };

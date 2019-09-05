@@ -258,10 +258,8 @@ export interface TextDocumentChangeEvent {
 }
 
 // tslint:disable-next-line: max-classes-per-file
-export class ExtensionContext {
-    public asAbsolutePath(relativePath: string): string {
-        return "";
-    }
+export interface ConfigurationChangeEvent {
+    affectsConfiguration(section: string, resource?): boolean;
 }
 
 export interface TextDocumentChangeEvent {
@@ -328,4 +326,13 @@ export namespace workspace {
         callback: (event: Event<TextDocumentChangeEvent>) => any,
         // tslint:disable-next-line: no-empty
     ) {}
+    export const onDidChangeConfiguration: Event<
+        ConfigurationChangeEvent
+    > = jest.fn();
+}
+// tslint:disable-next-line: max-classes-per-file
+export class ExtensionContext {
+    public asAbsolutePath(relativePath: string): string {
+        return "";
+    }
 }
