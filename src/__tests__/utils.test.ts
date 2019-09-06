@@ -11,6 +11,7 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
+import * as path from "path";
 import * as vscode from "vscode";
 import { Connection } from "../model/Connection";
 import { Member } from "../model/DSEntities";
@@ -141,25 +142,25 @@ describe("Check that the extension in tempFileName is created correctly", () => 
   const host: Connection = { name: "", url: "", username: "", filters: [filterInput] };
   const tmpPrefix = "dfg";
   it("Returns txt extension", () => {
-    const expectedReturnedValue = tmpPrefix + "\\" + dataset.name + "_" + member.name + ".txt";
+    const expectedReturnedValue = tmpPrefix + path.sep + dataset.name + "_" + member.name + ".txt";
     const returnedValue4 = generateTempFileName(host, dataset, member, "dfg");
     expect(expectedReturnedValue).toEqual(returnedValue4);
   });
   it("Returns cbl extension", () => {
     dataset.name = "TEST.COBOL";
-    const expectedReturnedValue = tmpPrefix + "\\" + dataset.name + "_" + member.name + ".cbl";
+    const expectedReturnedValue = tmpPrefix + path.sep + dataset.name + "_" + member.name + ".cbl";
     const returnedValue = generateTempFileName(host, dataset, member, "dfg");
     expect(expectedReturnedValue).toEqual(returnedValue);
   });
   it("Returns jcl extension", () => {
     dataset.name = "TEST.JCL";
-    const expectedReturnedValue = tmpPrefix + "\\" + dataset.name + "_" + member.name + ".jcl";
+    const expectedReturnedValue = tmpPrefix + path.sep + dataset.name + "_" + member.name + ".jcl";
     const returnedValue2 = generateTempFileName(host, dataset, member, "dfg");
     expect(expectedReturnedValue).toEqual(returnedValue2);
   });
   it("Returns cbl extension", () => {
     dataset.name = "TEST.CBL";
-    const expectedReturnedValue = tmpPrefix + "\\" + dataset.name + "_" + member.name + ".cbl";
+    const expectedReturnedValue = tmpPrefix + path.sep + dataset.name + "_" + member.name + ".cbl";
     const returnedValue3 = generateTempFileName(host, dataset, member, "dfg");
     expect(expectedReturnedValue).toEqual(returnedValue3);
   });
