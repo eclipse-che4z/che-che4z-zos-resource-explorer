@@ -9,7 +9,7 @@ spec:
     image: node:12.9.1-alpine
     tty: true
 """
-
+properties([pipelineTriggers([githubPush()])])
 pipeline {
     agent {
         kubernetes {
@@ -17,25 +17,25 @@ pipeline {
             yaml kubernetes_config
         }
     }
-    triggers {
-		gitlab(
-			triggerOnPush: true,
-			triggerOnMergeRequest: true,
-			triggerOpenMergeRequestOnPush: "both",
-			triggerOnNoteRequest: true,
-			noteRegex: "REBUILD",
-			skipWorkInProgressMergeRequest: false,
-			ciSkip: true,
-			setBuildDescription: true,
-			addNoteOnMergeRequest: true,
-			addCiMessage: true,
-			addVoteOnMergeRequest: true,
-			acceptMergeRequestOnSuccess: false,
-			branchFilterType: "All",
-			includeBranchesSpec: "",
-			excludeBranchesSpec: ""
-		)
-	}
+    // triggers {
+	// 	gitlab(
+	// 		triggerOnPush: true,
+	// 		triggerOnMergeRequest: true,
+	// 		triggerOpenMergeRequestOnPush: "both",
+	// 		triggerOnNoteRequest: true,
+	// 		noteRegex: "REBUILD",
+	// 		skipWorkInProgressMergeRequest: false,
+	// 		ciSkip: true,
+	// 		setBuildDescription: true,
+	// 		addNoteOnMergeRequest: true,
+	// 		addCiMessage: true,
+	// 		addVoteOnMergeRequest: true,
+	// 		acceptMergeRequestOnSuccess: false,
+	// 		branchFilterType: "All",
+	// 		includeBranchesSpec: "",
+	// 		excludeBranchesSpec: ""
+	// 	)
+	// }
     stages {
         stage('Compile & Test') {
             environment {
