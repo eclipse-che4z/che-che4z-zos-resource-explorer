@@ -9,6 +9,8 @@ spec:
     image: node:12.9.1-alpine
     tty: true
 """
+
+properties([pipelineTriggers([githubPush()])])
 pipeline {
     agent {
         kubernetes {
@@ -41,7 +43,7 @@ pipeline {
                 npm_config_cache = "${env.WORKSPACE}"
             }
             steps {
-                properties([pipelineTriggers([githubPush()])])
+                
                 container('node') {
                     sh "npm ci"
                     // sh "npm test"
