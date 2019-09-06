@@ -30,6 +30,7 @@ pipeline {
                 
                 container('node') {
                     sh "pwd"
+                    echo "${env.WORKSPACE}"
                     // sh "ls"
                     // sh "hostnamectl"
                     // sh 'yum install sudo -y'
@@ -37,10 +38,10 @@ pipeline {
                     // sh 'sudo curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -'
                     // sh 'sudo yum install nodejs'
 
+                    // sh "npm ci"
+                    // sh "npm test"
 
-                    sh "npm ci"
-                    sh "npm test"
-                    // sh "sudo npm i -g vsce"
+                    sh "npm i vsce"
                 }
             }
         }
