@@ -26,6 +26,10 @@ export function generateDefaultFilter(connection: Connection) {
     return { name: "My Data Sets", value: connection.username.toLocaleUpperCase() };
 }
 
+export function generateDummyFilter(connection: Connection) {
+    return { name: "Dummy filter", value: connection.username.toLocaleUpperCase() };
+}
+
 export function generateArgs(dataset: Dataset) {
     const host: Connection = generateConnection("some connection");
 
