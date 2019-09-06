@@ -13,7 +13,6 @@
  */
 
 import * as vscode from "vscode";
-import { Connection } from "../model/Connection";
 import { SettingsFacade } from "../service/SettingsFacade";
 import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 
