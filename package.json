@@ -126,10 +126,6 @@
                     "when": "view == zosexplorer && viewItem == member"
                 },
                 {
-                    "command": "zosexplorer.edit",
-                    "when": "view == zosexplorer && viewItem == dataset_PS"
-                },
-                {
                     "command": "zosexplorer.delete",
                     "when": "view == zosexplorer && viewItem == member"
                 },

@@ -13,6 +13,7 @@
  */
 
 // tslint:disable: max-classes-per-file no-namespace
+
 export enum TreeItemCollapsibleState {
     /**
      * Determines an item can be neither collapsed nor expanded. Implies it has no children.
@@ -32,14 +33,15 @@ export namespace commands {
     const commandMap = {};
 
     export function registerCommand(
-        command: string,
+        commandId: string,
         callback: (...args: any[]) => any,
         thisArg?: any,
     ) {
-        commandMap[command] = callback;
+        commandMap[commandId] = callback;
     }
-    export function executeCommand<T>(_command: string, ...rest: any[]) {
-        commandMap[_command](rest);
+
+    export function executeCommand<T>(command: string, ...rest: any[]) {
+        commandMap[command](rest);
     }
 }
 
@@ -75,8 +77,8 @@ export namespace window {
     export function showInformationMessage(
         message: string,
         ...items: string[]
-    ): undefined {
-        return undefined;
+    ): Thenable<string | undefined>{
+        return Promise.resolve(message);
     }
 
     export function showErrorMessage(
@@ -84,6 +86,10 @@ export namespace window {
         ...items: string[]
     ): undefined {
         return undefined;
+    }
+
+    export function showWarningMessage(message: string, ...items: string[]): Thenable <string | undefined> {
+        return Promise.resolve("OK");
     }
     export interface MessageOptions {
         modal?: boolean;
@@ -94,14 +100,17 @@ export namespace window {
         isCloseAffordance?: boolean;
     }
 
-    export function showInputBox(options?: InputBoxOptions,
-        token?: CancellationToken): Thenable<string | undefined>{
+    export function showInputBox(options?: InputBoxOptions, token?): Thenable<string | undefined>{
         return Promise.resolve("NameOfMember");
     }
 
     export function withProgress<R>(options: ProgressOptions,
                                     task: (progress?: Progress) => any) {
         return task({report: jest.fn()} as any);
+    }
+
+    export async function showTextDocument(document, options?) {
+        return Promise.resolve("NameOfDocument");
     }
 }
 
@@ -156,6 +165,10 @@ export interface TextDocumentChangeEvent {
     contentChanges: [];
 }
 
+export interface ConfigurationChangeEvent {
+   affectsConfiguration(section: string, resource?): boolean;
+}
+
 export namespace workspace {
     export let rootPath: string | undefined;
 
@@ -176,6 +189,11 @@ export namespace workspace {
         callback: (event: Event<TextDocumentChangeEvent>) => any,
     ) {}
 
+    export function openTextDocument(fileName: string) {
+        const document: any = {};
+        return Promise.resolve(document);
+    }
+
     export interface InputBoxOptions {
         placeholder?: string;
     }
@@ -183,6 +201,7 @@ export namespace workspace {
     export interface TextDocument {
         fileName?: string;
     }
+    export const onDidChangeConfiguration: Event<ConfigurationChangeEvent> = jest.fn();
 }
 
 export class ExtensionContext {
@@ -215,4 +234,8 @@ export interface ProgressOptions {
 
 export interface Progress {
     report(value): void;
+}
+
+export enum ConfigurationTarget {
+    Global = 1,
 }

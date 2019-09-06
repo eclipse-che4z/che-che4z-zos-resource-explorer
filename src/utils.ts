@@ -103,12 +103,6 @@ export function checkFilterString(host: Connection, input: string): string | und
     }
 
     const nameSegments: string[] = input.toUpperCase().split(".");
-    if (nameSegments.length < MIN_SEGMENTS_COUNT) {
-        return "Filter string does not have any nodes";
-    }
-    if (nameSegments.length > MAX_SEGMENTS_COUNT) {
-        return "Filter string contains too many nodes(more than 8)";
-    }
 
     for (let i = 0; i < nameSegments.length; i++) {
         const errorMessage = checkFilterSegment(nameSegments[i], i);

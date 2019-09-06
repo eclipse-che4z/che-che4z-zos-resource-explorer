@@ -11,24 +11,30 @@
  * Contributors:
  *   Broadcom, Inc. - initial API and implementation
  */
-jest.mock("../service/ZoweRestClient");
 
-import { Connection } from "../model/Connection";
-import { DatasetCache, PATH_SEPARATOR } from "../service/DatasetCache";
-import { DatasetService } from "../service/DatasetService";
-import { ZoweRestClient } from "../service/ZoweRestClient";
-import { ZNode } from "../ui/tree/DatasetTreeModel";
+import * as vscode from "vscode";
+import { activate } from "../extension";
 
-describe("DatasetService", () => {
-    const host: Connection = { name: "", url: "", username: "" };
-    const filter: string = "";
-    const result: string[] = ["M1", "M2", "M3"];
+describe("Extension entry point test", () => {
+    it("should initialize zosexplorer", async () => {
+        const context: any = {
+            asAbsolutePath: jest.fn(),
+            subscriptions: {
+                push: jest.fn(),
+            },
+        };
+        const zosexplorer: any = {
+            onDidCollapseElement: jest.fn(),
+            onDidExpandElement: jest.fn(),
+        };
 
-    const creds: any = {};
-    const restStub = new ZoweRestClient(creds);
+        vscode.window.createTreeView = jest.fn().mockReturnValue(zosexplorer);
 
-    test("can list dataset members", async () => {
-        const datasetService: DatasetService = new DatasetService(restStub);
-        expect(await datasetService.listMembers(host, filter)).toEqual(result);
+        activate(context);
+
+        expect(vscode.window.createTreeView).toBeCalled();
+        expect(zosexplorer.onDidCollapseElement).toBeCalled();
+        expect(zosexplorer.onDidExpandElement).toBeCalled();
+        expect(context.subscriptions.push).toBeCalledWith(zosexplorer);
     });
 });

@@ -18,24 +18,24 @@ export interface Filter {
 }
 
 export interface Dataset {
-    allocatedSize: number;
-    allocationUnit: string;
-    averageBlock: number;
-    blockSize: number;
-    catalogName: string;
-    creationDate: string;
+    allocatedSize?: number;
+    allocationUnit?: string;
+    averageBlock?: number;
+    blockSize?: number;
+    catalogName?: string;
+    creationDate?: string;
     dataSetOrganization?: string;
-    deviceType: string;
-    directoryBlocks: number;
-    expirationDate: string;
-    migrated: boolean;
+    deviceType?: string;
+    directoryBlocks?: number;
+    expirationDate?: string;
+    migrated?: boolean;
     name: string;
-    primary: number;
-    recordFormat: string;
-    recordLength: number;
-    secondary: number;
-    used: number;
-    volumeSerial: string;
+    primary?: number;
+    recordFormat?: string;
+    recordLength?: number;
+    secondary?: number;
+    used?: number;
+    volumeSerial?: string;
 }
 
 export interface Member {

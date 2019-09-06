@@ -83,6 +83,9 @@ export class SettingsFacade {
                     targetHost.filters.splice(i, 1);
                 }
             }
+            if (targetHost.filters) {
+                delete targetHost.filters;
+            }
             SettingsFacade.updateHosts(hosts);
         }
     }
@@ -134,7 +137,7 @@ export class SettingsFacade {
 
     public static resetPassword(host: Connection) {
         delete this.passwords[host.name];
-        host.password = undefined;
+        delete host.password;
     }
 
     private static passwords = {};
