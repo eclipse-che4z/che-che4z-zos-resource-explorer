@@ -13,7 +13,7 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-node('nodeo') {
+agent {
    // delete workspace
    deleteDir()
     
