@@ -25,6 +25,7 @@ import { DatasetService } from "../service/DatasetService";
 import { SettingsFacade } from "../service/SettingsFacade";
 import { ZoweRestClient } from "../service/ZoweRestClient";
 import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
+import { generateTempFileName } from "../utils";
 import { createDummyDataset } from "./utils/DatasetUtils";
 
 describe("DatasetEditMember", () => {
@@ -100,36 +101,40 @@ describe("DatasetEditMember", () => {
     });
 
     it("Mark Member", () => {
-        datasetEditManager.markedMember({
+        const mark1 = datasetEditManager.markedMember({
             datasetName: "Mark_Member",
             hostName: "MyHost",
             memberName: "Member1",
         });
-        datasetEditManager.markedMember({
+        const mark2 = datasetEditManager.markedMember({
             datasetName: "Mark_Member",
             hostName: "MyHost",
             memberName: "Member2",
         });
-        datasetEditManager.markedMember({
+        const mark3 = datasetEditManager.markedMember({
             datasetName: "Mark_Member",
             hostName: "MyHost",
             memberName: "Member2",
         });
+
+        expect(mark1).toEqual(true);
+        expect(mark2).toEqual(true);
+        expect(mark3).toEqual(false);
     });
 
-    it("Save to Mainframe with no marked dataset", () => {
+    it("Save to Mainframe with no marked dataset", async () => {
         const connection: Connection = {
             name: "RealMock",
             url: link,
             username: "USERNAME",
         };
-        saveToMainframe(
+        await saveToMainframe(
             connection,
             "C:HarddriveMyHostFILE\\RealMock\\USERNAME.COBOL_FILE",
         );
     });
 
-    it("Save to Mainframe with different dataset", () => {
+    it("Save to Mainframe with different dataset", async () => {
         const connection: Connection = {
             name: "Mocky",
             url: link,
@@ -140,13 +145,13 @@ describe("DatasetEditMember", () => {
             hostName: connection.name,
             memberName: "FILE",
         });
-        saveToMainframe(
+        await saveToMainframe(
             connection,
             "C:HarddriveMyHostFILE\\Mocky\\DATASET_FILE.cbl",
         );
     });
 
-    it("Save to Mainframe with marked dataset", () => {
+    it("Save to Mainframe with marked dataset", async () => {
         const connection: Connection = {
             name: "Mocky",
             url: link,
@@ -157,21 +162,32 @@ describe("DatasetEditMember", () => {
             hostName: connection.name,
             memberName: "FILE",
         });
-        saveToMainframe(
+        await saveToMainframe(
             connection,
             "C:HarddriveMyHostFILE\\Mocky\\DATASET_FILE.cbl",
         );
     });
 
     it("Close document", () => {
+        const closeDocListener = jest.spyOn(
+            datasetEditManager,
+            "closeFileDocument",
+        );
         datasetEditManager.closeFileDocument(textDocument);
+        expect(closeDocListener).toBeCalled();
     });
 
     it("Clean edited member", () => {
+        const utils = require("../utils");
+        const cleanMember = jest.spyOn(datasetEditManager, "cleanEditedMember");
+        jest.spyOn(utils, "generateTempFileName");
         datasetEditManager.cleanEditedMember(host, dataset, member);
+        expect(cleanMember).toReturnWith(true);
+        expect(generateTempFileName).toReturn();
     });
 
     it("Save Document", () => {
+        jest.spyOn(datasetEditManager, "saveDocumentFile");
         const datasetDataProvider: DatasetDataProvider = new DatasetDataProvider(
             context,
             datasetEditManager as any,
@@ -179,14 +195,20 @@ describe("DatasetEditMember", () => {
             datasetService,
         );
         datasetEditManager.saveDocumentFile(textDocument, datasetDataProvider);
+        // tslint:disable-next-line: no-unused-expression
+        expect(datasetEditManager.saveDocumentFile).toBeCalled;
     });
 
-    function saveToMainframe(connection: Connection, uri: string) {
+    async function saveToMainframe(connection: Connection, uri: string) {
         const a = vscode.window.showWarningMessage;
-
+        jest.spyOn(datasetEditManager, "saveToMainframe");
+        jest.spyOn(SettingsFacade, "findHostByName");
         vscode.window.showWarningMessage = jest.fn().mockReturnValue("Save");
         SettingsFacade.listHosts = jest.fn().mockReturnValue([connection]);
-        datasetEditManager.saveToMainframe(uri);
+        await datasetEditManager.saveToMainframe(uri);
+        expect(datasetEditManager.saveToMainframe).toBeCalled();
+        expect(SettingsFacade.listHosts).toBeCalled();
+        expect(SettingsFacade.findHostByName).toBeCalled();
         vscode.window.showWarningMessage = a;
     }
 });
