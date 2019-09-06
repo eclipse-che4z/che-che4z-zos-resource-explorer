@@ -38,13 +38,13 @@ node('nodeo') {
       sh 'npm install'
    }
 
-    stage('SonarQube analysis') {
-         // requires SonarQube Scanner 2.8+
-        def scannerHome = tool 'SonarQ scanner';
-        withSonarQubeEnv('sonarqube-isl-01.ca.com') {
-            sh "${scannerHome}/bin/sonar-scanner  -Dsonar.projectKey=com.broadcom.zos-explorer-ts -Dsonar.branch.target=${sonarBranchTarget} -Dsonar.branch.name=${branchName}"
-        }
-    }
+    // stage('SonarQube analysis') {
+    //      // requires SonarQube Scanner 2.8+
+    //     def scannerHome = tool 'SonarQ scanner';
+    //     withSonarQubeEnv('sonarqube-isl-01.ca.com') {
+    //         sh "${scannerHome}/bin/sonar-scanner  -Dsonar.projectKey=com.broadcom.zos-explorer-ts -Dsonar.branch.target=${sonarBranchTarget} -Dsonar.branch.name=${branchName}"
+    //     }
+    // }
 
    stage('Compile') {
       sh 'tsc -p ./'
