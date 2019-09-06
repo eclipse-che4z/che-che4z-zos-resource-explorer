@@ -18,6 +18,12 @@ pipeline {
         }
     }
     stages {
+        stage('Delete dir') {
+            steps {
+                // delete workspace
+                deleteDir()   
+            }
+        }
         stage('Build') {
             environment {
                 SPAWN_WRAP_SHIM_ROOT = "${env.WORKSPACE}"
