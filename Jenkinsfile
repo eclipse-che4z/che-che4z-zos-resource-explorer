@@ -6,14 +6,14 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:12
+    image: node:12.9.1-alpine
     tty: true
 """
 
 pipeline {
     agent {
         kubernetes {
-            label 'explorer-for-zos'
+            label 'explorer-for-zos-pod'  
             yaml kubernetes_config
         }
     }
@@ -22,25 +22,18 @@ pipeline {
             steps {
                 // delete workspace
                 deleteDir()   
-                sh 'echo delete dir'
             }
         }
-        stage('Checkout') {
-            steps {
-                // Checkout code from repository
-                checkout scm
+        stage('Build') {
+            environment {
+                SPAWN_WRAP_SHIM_ROOT = "${env.WORKSPACE}"
+                YARN_ARGS = "--cache-folder ${env.WORKSPACE}/yarn-cache --global-folder ${env.WORKSPACE}/yarn-global"
             }
-        }
-
-        stage('Install') {
             steps {
-                sh 'yarn install'
-            }
-        }
-
-        stage('Compile') {
-            steps {
-                sh 'yarn run compile'
+                container('node') {
+                    sh "yarn ${env.YARN_ARGS} install"
+                    sh "yarn ${env.YARN_ARGS} test"
+                }
             }
         }
     }
