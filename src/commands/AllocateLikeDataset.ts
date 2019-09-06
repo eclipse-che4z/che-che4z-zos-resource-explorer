@@ -17,7 +17,7 @@ import { Connection } from "../model/Connection";
 import { Dataset } from "../model/DSEntities";
 import { DatasetCache } from "../service/DatasetCache";
 import { DatasetService } from "../service/DatasetService";
-import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { validateDatasetName } from "../utils";
 /**
  * Start the routine to create a new dataset. This function will:
@@ -31,7 +31,7 @@ import { validateDatasetName } from "../utils";
 export async function allocateLikeDataset(
     datasetService: DatasetService,
     cache: DatasetCache,
-    mvsDataProvider: MVSDataProvider,
+    datasetDataProvider: DatasetDataProvider,
     arg: any,
 ) {
     if (!isDatasetTypeSupported(arg.dataset.dataSetOrganization)) {
@@ -75,7 +75,7 @@ export async function allocateLikeDataset(
     const lastIndex = arg.path.lastIndexOf("->");
     const refreshPath = arg.path.substr(0, lastIndex + 2);
     cache.reset(refreshPath);
-    mvsDataProvider.refresh();
+    datasetDataProvider.refresh();
 }
 
 async function doAllocate(

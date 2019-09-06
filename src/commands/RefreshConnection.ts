@@ -13,10 +13,10 @@
  */
 
 import { DatasetCache } from "../service/DatasetCache";
-import { MVSDataProvider } from "../ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 import { createHostPath } from "../ui/tree/DatasetTreeModel";
 
-export async function refreshConnection(cache: DatasetCache, mvsDataProvider: MVSDataProvider, hostNode: any) {
+export async function refreshConnection(cache: DatasetCache, datasetDataProvider: DatasetDataProvider, hostNode: any) {
     cache.reset(createHostPath(hostNode));
-    mvsDataProvider.refresh();
+    datasetDataProvider.refresh();
 }

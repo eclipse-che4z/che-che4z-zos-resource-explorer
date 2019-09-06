@@ -33,35 +33,40 @@ import { DatasetEditManager } from "./service/DatasetEditManager";
 import { DatasetService } from "./service/DatasetService";
 import { HOST_SETTINGS_KEY, SettingsFacade } from "./service/SettingsFacade";
 import { ZoweRestClient } from "./service/ZoweRestClient";
-import { MVSDataProvider } from "./ui/tree/DatasetDataProvider";
+import { DatasetDataProvider } from "./ui/tree/DatasetDataProvider";
 import { ZNode } from "./ui/tree/DatasetTreeModel";
 
 export function activate(context: vscode.ExtensionContext) {
     const rest: ZoweRestClient = new ZoweRestClient(new DefaultCredentialsService());
     const datasetService: DatasetService = new DatasetService(rest);
     const cache: DatasetCache = new DatasetCache();
-    const datasetEditManager: DatasetEditManager = new DatasetEditManager(rest);
-    const mvsDataProvider: MVSDataProvider = new MVSDataProvider(context, datasetEditManager, cache, datasetService);
+    const datasetEditManager: DatasetEditManager = new DatasetEditManager(datasetService);
+    const datasetDataProvider: DatasetDataProvider = new DatasetDataProvider(
+        context,
+        datasetEditManager,
+        cache,
+        datasetService,
+    );
     const copyPasteService: CopyPasteService = new CopyPasteService(rest, datasetService);
 
     const zosexplorer: vscode.TreeView<ZNode> = vscode.window.createTreeView("zosexplorer", {
-        treeDataProvider: mvsDataProvider,
+        treeDataProvider: datasetDataProvider,
     });
     zosexplorer.onDidCollapseElement((event) => {
-        mvsDataProvider.setCollapsState(event.element.path, vscode.TreeItemCollapsibleState.Collapsed);
+        datasetDataProvider.setCollapsState(event.element.path, vscode.TreeItemCollapsibleState.Collapsed);
     });
     zosexplorer.onDidExpandElement((event) => {
-        mvsDataProvider.setCollapsState(event.element.path, vscode.TreeItemCollapsibleState.Expanded);
+        datasetDataProvider.setCollapsState(event.element.path, vscode.TreeItemCollapsibleState.Expanded);
     });
     context.subscriptions.push(zosexplorer);
-    datasetEditManager.register(context.subscriptions, mvsDataProvider);
+    datasetEditManager.register(context.subscriptions, datasetDataProvider);
 
-    registerCommands(datasetService, cache, datasetEditManager, mvsDataProvider, copyPasteService, context, rest);
+    registerCommands(datasetService, cache, datasetEditManager, datasetDataProvider, copyPasteService, context, rest);
 
     context.subscriptions.push(
         vscode.workspace.onDidChangeConfiguration((event: vscode.ConfigurationChangeEvent) => {
             if (event.affectsConfiguration(HOST_SETTINGS_KEY)) {
-                mvsDataProvider.reloadSettings();
+                datasetDataProvider.reloadSettings();
             }
         }),
     );
@@ -76,7 +81,7 @@ function registerCommands(
     datasetService: DatasetService,
     cache: DatasetCache,
     datasetEditManager: DatasetEditManager,
-    mvsDataProvider: MVSDataProvider,
+    mvsDataProvider: DatasetDataProvider,
     copyPasteService: CopyPasteService,
     context: vscode.ExtensionContext,
     rest: ZoweRestClient,
@@ -134,12 +139,12 @@ function registerCommands(
 
     // Members
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.copyMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.copy", async (arg: any) => {
             await copyMember(copyPasteService, arg);
         }),
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.pasteMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.paste", async (arg: any) => {
             await pasteMember(datasetService, copyPasteService, cache, mvsDataProvider, arg);
         }),
     );
@@ -149,12 +154,12 @@ function registerCommands(
         }),
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.browseMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.browse", async (arg: any) => {
             await browseMember(datasetService, arg);
         }),
     );
     context.subscriptions.push(
-        vscode.commands.registerCommand("zosexplorer.deleteMember", async (arg: any) => {
+        vscode.commands.registerCommand("zosexplorer.delete", async (arg: any) => {
             await deleteMember(datasetService, datasetEditManager, cache, mvsDataProvider, arg);
         }),
     );

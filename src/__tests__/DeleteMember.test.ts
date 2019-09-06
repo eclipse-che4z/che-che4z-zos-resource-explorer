@@ -1,0 +1,101 @@
+/*
+ * Copyright (c) 2019 Broadcom.
+ * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Broadcom, Inc. - initial API and implementation
+ */
+
+jest.mock("vscode");
+jest.mock("../service/SettingsFacade");
+
+import * as vscode from "vscode";
+import { deleteMember } from "../commands/DeleteMember";
+import { SettingsFacade } from "../service/SettingsFacade";
+import { createDummyDataset } from "../utils";
+
+let cache: any;
+let datasetDataProvider: any;
+const args: any = {host: {name: "OK"}, dataset: createDummyDataset(), member: {name: "name"}, type: "member"};
+
+beforeEach(() => {
+        cache = {
+            resetMember: jest.fn(),
+        };
+        datasetDataProvider = {
+            refresh: jest.fn(),
+        };
+    });
+
+describe("Delete a member", () => {
+    it("Deletes a member", async () => {
+        const datasetService: any = {
+            deleteMember: jest.fn(),
+        };
+        const datasetEditManager: any = {
+        cleanEditedMember: jest.fn(),
+        unmarkMember: jest.fn(),
+        };
+        const listHostsListener = jest.spyOn(SettingsFacade, "listHosts");
+        const showWarningMessageListener = jest.spyOn(vscode.window, "showWarningMessage");
+        const findHostByNameListener = jest.spyOn(SettingsFacade, "findHostByName");
+        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, args);
+        expect(datasetService.deleteMember).toHaveReturned();
+        expect(datasetEditManager.cleanEditedMember).toHaveReturned();
+        expect(datasetEditManager.unmarkMember).toHaveReturned();
+        expect(cache.resetMember).toHaveReturned();
+        expect(datasetDataProvider.refresh).toHaveReturned();
+        expect(showWarningMessageListener).toHaveReturnedTimes(1);
+        expect(listHostsListener).toHaveReturned();
+        expect(findHostByNameListener).toHaveReturned();
+    });
+    it("Tries to delete a non-member node", async () => {
+        const datasetService: any = {
+            deleteMember: jest.fn(),
+        };
+        const datasetEditManager: any = {
+        cleanEditedMember: jest.fn(),
+        unmarkMember: jest.fn(),
+        };
+        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, {type: "notMember"});
+        expect(datasetService.deleteMember).toHaveReturnedTimes(0);
+        expect(datasetEditManager.cleanEditedMember).toHaveReturnedTimes(0);
+        expect(datasetEditManager.unmarkMember).toHaveReturnedTimes(0);
+    });
+    it("Simulates a delete member error", async () => {
+        const datasetService: any = {
+            deleteMember: jest.fn().mockImplementation(() => {
+                throw new Error();
+            }),
+        };
+        const datasetEditManager: any = {
+        cleanEditedMember: jest.fn(),
+        unmarkMember: jest.fn(),
+        };
+        const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
+        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, args);
+        expect(showErrorMessageListener).toHaveReturnedTimes(1);
+    });
+    it("Simulates target host to be undefined", async () => {
+        jest.clearAllMocks();
+        const datasetService: any = {
+            deleteMember: jest.fn(),
+        };
+        const datasetEditManager: any = {
+        cleanEditedMember: jest.fn(),
+        unmarkMember: jest.fn(),
+        };
+        const argument: any = {dataset: createDummyDataset(), host: {name: "notOk"},
+         member: {name: "name"}, type: "member"};
+        const showWarningMessageListener = jest.spyOn(vscode.window, "showWarningMessage");
+        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, argument);
+        expect(showWarningMessageListener).toHaveReturnedTimes(2);
+    });
+
+});

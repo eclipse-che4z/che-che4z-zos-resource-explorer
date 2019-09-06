@@ -103,12 +103,6 @@ export function checkFilterString(host: Connection, input: string): string | und
     }
 
     const nameSegments: string[] = input.toUpperCase().split(".");
-    if (nameSegments.length < MIN_SEGMENTS_COUNT) {
-        return "Filter string does not have any nodes";
-    }
-    if (nameSegments.length > MAX_SEGMENTS_COUNT) {
-        return "Filter string contains too many nodes(more than 8)";
-    }
 
     for (let i = 0; i < nameSegments.length; i++) {
         const errorMessage = checkFilterSegment(nameSegments[i], i);
@@ -243,4 +237,31 @@ export async function createPhysicalDocument(
     }
     const document: vscode.TextDocument = await vscode.workspace.openTextDocument(filePath);
     await vscode.window.showTextDocument(document, { preview: false });
+}
+
+/**
+ * Create a dummy dataset.
+ * @return A dummy dataset.
+ */
+export function createDummyDataset(): Dataset {
+    return {
+        allocatedSize: 15,
+        allocationUnit: "BLOCK",
+        averageBlock: 0,
+        blockSize: 6160,
+        catalogName: "ICFCAT.MV3B.CATALOGA",
+        creationDate: "2017/07/25",
+        dataSetOrganization: "PO",
+        deviceType: "3390",
+        directoryBlocks: 10,
+        expirationDate: "2020/07/25",
+        migrated: false,
+        name: "TEST.DATASET",
+        primary: 10,
+        recordFormat: "FB",
+        recordLength: 80,
+        secondary: 5,
+        used: 0,
+        volumeSerial: "3BP001",
+    };
 }

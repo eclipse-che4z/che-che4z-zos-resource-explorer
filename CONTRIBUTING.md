@@ -1,10 +1,10 @@
 # Contributing to Eclipse Che4z
 
-Thanks for your interest in this project.
+Thank you for your interest in this project.
 
 ## Project description
 
-Eclipse Che4z provides an components/extensions for Eclipse Che to facilitate mainframe application development by providing:
+Eclipse Che4z provides components/extensions for Eclipse Che to facilitate mainframe application development.
 
 * https://projects.eclipse.org/projects/ecd.che.che4z
 
@@ -19,7 +19,7 @@ The project maintains the following source code repository
 
 ## Eclipse Contributor Agreement
 
-Before your contribution can be accepted by the project team contributors must electronically sign the Eclipse Contributor Agreement (ECA).
+Before your contribution can be accepted by the project team contributors, you must electronically sign the Eclipse Contributor Agreement (ECA).
 
 * http://www.eclipse.org/legal/ECA.php
 
@@ -30,18 +30,20 @@ https://www.eclipse.org/projects/handbook/#resources-commit
 
 ## Setting up the Development Environment
 
-To build project you need to install npm.
+Ensure you have [npm](https://www.npmjs.com/) installed before you proceed.
 
-Checkout source code of Explorer for z/OS:
-$ git clone https://github.com/eclipse/che-che4z-explorer-for-zos
+To create a contribution, follow these steps:
 
-To build project run:
-$ npm install && npm run compile
-
+1. Create an issue detailing the reason for your contribution.
+2. Fork the project.
+3. Clone or download the repository.
+4. Build the project by running the command `$ npm install && npm run compile`.
+5. Run the command `$ git add`.
+6. Run the command `$ git commit -m "explanation of your work and issue# obtained when you create it" -s`.
+7. Run the command `$ git push`.
 
 ## Contact
 
 Contact the project developers.
 
 * supportChe4z.pdl@broadcom.com
-
