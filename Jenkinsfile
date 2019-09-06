@@ -10,7 +10,7 @@ spec:
     tty: true
 """
 pipeline {
-    properties([pipelineTriggers([githubPush()])])
+    options([pipelineTriggers([githubPush()])])
     agent {
         kubernetes {
             label 'explorer-for-zos-pod'  
