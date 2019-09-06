@@ -18,8 +18,8 @@ pipeline {
             yaml kubernetes_config
         }
     }
-    stages {
             skipDefaultCheckout(true) 
+    stages {
         stage('Compile & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
