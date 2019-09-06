@@ -18,12 +18,12 @@ pipeline {
         }
     }
     stages {
-        stage('Delete dir') {
-            steps {
-                // delete workspace
-                deleteDir()   
-            }
-        }
+        // stage('Delete dir') {
+        //     steps {
+        //         // delete workspace
+        //         deleteDir()   
+        //     }
+        // }
         // stage('npm install') {
         //     steps {
         //         npm_config_cache='/path/to/cache'
