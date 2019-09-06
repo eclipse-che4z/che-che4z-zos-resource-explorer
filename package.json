@@ -257,7 +257,8 @@
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "jest -w 1"
+        "test": "jest -w 1",
+        "build": "vsce package"
     },
     "devDependencies": {
         "@types/jest": "^24.0.18",
