@@ -25,7 +25,9 @@ pipeline {
             }
         }
         stage('npm install') {
-            sh 'npm install'
+            steps {
+                sh 'npm install'
+            }
         }
         // stage('Build') {
         //     environment {
