@@ -6,7 +6,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:12.10.0-alpine
+    image: centos:latest
     tty: true
 """
 
@@ -27,6 +27,9 @@ pipeline {
                 
                 container('node') {
                     // sh "hostnamectl"
+                    sh 'yum install -y gcc-c++ make'
+                    sh 'curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -'
+                    sh 'yum install nodejs'
 
 
                     sh "npm ci"
