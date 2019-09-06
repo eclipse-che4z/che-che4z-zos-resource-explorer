@@ -20,34 +20,30 @@ import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 export async function editConnection(datasetDataProvider: DatasetDataProvider, arg: any) {
     const newHostName =  await vscode.window.showInputBox({
         ignoreFocusOut: true,
-        placeHolder: "Host Name",
-        prompt: "Enter the Host Name ",
-        validateInput: (text: string) => (text !== "" ? "" : "Host Name must not be empty"),
+        placeHolder: "Connection name",
+        prompt: "Enter a custom name for the connection.",
+        validateInput: (text: string) => (text !== "" ? "" : "Please use only characters A-z and 0-9."),
         value: arg.host.name,
     });
 
     if (newHostName === undefined) {
-        return undefined;
-    }
-
-    const isExistingHostName = (name: string): boolean => {
-        for (const host of SettingsFacade.listHosts()) {
-            if (host.name === name) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    if (isExistingHostName(newHostName)) {
-        vscode.window.showErrorMessage(`Host with name ${newHostName} already exists.`);
         return;
     }
-    const hosts: Connection[] = SettingsFacade.listHosts();
-    const targetHost: Connection | undefined = SettingsFacade.findHostByName(arg.host.name, hosts);
+
+    for (const host of SettingsFacade.listHosts()) {
+        if (host.name === newHostName) {
+            vscode.window.showErrorMessage(`Host with name ${newHostName} already exists.`);
+            return;
+        }
+    }
+    const hosts = SettingsFacade.listHosts();
+    const targetHost = SettingsFacade.findHostByName(arg.host.name, hosts);
     if (targetHost) {
+        const oldName = targetHost.name;
         targetHost.name = newHostName;
         await SettingsFacade.updateHosts(hosts);
         datasetDataProvider.refresh();
+        vscode.window.showInformationMessage(`Connection ${oldName} was renamed to ${newHostName}.`);
     }
+
 }
