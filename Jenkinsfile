@@ -10,7 +10,7 @@ spec:
     tty: true
 """
 
-properties([pipelineTriggers([githubPush()])])
+// properties([pipelineTriggers([githubPush()])])
 pipeline {
     agent {
         kubernetes {
@@ -29,8 +29,8 @@ pipeline {
                     // sh "hostnamectl"
 
 
-                    // sh "npm ci"
-                    // sh "npm test"
+                    sh "npm ci"
+                    sh "npm test"
                     // sh "sudo npm i -g vsce"
                 }
             }
