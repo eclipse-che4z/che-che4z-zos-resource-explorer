@@ -18,22 +18,9 @@ pipeline {
         }
     }
     stages {
-        // stage('Delete dir') {
-        //     steps {
-        //         // delete workspace
-        //         deleteDir()   
-        //     }
-        // }
-        // stage('npm install') {
-        //     steps {
-        //         npm_config_cache='/path/to/cache'
-        //         sh 'npm install'
-        //     }
-        // }
         stage('Build') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
-                // YARN_ARGS = "--cache-folder ${env.WORKSPACE}/yarn-cache --global-folder ${env.WORKSPACE}/yarn-global"
             }
             steps {
                 container('node') {
