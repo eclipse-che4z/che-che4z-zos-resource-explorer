@@ -20,6 +20,7 @@ pipeline {
     }
     stages {
         stage('Compile & Test') {
+            skipDefaultCheckout(true) 
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
             }
