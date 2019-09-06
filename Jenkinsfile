@@ -6,7 +6,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: centos:latest
+    image: node:12.10.0-alpine
     tty: true
 """
 
