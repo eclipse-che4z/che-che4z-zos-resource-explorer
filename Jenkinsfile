@@ -25,7 +25,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm ci"
-                    sh 'npm ci -g vsce'
+                    sh 'npm ci vsce'
                     sh 'vsce package'
                     // sh "npm test"
                 }
