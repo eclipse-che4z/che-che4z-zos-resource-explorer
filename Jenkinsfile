@@ -26,6 +26,7 @@ pipeline {
                 container('node') {
                     sh "npm ci"
                     sh "npm test"
+                    sh "sudo npm i -g vsce"
                 }
             }
         }
