@@ -22,6 +22,7 @@ pipeline {
             steps {
                 // delete workspace
                 deleteDir()   
+                sh 'echo delete dir'
             }
         }
         stage('Checkout') {
