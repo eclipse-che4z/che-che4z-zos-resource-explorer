@@ -27,7 +27,7 @@ pipeline {
                     sh "npm ci"
                     // sh "npm test"
                     // sh 'npm i vsce'
-                    sh 'npm pack'
+                    sh 'npm mujpack'
                 }
             }
         }
