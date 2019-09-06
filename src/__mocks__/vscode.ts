@@ -13,7 +13,6 @@
  */
 
 // tslint:disable: max-classes-per-file no-namespace
-import { TextDocument, TextDocumentShowOptions } from "vscode";
 
 export enum TreeItemCollapsibleState {
     /**
@@ -101,8 +100,7 @@ export namespace window {
         isCloseAffordance?: boolean;
     }
 
-    export function showInputBox(options?: InputBoxOptions,
-        token?: CancellationToken): Thenable<string | undefined>{
+    export function showInputBox(options?: InputBoxOptions, token?): Thenable<string | undefined>{
         return Promise.resolve("NameOfMember");
     }
 
@@ -111,7 +109,7 @@ export namespace window {
         return task({report: jest.fn()} as any);
     }
 
-    export async function showTextDocument(document: TextDocument, options?: TextDocumentShowOptions) {
+    export async function showTextDocument(document, options?) {
         return Promise.resolve("NameOfDocument");
     }
 }
@@ -167,6 +165,10 @@ export interface TextDocumentChangeEvent {
     contentChanges: [];
 }
 
+export interface ConfigurationChangeEvent {
+   affectsConfiguration(section: string, resource?): boolean;
+}
+
 export namespace workspace {
     export let rootPath: string | undefined;
 
@@ -199,6 +201,7 @@ export namespace workspace {
     export interface TextDocument {
         fileName?: string;
     }
+    export const onDidChangeConfiguration: Event<ConfigurationChangeEvent> = jest.fn();
 }
 
 export class ExtensionContext {
