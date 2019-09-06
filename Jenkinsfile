@@ -30,12 +30,9 @@ pipeline {
             }
         }
         stage('Build') {
-            // environment {
-            //     npm_config_cache = "${env.WORKSPACE}"
-            // }
             steps {
                 container('node') {
-                    sh 'npm i vsce'
+                    sh 'npm ci vsce'
                     sh 'vsce package'
                 }
             }
