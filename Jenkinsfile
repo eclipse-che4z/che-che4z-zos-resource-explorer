@@ -35,6 +35,7 @@ pipeline {
             // }
             steps {
                 container('node') {
+                    sh 'npm i vsce'
                     sh 'vsce package'
                 }
             }
