@@ -59,20 +59,18 @@ export class DatasetEditManager {
             vscode.commands.registerCommand(
                 "zosexplorer.edit",
                 async (arg) => {
-                    let passedMember: Member = { name: ""};
-                    const DSO: string = arg.dataset.dataSetOrganization;
-                    if (DSO === DSOrg.PO) {
-                        passedMember = arg.member;
-                    } else {
+                    let passedMember: Member = {name: ""};
+                    if (arg.dataset.dataSetOrganization === DSOrg.PS) {
                         passedMember.name = arg.dataset.name;
+                    } else {
+                        passedMember = arg.member;
                     }
                     try {
                         await this.editMember(
                             arg.host,
                             arg.dataset,
                             passedMember,
-                            dataProvider,
-                            DSO,
+                            dataProvider
                         );
                     } catch (error) {
                         vscode.window.showErrorMessage(
@@ -190,11 +188,10 @@ export class DatasetEditManager {
         dataset: Dataset,
         member: Member,
         dataProvider: DatasetDataProvider,
-        DSO: string,
     ) {
         const content = await this.datasetService.getContent(
             host,
-            (DSO === DSOrg.PO) ? `${dataset.name}(${member.name})` : `${dataset.name}`,
+            ((dataset.dataSetOrganization === DSOrg.PS) ? `${dataset.name}(${member.name})` : `${dataset.name}`),
         );
         const filePath: string = generateTempFileName(host, dataset, member);
         ensureDirectoryExistence(filePath);
