@@ -26,6 +26,8 @@ pipeline {
             steps {
                 
                 container('node') {
+                    sh "pwd"
+                    sh "ls"
                     sh "hostnamectl"
                     sh 'yum install sudo -y'
                     sh 'sudo yum install -y gcc-c++ make'
