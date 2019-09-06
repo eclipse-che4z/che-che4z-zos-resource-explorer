@@ -52,6 +52,8 @@ pipeline {
                     sh "npm ci"
                     sh "npm cache clean --force"
                     sh "npm i vsce"
+                    sh "npm rebuild"
+                    sh "npm i vsce"
                     // sh "npm test"
 
                 }
