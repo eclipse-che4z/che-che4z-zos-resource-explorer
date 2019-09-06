@@ -10,7 +10,6 @@ spec:
     tty: true
 """
 pipeline {
-    options([pipelineTriggers([githubPush()])])
     agent {
         kubernetes {
             label 'explorer-for-zos-pod'  
@@ -38,6 +37,8 @@ pipeline {
 	// }
     stages {
         stage('Compile & Test') {
+            properties([pipelineTriggers([githubPush()])])
+    
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
             }
