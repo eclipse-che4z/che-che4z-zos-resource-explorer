@@ -22,16 +22,21 @@ import { createDummyDataset } from "../utils";
 
 let cache: any;
 let datasetDataProvider: any;
-const args: any = {host: {name: "OK"}, dataset: createDummyDataset(), member: {name: "name"}, type: "member"};
+const args: any = {
+    dataset: createDummyDataset(),
+    host: { name: "OK" },
+    member: { name: "name" },
+    type: "member",
+};
 
 beforeEach(() => {
-        cache = {
-            resetMember: jest.fn(),
-        };
-        datasetDataProvider = {
-            refresh: jest.fn(),
-        };
-    });
+    cache = {
+        resetMember: jest.fn(),
+    };
+    datasetDataProvider = {
+        refresh: jest.fn(),
+    };
+});
 
 describe("Delete a member", () => {
     it("Deletes a member", async () => {
@@ -39,20 +44,32 @@ describe("Delete a member", () => {
             deleteMember: jest.fn(),
         };
         const datasetEditManager: any = {
-        cleanEditedMember: jest.fn(),
-        unmarkMember: jest.fn(),
+            cleanEditedMember: jest.fn(),
+            unmarkMember: jest.fn(),
         };
-        const listHostsListener = jest.spyOn(SettingsFacade, "listHosts");
-        const showWarningMessageListener = jest.spyOn(vscode.window, "showWarningMessage");
-        const findHostByNameListener = jest.spyOn(SettingsFacade, "findHostByName");
-        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, args);
+        SettingsFacade.listHosts = jest.fn().mockReturnValue([args.host]);
+        const showWarningMessageListener = jest.spyOn(
+            vscode.window,
+            "showWarningMessage",
+        );
+        const findHostByNameListener = jest.spyOn(
+            SettingsFacade,
+            "findHostByName",
+        );
+        await deleteMember(
+            datasetService,
+            datasetEditManager,
+            cache,
+            datasetDataProvider,
+            args,
+        );
         expect(datasetService.deleteMember).toHaveReturned();
         expect(datasetEditManager.cleanEditedMember).toHaveReturned();
         expect(datasetEditManager.unmarkMember).toHaveReturned();
         expect(cache.resetMember).toHaveReturned();
         expect(datasetDataProvider.refresh).toHaveReturned();
         expect(showWarningMessageListener).toHaveReturnedTimes(1);
-        expect(listHostsListener).toHaveReturned();
+        expect(SettingsFacade.listHosts).toHaveReturned();
         expect(findHostByNameListener).toHaveReturned();
     });
     it("Tries to delete a non-member node", async () => {
@@ -60,10 +77,16 @@ describe("Delete a member", () => {
             deleteMember: jest.fn(),
         };
         const datasetEditManager: any = {
-        cleanEditedMember: jest.fn(),
-        unmarkMember: jest.fn(),
+            cleanEditedMember: jest.fn(),
+            unmarkMember: jest.fn(),
         };
-        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, {type: "notMember"});
+        await deleteMember(
+            datasetService,
+            datasetEditManager,
+            cache,
+            datasetDataProvider,
+            { type: "notMember" },
+        );
         expect(datasetService.deleteMember).toHaveReturnedTimes(0);
         expect(datasetEditManager.cleanEditedMember).toHaveReturnedTimes(0);
         expect(datasetEditManager.unmarkMember).toHaveReturnedTimes(0);
@@ -75,12 +98,25 @@ describe("Delete a member", () => {
             }),
         };
         const datasetEditManager: any = {
-        cleanEditedMember: jest.fn(),
-        unmarkMember: jest.fn(),
+            cleanEditedMember: jest.fn(),
+            unmarkMember: jest.fn(),
         };
-        const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
-        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, args);
-        expect(showErrorMessageListener).toHaveReturnedTimes(1);
+
+        SettingsFacade.listHosts = jest.fn().mockReturnValue([args.host]);
+        vscode.window.showErrorMessage = jest
+            .fn()
+            .mockReturnValue(Promise.resolve(undefined));
+        vscode.window.showWarningMessage = jest
+            .fn()
+            .mockReturnValue(Promise.resolve("OK"));
+        await deleteMember(
+            datasetService,
+            datasetEditManager,
+            cache,
+            datasetDataProvider,
+            args,
+        );
+        expect(vscode.window.showErrorMessage).toBeCalled();
     });
     it("Simulates target host to be undefined", async () => {
         jest.clearAllMocks();
@@ -88,14 +124,26 @@ describe("Delete a member", () => {
             deleteMember: jest.fn(),
         };
         const datasetEditManager: any = {
-        cleanEditedMember: jest.fn(),
-        unmarkMember: jest.fn(),
+            cleanEditedMember: jest.fn(),
+            unmarkMember: jest.fn(),
         };
-        const argument: any = {dataset: createDummyDataset(), host: {name: "notOk"},
-         member: {name: "name"}, type: "member"};
-        const showWarningMessageListener = jest.spyOn(vscode.window, "showWarningMessage");
-        await deleteMember(datasetService, datasetEditManager, cache, datasetDataProvider, argument);
+        const argument: any = {
+            dataset: createDummyDataset(),
+            host: { name: "notOk" },
+            member: { name: "name" },
+            type: "member",
+        };
+        const showWarningMessageListener = jest.spyOn(
+            vscode.window,
+            "showWarningMessage",
+        );
+        await deleteMember(
+            datasetService,
+            datasetEditManager,
+            cache,
+            datasetDataProvider,
+            argument,
+        );
         expect(showWarningMessageListener).toHaveReturnedTimes(2);
     });
-
 });

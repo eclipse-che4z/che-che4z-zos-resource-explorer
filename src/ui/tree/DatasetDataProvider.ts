@@ -235,6 +235,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             let message = error.body;
             if (error.message && error.message ===
                 "ServletDispatcher failed - received TSO Prompt when expecting TsoServletResponse") {
+                // tslint:disable-next-line: max-line-length
                 message = "Cannot list datasets based on current filter. Amend filter to exclude datasets archived by CA Disk.";
             }
             return this.processZoweError(message, host);
