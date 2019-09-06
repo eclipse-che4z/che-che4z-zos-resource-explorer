@@ -27,6 +27,7 @@ pipeline {
                 
                 container('node') {
                     // sh "hostnamectl"
+                    sh 'yum install sudo -y'
                     sh 'sudo yum install -y gcc-c++ make'
                     sh 'sudo curl -sL https://rpm.nodesource.com/setup_6.x | sudo -E bash -'
                     sh 'sudo yum install nodejs'
