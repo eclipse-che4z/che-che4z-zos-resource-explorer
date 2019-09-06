@@ -32,7 +32,7 @@ pipeline {
         stage('Build') {
             steps {
                 container('node') {
-                    sh 'npm ci vsce'
+                    sh 'npm ci -g vsce'
                     sh 'vsce package'
                 }
             }
