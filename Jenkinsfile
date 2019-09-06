@@ -18,7 +18,7 @@ pipeline {
         }
     }
     stages {
-        stage('Build') {
+        stage('Compile & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
             }
@@ -26,6 +26,16 @@ pipeline {
                 container('node') {
                     sh "npm ci"
                     sh "npm test"
+                }
+            }
+        }
+        stage('Build') {
+            // environment {
+            //     npm_config_cache = "${env.WORKSPACE}"
+            // }
+            steps {
+                container('node') {
+                    sh 'vsce package'
                 }
             }
         }
