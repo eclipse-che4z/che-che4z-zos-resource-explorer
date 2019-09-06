@@ -21,7 +21,8 @@ pipeline {
         stage('Delete dir') {
             steps {
                 // delete workspace
-                deleteDir()   
+                deleteDir() 
+                sh 'echo delete dir'  
             }
         }
         stage('Build') {
