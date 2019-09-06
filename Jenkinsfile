@@ -9,8 +9,8 @@ spec:
     image: node:12.9.1-alpine
     tty: true
 """
-properties([pipelineTriggers([githubPush()])])
 pipeline {
+    properties([pipelineTriggers([githubPush()])])
     agent {
         kubernetes {
             label 'explorer-for-zos-pod'  
