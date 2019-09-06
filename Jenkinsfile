@@ -45,9 +45,12 @@ pipeline {
             steps {
                 
                 container('node') {
-                    sh "npm ci"
+                    sh "hostnamectl"
+
+
+                    // sh "npm ci"
                     // sh "npm test"
-                    sh "sudo npm i -g vsce"
+                    // sh "sudo npm i -g vsce"
                 }
             }
         }
