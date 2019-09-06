@@ -25,19 +25,11 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm ci"
-                    sh 'npm i vsce'
-                    sh 'vsce package'
                     // sh "npm test"
+                    sh 'npm i vsce'
+                    // sh 'vsce package'
                 }
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         container('node') {
-        //             sh 'npm ci -g vsce'
-        //             sh 'vsce package'
-        //         }
-        //     }
-        // }
     }
 }
