@@ -28,6 +28,7 @@ import {
     ZMemberNode,
     ZSubsystemNode,
     ZUserDatasetNode,
+    ZNode,
 } from "../ui/tree/DatasetTreeModel";
 import { createDummyDataset } from "./utils/DatasetUtils";
 import { generateConnection, generateDefaultFilter } from "./utils/TestUtils";
@@ -228,7 +229,10 @@ describe("DatasetDataProvider", () => {
                 {} as any,
                 {} as any,
             );
+            const newConnection = new ZNode(NodeType.CREATE_CONNECTION);
+            newConnection.type = NodeType.CREATE_CONNECTION;
             expect(await dsp.getChildren()).toEqual([
+                newConnection,
                 new ZHostNode(connectionWithFilter),
                 new ZHostNode(connectionWithoutFilter),
             ]);
