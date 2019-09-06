@@ -6,7 +6,7 @@ kind: Pod
 spec:
   containers:
   - name: node
-    image: node:12.9.1-alpine
+    image: node:12.10.0-alpine
     tty: true
 """
 
@@ -18,25 +18,6 @@ pipeline {
             yaml kubernetes_config
         }
     }
-    // triggers {
-	// 	gitlab(
-	// 		triggerOnPush: true,
-	// 		triggerOnMergeRequest: true,
-	// 		triggerOpenMergeRequestOnPush: "both",
-	// 		triggerOnNoteRequest: true,
-	// 		noteRegex: "REBUILD",
-	// 		skipWorkInProgressMergeRequest: false,
-	// 		ciSkip: true,
-	// 		setBuildDescription: true,
-	// 		addNoteOnMergeRequest: true,
-	// 		addCiMessage: true,
-	// 		addVoteOnMergeRequest: true,
-	// 		acceptMergeRequestOnSuccess: false,
-	// 		branchFilterType: "All",
-	// 		includeBranchesSpec: "",
-	// 		excludeBranchesSpec: ""
-	// 	)
-	// }
     stages {
         stage('Compile & Test') {
             environment {
@@ -45,7 +26,7 @@ pipeline {
             steps {
                 
                 container('node') {
-                    sh "hostnamectl"
+                    // sh "hostnamectl"
 
 
                     // sh "npm ci"
