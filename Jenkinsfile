@@ -31,8 +31,8 @@ pipeline {
                 container('node') {
                     sh "pwd"
                     echo "${env.WORKSPACE}"
-                    sh "npm i --no-bin-links"
-                    // sh "npm ci"
+                    // sh "npm i --no-bin-links"
+                    sh "npm ci"
                     // sh "npm cache clean --force"
                     sh "npm i vsce"
                     // sh "npm rebuild"
