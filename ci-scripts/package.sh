@@ -4,7 +4,7 @@
 #     is_theia="true"
 # fi
 
-# set -ex
+set -ex
 
 # cd $(dirname $0)/../dev
 
