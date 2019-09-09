@@ -369,9 +369,9 @@ export class DatasetEditManager {
         await SettingsFacade.requestCredentials(host);
         await this.datasetService.putContent(
             host,
-            content,
             memberQualifier.datasetName,
             memberQualifier.memberName,
+            content,
         );
     }
 }
