@@ -54,23 +54,20 @@ export class DatasetEditManager {
         dataProvider: DatasetDataProvider,
     ) {
         subscriptions.push(
-            vscode.commands.registerCommand(
-                "zosexplorer.edit",
-                async (arg) => {
-                    try {
-                        await this.editMember(
-                            arg.host,
-                            arg.dataset,
-                            arg.member,
-                            dataProvider,
-                        );
-                    } catch (error) {
-                        vscode.window.showErrorMessage(
-                            "Edit member error: " + error,
-                        );
-                    }
-                },
-            ),
+            vscode.commands.registerCommand("zosexplorer.edit", async (arg) => {
+                try {
+                    await this.editMember(
+                        arg.host,
+                        arg.dataset,
+                        arg.member,
+                        dataProvider,
+                    );
+                } catch (error) {
+                    vscode.window.showErrorMessage(
+                        "Edit member error: " + error,
+                    );
+                }
+            }),
         );
         subscriptions.push(
             vscode.workspace.onDidChangeTextDocument(
@@ -78,7 +75,7 @@ export class DatasetEditManager {
                     if (
                         this.isDataSetFile(event.document.fileName) &&
                         event.document.isDirty &&
-                        this.markEditedMember(
+                        this.markedMember(
                             DatasetEditManager.processFilePath(
                                 event.document.fileName,
                             ),
@@ -123,7 +120,9 @@ export class DatasetEditManager {
                 return true;
             } catch (error) {
                 if (error.message === "fwrite() error") {
-                    await vscode.window.showErrorMessage("Action failed: Data set size exceeded or file corrupted.");
+                    await vscode.window.showErrorMessage(
+                        "Action failed: Data set size exceeded or file corrupted.",
+                    );
                 }
                 await vscode.window.showErrorMessage(error.toString());
             }
@@ -173,6 +172,20 @@ export class DatasetEditManager {
         memberName: string,
     ) {
         this.unmarkEditedMember({ datasetName, hostName, memberName });
+    }
+    public markedMember(memberQualifier: MemberQualifier): boolean {
+        return this.markEditedMember(memberQualifier);
+    }
+
+    public closeFileDocument(closedDocument: vscode.TextDocument) {
+        return this.closeDocument(closedDocument);
+    }
+
+    public saveDocumentFile(
+        savedDoc: vscode.TextDocument,
+        dataProvider: DatasetDataProvider,
+    ) {
+        return this.saveDocument(savedDoc, dataProvider);
     }
 
     private async editMember(
@@ -245,6 +258,7 @@ export class DatasetEditManager {
         }
         return false;
     }
+
     private closeDocument(closedDocument: vscode.TextDocument) {
         if (!closedDocument.isClosed) {
             return;

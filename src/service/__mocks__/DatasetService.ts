@@ -14,10 +14,16 @@
 jest.mock("../ZoweRestClient");
 
 import { Connection } from "../../model/Connection";
-import { ZoweRestClient } from "../ZoweRestClient";
 
 export class DatasetService {
-    constructor(private rest: ZoweRestClient) {}
+    constructor(private rest: any) {}
+
+    public async getContent(
+        connection: Connection,
+        datasetName: string,
+    ): Promise<string> {
+        return "CONTENT FOR OUR MOCK IMPLEMENTATION";
+    }
 
     public async putContent(
         connection: Connection,
@@ -25,14 +31,7 @@ export class DatasetService {
         memberName: string,
         data: string,
     ) {
-        return this.rest.putContent(connection, data, datasetName, memberName);
-    }
-
-    public async getContent(
-        connection: Connection,
-        datasetName: string,
-    ): Promise<string> {
-        return this.rest.getContent(connection, datasetName);
+        return "CONTENT FOR OUR MOCK IMPLEMENTATION";
     }
 
     public async createMember(connection: Connection, datasetName: string, memberName: string, data?: string) {
