@@ -16,6 +16,7 @@ jest.mock("../service/DatasetService");
 jest.mock("../service/SettingsFacade");
 jest.mock("fs");
 
+import * as path from "path";
 import * as vscode from "vscode";
 import { TextDocument, Uri } from "../__mocks__/vscode";
 import { Connection } from "../model/Connection";
@@ -42,18 +43,14 @@ describe("DatasetEditMember", () => {
     const creds: any = {};
     const rest: ZoweRestClient = new ZoweRestClient(creds);
     const datasetService: DatasetService = new DatasetService(rest);
-    const datasetEditManager: DatasetEditManager = new DatasetEditManager(
-        datasetService,
-    );
+    const datasetEditManager: DatasetEditManager = new DatasetEditManager(datasetService);
     const cache = {
-        getItemCollapsState: jest
-            .fn()
-            .mockReturnValue(vscode.TreeItemCollapsibleState.Collapsed),
+        getItemCollapsState: jest.fn().mockReturnValue(vscode.TreeItemCollapsibleState.Collapsed),
     };
     const link = "https://mock.com";
     const textDocument: TextDocument = {
         eol: undefined,
-        fileName: "",
+        fileName: "C:" + path.sep + "HarddriveMyHostFILE" + path.sep + "Mocky" + path.sep + "DATASET_FILE.cbl",
         isClosed: true,
         isDirty: true,
         isUntitled: true,
@@ -130,7 +127,7 @@ describe("DatasetEditMember", () => {
         };
         await saveToMainframe(
             connection,
-            "C:HarddriveMyHostFILE\\RealMock\\USERNAME.COBOL_FILE",
+            "C:" + path.sep + "HarddriveMyHostFILE" + path.sep + "RealMock" + path.sep + "USERNAME.COBOL_FILE",
         );
     });
 
@@ -147,7 +144,7 @@ describe("DatasetEditMember", () => {
         });
         await saveToMainframe(
             connection,
-            "C:HarddriveMyHostFILE\\Mocky\\DATASET_FILE.cbl",
+            "C:" + path.sep + "HarddriveMyHostFILE" + path.sep + "Mocky" + path.sep + "DATASET_FILE.cbl",
         );
     });
 
@@ -164,7 +161,7 @@ describe("DatasetEditMember", () => {
         });
         await saveToMainframe(
             connection,
-            "C:HarddriveMyHostFILE\\Mocky\\DATASET_FILE.cbl",
+            "C:" + path.sep + "HarddriveMyHostFILE" + path.sep + "Mocky" + path.sep + "DATASET_FILE.cbl",
         );
     });
 
