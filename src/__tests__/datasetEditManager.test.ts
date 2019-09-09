@@ -127,7 +127,7 @@ describe("DatasetEditMember", () => {
         };
         await saveToMainframe(
             connection,
-            "C:" + path.sep + "HarddriveMyHostFILE" + path.sep + "RealMock" + path.sep + "USERNAME.COBOL_FILE",
+            "C:" + path.sep + "HarddriveMyHostFILE" + path.sep + Buffer.from("RealMock").toString("base64") + path.sep + "USERNAME.COBOL_FILE",
         );
     });
 
