@@ -13,20 +13,17 @@
  */
 import * as vscode from "vscode";
 import { deleteFilter } from "../commands/DeleteFilter";
-import { Connection } from "../model/Connection";
 import { SettingsFacade } from "../service/SettingsFacade";
 import { NodeType } from "../ui/tree/DatasetTreeModel";
-import { generateConnection, generateDummyFilter } from "./utils/TestUtils";
+import { generateDummyFilter } from "./utils/TestUtils";
 
 let showWarningMessage: any;
-let dummyConnection: Connection;
 let dummyFilter: any;
 
 beforeAll(() => {
     showWarningMessage = jest.spyOn(vscode.window, "showWarningMessage");
 
-    dummyConnection = generateConnection();
-    dummyFilter = generateDummyFilter(dummyConnection);
+    dummyFilter = generateDummyFilter();
 });
 
 describe("Delete Filter functionality", () => {
@@ -35,7 +32,6 @@ describe("Delete Filter functionality", () => {
 
         const datasetFilterNode: any = {
             filter: dummyFilter,
-            host: dummyConnection,
             type: NodeType.DATASETS_FILTER,
         };
 
