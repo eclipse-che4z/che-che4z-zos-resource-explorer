@@ -33,8 +33,9 @@ pipeline {
                     echo "${env.WORKSPACE}"
                     // sh "npm i --no-bin-links"
                     sh "npm ci"
+                    sh 'ci-scripts/package.sh'
                     // sh "npm cache clean --force"
-                    sh "npm i vsce"
+                    // sh "npm i vsce"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
