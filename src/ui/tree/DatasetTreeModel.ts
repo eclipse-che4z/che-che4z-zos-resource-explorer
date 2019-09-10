@@ -92,7 +92,7 @@ export class ZEmptyNode extends ZNode {
 }
 
 export function createHostPath(host: Connection): string {
-    return host.url + host.username;
+    return host.url + host.name + host.username;
 }
 
 export function createFilterPath(host: Connection, filter: Filter): string {
