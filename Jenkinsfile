@@ -18,6 +18,10 @@ pipeline {
             yaml kubernetes_config
         }
     }
+    def customImage = docker.build("my-image:${env.BUILD_ID}")
+        customImage.inside {
+        sh 'echo "container inside"'
+        }
     options {
         skipDefaultCheckout(true) 
     }
@@ -39,11 +43,7 @@ pipeline {
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
-                    def customImage = docker.build("my-image:${env.BUILD_ID}")
-
-                     customImage.inside {
-                        sh 'echo "container inside"'
-                     }
+                    
 
                 }
             }
