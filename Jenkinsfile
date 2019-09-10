@@ -29,20 +29,13 @@ pipeline {
                 // sh "echo ${env.WORKSPACE}"
             }
             steps {
-                script {
-                    def customImage = docker.build("my-image:${env.BUILD_ID}")
-                    customImage.inside {
-                    sh 'echo "container inside"'
-                    }
-                }
-                
                 container('node') {
                     sh "pwd"
                     // sh "npm i --no-bin-links"
                     // sh "npm ci"
                     // sh 'ci-scripts/package.sh'
                     // sh "npm cache clean --force"
-                    // sh "npm i vsce"
+                    sh "npm i vsce"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
