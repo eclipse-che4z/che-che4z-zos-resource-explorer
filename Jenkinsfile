@@ -19,26 +19,31 @@ pipeline {
         }
     }
     options {
-        skipDefaultCheckout(false) 
+        skipDefaultCheckout(true) 
     }
     stages {
         stage('Compile & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
+                sh "echo ${npm_config_cache}"
             }
             steps {
                 
                 container('node') {
                     sh "pwd"
-                    echo "${env.WORKSPACE}"
                     // sh "npm i --no-bin-links"
-                    sh "npm ci"
-                    sh 'ci-scripts/package.sh'
+                    // sh "npm ci"
+                    // sh 'ci-scripts/package.sh'
                     // sh "npm cache clean --force"
                     // sh "npm i vsce"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
+                    def customImage = docker.build("my-image:${env.BUILD_ID}")
+
+                     customImage.inside {
+                        sh 'echo "container inside"'
+                     }
 
                 }
             }
