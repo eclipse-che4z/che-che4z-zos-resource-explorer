@@ -18,10 +18,7 @@ pipeline {
             yaml kubernetes_config
         }
     }
-    def customImage = docker.build("my-image:${env.BUILD_ID}")
-        customImage.inside {
-        sh 'echo "container inside"'
-        }
+    
     options {
         skipDefaultCheckout(true) 
     }
@@ -32,6 +29,12 @@ pipeline {
                 // sh "echo ${env.WORKSPACE}"
             }
             steps {
+                script {
+                    def customImage = docker.build("my-image:${env.BUILD_ID}")
+                    customImage.inside {
+                    sh 'echo "container inside"'
+                    }
+                }
                 
                 container('node') {
                     sh "pwd"
