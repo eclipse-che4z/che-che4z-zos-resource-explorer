@@ -25,7 +25,7 @@ pipeline {
         stage('Compile & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
-                sh "echo ${npm_config_cache}"
+                sh "echo ${env.WORKSPACE}"
             }
             steps {
                 
