@@ -12,10 +12,6 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-jest.mock("vscode");
-jest.mock("../utils");
-jest.mock("../service/SettingsFacade");
-
 import { createConnection } from "../commands/CreateConnection";
 import { DefaultCredentialsService } from "../service/CredentialsService";
 import { ZoweRestClient } from "../service/ZoweRestClient";

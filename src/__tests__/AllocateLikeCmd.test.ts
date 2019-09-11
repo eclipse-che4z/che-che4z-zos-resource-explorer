@@ -52,14 +52,17 @@ describe("[POSITIVE TESTS] Allocate like command", () => {
         - DATASET_SERVICE_MOCK: Dataset didn't already exsist --> generateDataserviceMock(FALSE).
         - EXPECTED RESULT: The unit test will trigger the showInformationMessage(`Dataset created.`).
         */
-        await allocateLikeDataset(generateDataserviceMock(false) as any, cache, mvsDatasetProviderMock, generateArgs(dataset));
+        await allocateLikeDataset(
+            generateDataserviceMock(false) as any,
+            cache,
+            mvsDatasetProviderMock,
+            generateArgs(dataset),
+        );
         expect(withProgressListener).toHaveReturned();
     });
-
 });
 
 describe("[NEGATIVE TESTS] Allocate like command", () => {
-
     test("Allocate like a VSAM dataset - not allowed", async () => {
         /*
         - DESC: A VSAM dataset with an valid allocation unit (track) is created.
@@ -69,7 +72,14 @@ describe("[NEGATIVE TESTS] Allocate like command", () => {
         const dummyDatasetOrg: Dataset = { name: DATASET_NAME, dataSetOrganization: VSM_ORG, allocationUnit: TRK_UNIT };
         const dataset: Dataset = createDummyDataset(dummyDatasetOrg);
 
-        expect(await allocateLikeDataset(generateDataserviceMock(false) as any, cache, mvsDatasetProviderMock, generateArgs(dataset))).toBe(false);
+        expect(
+            await allocateLikeDataset(
+                generateDataserviceMock(false) as any,
+                cache,
+                mvsDatasetProviderMock,
+                generateArgs(dataset),
+            ),
+        ).toBe(false);
     });
 
     test("Allocate like a BLOCKS unit dataset", async () => {
@@ -81,8 +91,14 @@ describe("[NEGATIVE TESTS] Allocate like command", () => {
         const dummyDatasetOrg: Dataset = { name: DATASET_NAME, dataSetOrganization: PO_ORG, allocationUnit: BLK_UNIT };
         const dataset: Dataset = createDummyDataset(dummyDatasetOrg);
 
-        expect(await allocateLikeDataset(generateDataserviceMock(false) as any, cache, mvsDatasetProviderMock, generateArgs(dataset))).toBe(false);
-
+        expect(
+            await allocateLikeDataset(
+                generateDataserviceMock(false) as any,
+                cache,
+                mvsDatasetProviderMock,
+                generateArgs(dataset),
+            ),
+        ).toBe(false);
     });
 
     test("Allocate like an already defined dataset", async () => {
@@ -94,6 +110,13 @@ describe("[NEGATIVE TESTS] Allocate like command", () => {
         const dummyDatasetOrg: Dataset = { name: DATASET_NAME, dataSetOrganization: PO_ORG, allocationUnit: TRK_UNIT };
         const dataset: Dataset = createDummyDataset(dummyDatasetOrg);
 
-        expect(await allocateLikeDataset(generateDataserviceMock(true) as any, cache, mvsDatasetProviderMock, generateArgs(dataset))).toBe(false);
+        expect(
+            await allocateLikeDataset(
+                generateDataserviceMock(true) as any,
+                cache,
+                mvsDatasetProviderMock,
+                generateArgs(dataset),
+            ),
+        ).toBe(false);
     });
 });

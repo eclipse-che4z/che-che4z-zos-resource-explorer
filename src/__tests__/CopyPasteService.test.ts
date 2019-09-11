@@ -12,8 +12,6 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 jest.mock("../service/ZoweRestClient");
-jest.mock("../service/DatasetService");
-jest.mock("../service/CredentialsService");
 
 import { Connection } from "../model/Connection";
 import { Dataset, Member } from "../model/DSEntities";
@@ -22,6 +20,7 @@ import { DatasetService } from "../service/DatasetService";
 import { ZoweRestClient } from "../service/ZoweRestClient";
 import { ZDatasetNode, ZMemberNode } from "../ui/tree/DatasetTreeModel";
 import { createDummyDataset } from "./utils/DatasetUtils";
+import { generateConnection } from "./utils/TestUtils";
 
 let dataset: Dataset;
 let datasetNode: ZDatasetNode;
@@ -45,7 +44,7 @@ beforeAll(() => {
     dataset = createDummyDataset();
     datasetNode = new ZDatasetNode(dataset, host, pathPrefix);
 
-    host = { name: "", url: "", username: "" };
+    host = generateConnection();
     pathPrefix = "PathPrefix";
     copyPasteService = new CopyPasteService(restStub, datasetServiceMocked);
     freshCopyPasteService = new CopyPasteService(restStub, datasetServiceMocked);
