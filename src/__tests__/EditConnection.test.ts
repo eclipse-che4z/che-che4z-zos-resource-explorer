@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2019 Broadcom.
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
@@ -69,5 +68,4 @@ describe("Edit Connection", () => {
         });
         expect(await editConnection(provider, arg)).toBeUndefined();
     });
-
 });

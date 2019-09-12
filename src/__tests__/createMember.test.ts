@@ -13,12 +13,8 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-jest.mock("../service/CredentialsService");
-jest.mock("../service/ZoweRestClient");
 jest.mock("../ui/tree/DatasetDataProvider");
 jest.mock("../service/DatasetService");
-jest.mock("vscode");
-jest.mock("../utils");
 
 import * as vscode from "vscode";
 import { createMember } from "../commands/CreateMember";
