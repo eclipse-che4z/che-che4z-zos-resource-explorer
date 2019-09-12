@@ -12,10 +12,6 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-jest.mock("vscode");
-jest.mock("../utils");
-jest.mock("../service/SettingsFacade");
-
 import * as vscode from "vscode";
 import { createFilter } from "../commands/CreateFilter";
 import { SettingsFacade } from "../service/SettingsFacade";

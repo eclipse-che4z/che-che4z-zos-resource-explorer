@@ -12,37 +12,35 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-jest.mock("vscode");
-jest.mock("../utils");
-
 import { editConnection } from "../commands/EditConnection";
 import { DefaultCredentialsService } from "../service/CredentialsService";
 import { ZoweRestClient } from "../service/ZoweRestClient";
 import { HostPanel } from "../ui/views/HostPanel";
 
 describe("Edit Connection", () => {
+    const datasetEditManager: any = {
+        cleanEditedMember: jest.fn(),
+        unmarkMember: jest.fn(),
+    };
+
+    HostPanel.editHost = jest.fn();
+    HostPanel.createHost = jest.fn();
+
     it("Edits Connection", async () => {
+        jest.resetAllMocks();
         const creds = new DefaultCredentialsService();
-        HostPanel.createHost = jest.fn();
-        const datasetEditManager: any = {
-            cleanEditedMember: jest.fn(),
-            unmarkMember: jest.fn(),
-            };
         const args = {host: {}};
-        HostPanel.editHost = jest.fn();
         await editConnection({} as any, datasetEditManager, new ZoweRestClient(creds), args);
-        expect(HostPanel.editHost).toHaveBeenCalled();
+        expect(HostPanel.editHost).toBeCalled();
+        expect(HostPanel.createHost).not.toBeCalled();
     });
+
     it("Cannot edit because the host does not exist", async () => {
+        jest.resetAllMocks();
         const creds = new DefaultCredentialsService();
-        HostPanel.createHost = jest.fn();
-        const datasetEditManager: any = {
-            cleanEditedMember: jest.fn(),
-            unmarkMember: jest.fn(),
-            };
         const args = {host: undefined};
-        HostPanel.createHost = jest.fn();
         await editConnection({} as any, datasetEditManager, new ZoweRestClient(creds), args);
-        expect(HostPanel.createHost).toHaveBeenCalled();
+        expect(HostPanel.editHost).not.toBeCalled();
+        expect(HostPanel.createHost).toBeCalled();
     });
 });

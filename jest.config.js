@@ -16,5 +16,5 @@ module.exports = {
         "resources/**/*.{js,jsx,ts}",
         "!**/node_modules/**",
         "!**/coverage/**"
-    ]
+     ]
   }
