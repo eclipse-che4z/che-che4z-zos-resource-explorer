@@ -28,4 +28,22 @@ export class SettingsFacade {
     public static listHosts(): Connection[] {
         return [];
     }
+
+    public static updateHosts(hosts: Connection[]) {
+        const cleanHosts: Connection[] = [];
+        hosts.forEach((host) => {
+            const cleanHost = Object.assign({}, host);
+            delete cleanHost.password;
+            cleanHosts.push(cleanHost);
+        });
+    }
+
+    public static findHostByName(name: string, hosts: Connection[]): Connection | undefined {
+        for (const host of hosts) {
+            if (host.name === name) {
+                return host;
+            }
+        }
+        return undefined;
+    }
 }
