@@ -50,13 +50,4 @@ export class SettingsFacade {
             cleanHosts.push(cleanHost);
         });
     }
-
-    public static findHostByName(name: string, hosts: Connection[]): Connection | undefined {
-        for (const host of hosts) {
-            if (host.name === name) {
-                return host;
-            }
-        }
-        return undefined;
-    }
 }
