@@ -30,7 +30,7 @@ describe("Create Connection", () => {
         await createConnection();
         expect(showInputBoxListener).toHaveReturned();
         expect(showInformationMessageListener).toHaveReturned();
-        });
+    });
 
     it("Does not create a connection test", async () => {
         vscode.window.showInputBox = jest.fn(() => {

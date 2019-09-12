@@ -14,9 +14,7 @@
 import { Connection } from "../../model/Connection";
 
 export class SettingsFacade {
-    public static async requestCredentials(
-        host: Connection,
-    ): Promise<{ username: string; password?: string }> {
+    public static async requestCredentials(host: Connection): Promise<{ username: string; password?: string }> {
         return {
             password: "",
             username: "",
@@ -26,10 +24,7 @@ export class SettingsFacade {
         host.password = undefined;
     }
 
-    public static findHostByName(
-        name: string,
-        hosts: Connection[],
-    ): Connection | undefined {
+    public static findHostByName(name: string, hosts: Connection[]): Connection | undefined {
         for (const host of hosts) {
             if (host.name === name) {
                 return host;
@@ -49,14 +44,5 @@ export class SettingsFacade {
             delete cleanHost.password;
             cleanHosts.push(cleanHost);
         });
-    }
-
-    public static findHostByName(name: string, hosts: Connection[]): Connection | undefined {
-        for (const host of hosts) {
-            if (host.name === name) {
-                return host;
-            }
-        }
-        return undefined;
     }
 }
