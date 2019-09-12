@@ -218,11 +218,8 @@ export async function createPhysicalDocument(
     host: Connection,
     content: string,
 ) {
-    const dirPath = path.join(os.tmpdir(), "zosExplorer", host.name);
-    const aux = datasetName.split(".");
-    const docType: string = aux[aux.length - 1];
-    const extension: string = mapToExtension(docType);
-    const filePath = path.join(dirPath, datasetName + SEPARATOR + memberName + "." + extension);
+    const filePath = generateTempFileName(host, {name: datasetName}, {name: memberName});
+
     ensureDirectoryExistence(filePath);
     if (fs.existsSync(filePath)) {
         await vscode.window
