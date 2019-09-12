@@ -12,16 +12,39 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
+jest.mock("../service/SettingsFacade");
+import * as vscode from "vscode";
 import { createConnection } from "../commands/CreateConnection";
-import { DefaultCredentialsService } from "../service/CredentialsService";
-import { ZoweRestClient } from "../service/ZoweRestClient";
-import { HostPanel } from "../ui/views/HostPanel";
+import { SettingsFacade } from "../service/SettingsFacade";
 
 describe("Create Connection", () => {
-    it("Creates Connection", async () => {
-        const creds = new DefaultCredentialsService();
-        HostPanel.createHost = jest.fn();
-        await createConnection({} as any, new ZoweRestClient(creds));
-        expect(HostPanel.createHost).toHaveBeenCalled();
+    SettingsFacade.listHosts = jest.fn(() => {
+        return [{ name: "Host1", url: "http://url1:1234", username: "" },
+               { name: "NewHost", url: "", username: "" },
+               { name: "Host2", url: "http://url2:1234", username: "" }];
+    });
+
+    it("Creates Connection test", async () => {
+        const showInputBoxListener = jest.spyOn(vscode.window, "showInputBox");
+        const showInformationMessageListener = jest.spyOn(vscode.window, "showInformationMessage");
+        await createConnection();
+        expect(showInputBoxListener).toHaveReturned();
+        expect(showInformationMessageListener).toHaveReturned();
+    });
+
+    it("Does not create a connection test", async () => {
+        vscode.window.showInputBox = jest.fn(() => {
+            return Promise.resolve("Host1");
+        });
+        const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
+        await createConnection();
+        expect(showErrorMessageListener).toHaveReturned();
+    });
+
+    it("Returns. Host name is undefined test", async () => {
+        vscode.window.showInputBox = jest.fn(() => {
+            return Promise.resolve(undefined);
+        });
+        expect(await createConnection()).toBeUndefined();
     });
 });

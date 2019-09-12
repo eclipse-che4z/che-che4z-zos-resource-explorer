@@ -89,13 +89,13 @@ function registerCommands(
     // Connections
     context.subscriptions.push(
         vscode.commands.registerCommand("zosexplorer.createConnection", async () => {
-            await createConnection(context, rest);
+            await createConnection();
         }),
     );
 
     context.subscriptions.push(
         vscode.commands.registerCommand("zosexplorer.editConnection", async (arg: any) => {
-            await editConnection(context, mvsDataProvider, rest, arg);
+            await editConnection(mvsDataProvider, arg);
         }),
     );
 
