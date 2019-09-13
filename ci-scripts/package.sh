@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 
 # if [[ $1 == "theia" ]]; then
 #     is_theia="true"
