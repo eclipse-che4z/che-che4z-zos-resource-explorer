@@ -20,7 +20,7 @@ pipeline {
     }
     
     options {
-        skipDefaultCheckout(true) 
+        skipDefaultCheckout(false) 
     }
     stages {
         stage('Compile & Test') {
