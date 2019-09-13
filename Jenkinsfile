@@ -32,7 +32,7 @@ pipeline {
                 container('node') {
                     sh "pwd"
                     // sh "npm i --no-bin-links"
-                    // sh "npm ci"
+                    sh "npm ci"
                     // sh 'ci-scripts/package.sh'
                     // sh "npm cache clean --force"
                     sh "npm i vsce"
