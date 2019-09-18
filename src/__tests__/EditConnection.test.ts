@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2019 Broadcom.
  * The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
@@ -13,21 +12,32 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
+jest.mock("../service/CredentialsService");
+jest.mock("../service/ZoweRestClient");
 jest.mock("../ui/tree/DatasetDataProvider");
 jest.mock("../service/DatasetService");
+jest.mock("../service/SettingsFacade");
+jest.mock("vscode");
 
 import * as vscode from "vscode";
-import { createMember } from "../commands/CreateMember";
+import { editConnection } from "../commands/EditConnection";
 import { DefaultCredentialsService } from "../service/CredentialsService";
 import { DatasetCache } from "../service/DatasetCache";
 import { DatasetEditManager } from "../service/DatasetEditManager";
 import { DatasetService } from "../service/DatasetService";
+import { SettingsFacade } from "../service/SettingsFacade";
 import { ZoweRestClient } from "../service/ZoweRestClient";
 import { DatasetDataProvider } from "../ui/tree/DatasetDataProvider";
 
-describe("Create Member", () => {
-    const service: DefaultCredentialsService = new DefaultCredentialsService();
+describe("Edit Connection", () => {
+    SettingsFacade.listHosts = jest.fn(() => {
+        return [{ name: "Host1", url: "http://url1:1234", username: "" },
+               { name: "NewHost", url: "", username: "" },
+               { name: "Host2", url: "http://url2:1234", username: "" }];
+    });
+    const arg = {host: {name: "Host1", url: "http://url1:1234", username: "" }};
     const cache: DatasetCache = new DatasetCache();
+    const service: DefaultCredentialsService = new DefaultCredentialsService();
     const client: ZoweRestClient = new ZoweRestClient(service);
     const datasetService: DatasetService = new DatasetService(client);
     const datasetEditManager: DatasetEditManager = new DatasetEditManager(datasetService);
@@ -36,25 +46,26 @@ describe("Create Member", () => {
         cache,
         datasetService);
 
-    it("Creates Member test", async () => {
+    it("Update Connection test", async () => {
         const showInputBoxListener = jest.spyOn(vscode.window, "showInputBox");
-        const withProgressListener = jest.spyOn(vscode.window, "withProgress");
-        const dsCreateMemberListener = jest.spyOn(datasetService, "createMember");
-        const memberExistsListener = jest.spyOn(datasetService, "isMemberExists");
-        await createMember(datasetService, cache, provider, {host: "", dataset: ""});
+        const showInformationMessageListener = jest.spyOn(vscode.window, "showInformationMessage");
+        await editConnection(provider, arg);
         expect(showInputBoxListener).toHaveReturned();
-        expect(withProgressListener).toHaveReturned();
-        expect(dsCreateMemberListener).toHaveReturned();
-        expect(memberExistsListener).toHaveReturned();
-    });
-    it("Should fail while trying to create a member, due to undefined arguments", async () => {
+        expect(showInformationMessageListener).toHaveReturned();
+        });
+
+    it("Does not edit a connection test", async () => {
+        vscode.window.showInputBox = jest.fn(() => {
+            return Promise.resolve("Host2");
+        });
         const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
-        await createMember(datasetService, cache, provider, undefined);
-        expect(showErrorMessageListener).toBeCalledTimes(1);
+        await editConnection(provider, arg);
+        expect(showErrorMessageListener).toHaveReturned();
     });
-    it("Should fail while trying to create a member, due to undefined arguments", async () => {
-        const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
-        await createMember(datasetService, cache, provider, {});
-        expect(showErrorMessageListener).toBeCalledTimes(2);
+    it("Returns. Host name is undefined test", async () => {
+        vscode.window.showInputBox = jest.fn(() => {
+            return Promise.resolve(undefined);
+        });
+        expect(await editConnection(provider, arg)).toBeUndefined();
     });
 });

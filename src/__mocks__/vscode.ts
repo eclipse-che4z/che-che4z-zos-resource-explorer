@@ -12,7 +12,7 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-// tslint:disable: max-classes-per-file no-namespace
+// tslint:disable: no-namespace bool-param-default max-classes-per-file no-empty
 export enum TreeItemCollapsibleState {
     /**
      * Determines an item can be neither collapsed nor expanded. Implies it has no children.
@@ -32,14 +32,14 @@ export namespace commands {
     const commandMap = {};
 
     export function registerCommand(
-        command: string,
+        commandId: string,
         callback: (...args: any[]) => any,
         thisArg?: any,
     ) {
-        commandMap[command] = callback;
+        commandMap[commandId] = callback;
     }
-    export function executeCommand<T>(_command: string, ...rest: any[]) {
-        commandMap[_command](rest);
+    export function executeCommand<T>(command: string, ...rest: any[]) {
+        commandMap[command](...rest);
     }
 }
 
@@ -52,12 +52,69 @@ export type ProviderResult<T> =
 interface Thenable<T> {
     then<TResult>(
         onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-        onrejected?: (reason: any) => TResult | Thenable<TResult>,
+        onrejected?: (reason: any) => TResult | Thenable<TResult> | void,
     ): Thenable<TResult>;
-    then<TResult>(
-        onfulfilled?: (value: T) => TResult | Thenable<TResult>,
-        onrejected?: (reason: any) => void,
-    ): Thenable<TResult>;
+}
+
+export interface TextDocument {
+    readonly uri: Uri;
+    readonly fileName: string;
+    readonly isUntitled: boolean;
+    readonly languageId: string;
+    readonly version: number;
+    readonly isDirty: boolean;
+    readonly isClosed: boolean;
+    readonly eol: any;
+    readonly lineCount: number;
+    save(): any;
+    lineAt(line: number | any): any;
+    offsetAt(position: any): any;
+    positionAt(offset: number): any;
+    getText(range?: any): string;
+    getWordRangeAtPosition(position: any, regex?: RegExp): any | undefined;
+    validateRange(range: any): any;
+    validatePosition(position: any): any;
+}
+
+export class Uri {
+    public readonly scheme: string;
+    public readonly authority: string;
+    public readonly path: string;
+    public readonly query: string;
+    public readonly fragment: string;
+    public readonly fsPath: string;
+
+    public constructor(
+        scheme: string,
+        authority: string,
+        path: string,
+        query: string,
+        fragment: string,
+        fsPath: string,
+    ) {
+        this.authority = authority;
+        this.scheme = scheme;
+        this.path = path;
+        this.query = query;
+        this.fragment = fragment;
+        this.fsPath = fsPath;
+    }
+    public with(change: {
+        scheme?: string;
+        authority?: string;
+        path?: string;
+        query?: string;
+        fragment?: string;
+    }): any {
+        return undefined;
+    }
+
+    public toString(skipEncoding?: boolean): string {
+        return this.path;
+    }
+    public toJSON(): any {
+        return undefined;
+    }
 }
 
 export type Event<T> = (
@@ -75,8 +132,8 @@ export namespace window {
     export function showInformationMessage(
         message: string,
         ...items: string[]
-    ): undefined {
-        return undefined;
+    ) {
+        return Promise.resolve(message);
     }
 
     export function showErrorMessage(
@@ -84,6 +141,10 @@ export namespace window {
         ...items: string[]
     ): undefined {
         return undefined;
+    }
+
+    export function showWarningMessage(message: string, ...items: string[]) {
+        return Promise.resolve("OK");
     }
     export interface MessageOptions {
         modal?: boolean;
@@ -94,14 +155,26 @@ export namespace window {
         isCloseAffordance?: boolean;
     }
 
-    export function showInputBox(options?: InputBoxOptions,
-        token?: CancellationToken): Thenable<string | undefined>{
+    export interface InputBoxOptions {
+        placeholder?: string;
+    }
+
+    export function showInputBox(
+        options?: InputBoxOptions,
+        token?: CancellationToken,
+    ) {
         return Promise.resolve("NameOfMember");
     }
 
-    export function withProgress<R>(options: ProgressOptions,
-         task: () => any) {
-        return task();
+    export function withProgress<R>(
+        options: ProgressOptions,
+        task: (progress?: Progress) => any,
+    ) {
+        return task({ report: jest.fn() } as any);
+    }
+
+    export async function showTextDocument(document, options?) {
+        return Promise.resolve("NameOfDocument");
     }
 }
 
@@ -142,21 +215,56 @@ export class TreeItem {
 
 export class EventEmitter<T> {
     public event: undefined;
+
+    public fire(data?: T): void {}
+
+    public dispose(): void {}
 }
 
 export interface TextDocumentChangeEvent {
-    /**
-     * The affected document.
-     */
     document: undefined;
-
-    /**
-     * An array of content changes.
-     */
     contentChanges: [];
 }
 
+export interface ConfigurationChangeEvent {
+    affectsConfiguration(section: string, resource?): boolean;
+}
+
+export interface TextDocumentChangeEvent {
+    document: undefined;
+    contentChanges: [];
+}
+
+export enum ProgressLocation {
+    SourceControl = 1,
+    Window = 10,
+    Notification = 15,
+}
+
+export interface ProgressOptions {
+    location: ProgressLocation;
+    title?: string;
+    cancellable?: boolean;
+}
+
+export interface Progress {
+    report(value): void;
+}
+
+export enum ConfigurationTarget {
+    Global = 1,
+}
+
 export namespace workspace {
+    export function openTextDocument(fileName: string) {
+        const document: any = {};
+        return Promise.resolve(document);
+    }
+
+    export interface InputBoxOptions {
+        placeholder?: string;
+    }
+
     export let rootPath: string | undefined;
 
     export interface WorkspaceFolder {
@@ -175,14 +283,9 @@ export namespace workspace {
     export function onWillSaveTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
     ) {}
-
-    export interface InputBoxOptions {
-        placeholder?: string;
-    }
-
-    export interface TextDocument {
-        fileName?: string;
-    }
+    export const onDidChangeConfiguration: Event<
+        ConfigurationChangeEvent
+    > = jest.fn();
 }
 
 export class ExtensionContext {
@@ -191,24 +294,6 @@ export class ExtensionContext {
     }
 }
 
-export enum ProgressLocation {
-    SourceControl = 1,
-    Window = 10,
-    Notification = 15,
-}
-
-export interface InputBoxOptions {
-    value?: string;
-    valueSelection?: [number, number];
-    prompt?: string;
-    placeHolder?: string;
-    password?: boolean;
-    ignoreFocusOut?: boolean;
-    validateInput?(value: string): string | undefined | null | Thenable<string | undefined | null>;
-}
-
-export interface ProgressOptions {
-    location: ProgressLocation;
-    title?: string;
-    cancellable?: boolean;
+export enum ViewColumn {
+    One,
 }

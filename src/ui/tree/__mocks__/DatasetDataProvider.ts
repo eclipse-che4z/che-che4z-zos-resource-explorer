@@ -13,30 +13,33 @@
  */
 
 import * as vscode from "vscode";
-import { ZNode } from "../DatasetTreeModel";
-import { DatasetService } from "../../../service/DatasetService";
 import { DatasetCache } from "../../../service/DatasetCache";
 import { DatasetEditManager } from "../../../service/DatasetEditManager";
+import { DatasetService } from "../../../service/DatasetService";
+import { ZNode } from "../DatasetTreeModel";
+
 export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
-
-
-    constructor(private context: vscode.ExtensionContext,
+    public onDidChangeTreeData?:
+        | vscode.Event<ZNode | null | undefined>
+        // tslint:disable-next-line: prefer-optional
+        | undefined;
+    constructor(
+        private context: vscode.ExtensionContext,
         private datasetEditorManager: DatasetEditManager,
         private datasetCache: DatasetCache,
-        private datasetService: DatasetService,){
-
-    }
-    onDidChangeTreeData?: vscode.Event<ZNode | null | undefined> | undefined;    getTreeItem(element: ZNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        private datasetService: DatasetService,
+    ) {}
+    public getTreeItem(
+        element: ZNode,
+    ): vscode.TreeItem | Thenable<vscode.TreeItem> {
         throw new Error("Method not implemented.");
     }
-    getChildren(element?: ZNode | undefined): vscode.ProviderResult<ZNode[]> {
+    public getChildren(
+        element?: ZNode | undefined,
+    ): vscode.ProviderResult<ZNode[]> {
         throw new Error("Method not implemented.");
     }
 
-    public refresh() {
-
-    }
-
-
-
+    // tslint:disable-next-line: no-empty
+    public refresh() {}
 }

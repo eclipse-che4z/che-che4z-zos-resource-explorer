@@ -83,23 +83,23 @@
                 }
             },
             {
-                "command": "zosexplorer.editMember",
+                "command": "zosexplorer.edit",
                 "title": "Edit"
             },
             {
-                "command": "zosexplorer.deleteMember",
+                "command": "zosexplorer.delete",
                 "title": "Delete"
             },
             {
-                "command": "zosexplorer.browseMember",
+                "command": "zosexplorer.browse",
                 "title": "Browse"
             },
             {
-                "command": "zosexplorer.copyMember",
+                "command": "zosexplorer.copy",
                 "title": "Copy"
             },
             {
-                "command": "zosexplorer.pasteMember",
+                "command": "zosexplorer.paste",
                 "title": "Paste"
             },
             {
@@ -114,19 +114,19 @@
         "menus": {
             "view/item/context": [
                 {
-                    "command": "zosexplorer.browseMember",
+                    "command": "zosexplorer.browse",
                     "when": "view == zosexplorer && viewItem == member"
                 },
                 {
-                    "command": "zosexplorer.browseMember",
+                    "command": "zosexplorer.browse",
                     "when": "view == zosexplorer && viewItem == dataset_PS"
                 },
                 {
-                    "command": "zosexplorer.editMember",
+                    "command": "zosexplorer.edit",
                     "when": "view == zosexplorer && viewItem == member"
                 },
                 {
-                    "command": "zosexplorer.deleteMember",
+                    "command": "zosexplorer.delete",
                     "when": "view == zosexplorer && viewItem == member"
                 },
                 {
@@ -160,12 +160,12 @@
                     "group": "inline"
                 },
                 {
-                    "command": "zosexplorer.copyMember",
+                    "command": "zosexplorer.copy",
                     "when": "view == zosexplorer && viewItem == member",
                     "group": "9_cutcopypaste"
                 },
                 {
-                    "command": "zosexplorer.pasteMember",
+                    "command": "zosexplorer.paste",
                     "when": "view == zosexplorer && viewItem =~ /(dataset_PO|dataset_PO_E)/",
                     "group": "9_cutcopypaste"
                 },
@@ -257,7 +257,7 @@
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "jest"
+        "test": "jest -w 1"
     },
     "devDependencies": {
         "@types/jest": "^24.0.18",

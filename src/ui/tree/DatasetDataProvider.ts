@@ -24,6 +24,8 @@ import {
     NodeType,
     ZDatasetFilterNode,
     ZDatasetNode,
+    ZEmptyDatasetNode,
+    ZEmptyNode,
     ZHostNode,
     ZMemberNode,
     ZNode,
@@ -108,6 +110,11 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
                     light: this.context.asAbsolutePath(path.join("resources", "light", "PS_icon.svg")),
                 };
             }
+            node.collapsibleState = vscode.TreeItemCollapsibleState.None;
+        }
+        if (NodeType.NONE === element.type) {
+            node.tooltip = "This dataset does not exist";
+            node.label = "<Invalid Path>";
             node.collapsibleState = vscode.TreeItemCollapsibleState.None;
         }
         return { ...node, ...element };
@@ -229,12 +236,14 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (result.length === 0) {
                 vscode.window.showWarningMessage("No dataset found.");
+                result.push(new ZEmptyDatasetNode());
             }
             return result;
         } catch (error) {
             let message = error.body;
             if (error.message && error.message ===
                 "ServletDispatcher failed - received TSO Prompt when expecting TsoServletResponse") {
+                // tslint:disable-next-line: max-line-length
                 message = "Cannot list datasets based on current filter. Amend filter to exclude datasets archived by CA Disk.";
             }
             return this.processZoweError(message, host);
@@ -261,6 +270,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (resultNodes.length === 0) {
                 vscode.window.showInformationMessage("No member found.");
+                return [new ZEmptyNode(dataset, { name: "<Empty>" }, host)];
             }
             return resultNodes;
         } catch (error) {

@@ -103,12 +103,6 @@ export function checkFilterString(host: Connection, input: string): string | und
     }
 
     const nameSegments: string[] = input.toUpperCase().split(".");
-    if (nameSegments.length < MIN_SEGMENTS_COUNT) {
-        return "Filter string does not have any nodes";
-    }
-    if (nameSegments.length > MAX_SEGMENTS_COUNT) {
-        return "Filter string contains too many nodes(more than 8)";
-    }
 
     for (let i = 0; i < nameSegments.length; i++) {
         const errorMessage = checkFilterSegment(nameSegments[i], i);
@@ -199,7 +193,7 @@ export function generateTempFileName(
     member: Member,
     tmpPrefix: string = path.join(os.tmpdir(), "zosExplorer"),
 ) {
-    const dirPath = path.join(tmpPrefix, host.name);
+    const dirPath = path.join(tmpPrefix, Buffer.from(host.name).toString("base64"));
     const dsnameSegments = dataset.name.split(".");
     const ext: string = mapToExtension(dsnameSegments[dsnameSegments.length - 1]);
     return path.join(dirPath, dataset.name + SEPARATOR + member.name + "." + ext);
@@ -224,11 +218,8 @@ export async function createPhysicalDocument(
     host: Connection,
     content: string,
 ) {
-    const dirPath = path.join(os.tmpdir(), "zosExplorer", host.name);
-    const aux = datasetName.split(".");
-    const docType: string = aux[aux.length - 1];
-    const extension: string = mapToExtension(docType);
-    const filePath = path.join(dirPath, datasetName + SEPARATOR + memberName + "." + extension);
+    const filePath = generateTempFileName(host, {name: datasetName}, {name: memberName});
+
     ensureDirectoryExistence(filePath);
     if (fs.existsSync(filePath)) {
         await vscode.window
