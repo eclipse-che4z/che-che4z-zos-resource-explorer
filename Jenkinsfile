@@ -36,11 +36,11 @@ pipeline {
                     sh "npm ci"
                     // sh 'ci-scripts/package.sh'
                     // sh "npm cache clean --force"
-                    sh "npm i vsce -prefix $HOME/workspace/che-che4z-explorer-for-zos_cicd/tools"
+                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
-                    sh "$HOME/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
+                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
                 }
             }
         }
