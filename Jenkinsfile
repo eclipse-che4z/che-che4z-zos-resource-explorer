@@ -31,12 +31,9 @@ pipeline {
             steps {
                 container('node') {
                     sh "pwd"
-                    sh "npm ci --no-bin-links"
-                    // sh "npm i --no-bin-links"
-                    // sh "npm ci"
-                    // sh 'ci-scripts/package.sh'
-                    // sh "npm cache clean --force"
-                    sh "npm i vsce"
+                    sh "npm ci"
+                    sh "sudo chown -R $USER /usr/local/lib/node_modules"
+                    sh "npm i vsce -g"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
