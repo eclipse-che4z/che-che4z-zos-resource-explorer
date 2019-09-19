@@ -76,6 +76,8 @@ export function deactivate() {
     // no-op
 }
 
+// no-op
+
 // TOSO remove rest
 function registerCommands(
     datasetService: DatasetService,
