@@ -36,8 +36,7 @@ pipeline {
                     sh "npm ci"
                     // sh 'ci-scripts/package.sh'
                     // sh "npm cache clean --force"
-                    sh "npm config set prefix $HOME/npm"
-                    sh "npm i vsce"
+                    sh "npm i vsce -prefix $HOME/npm"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
