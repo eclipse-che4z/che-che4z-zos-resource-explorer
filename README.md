@@ -37,7 +37,7 @@ Follow these steps:
 
 1. In z/OS Resource Explorer, click Add connection.
 2. Fill in the following fields:
-	- **URL** (in the format http://host:port or https://host:port)
+	- **URL** (in the format `http://host:port` or `https://host:port`)
 	- **Host name** (identifies the mainframe instance)
 		> **Note:** Ensure the connection name is unique
 	- Mainframe credentials (**username** and **password**)
