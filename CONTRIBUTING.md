@@ -42,6 +42,10 @@ To create a contribution, follow these steps:
 6. Run the command `$ git commit -m "explanation of your work and issue# obtained when you create it" -s`.
 7. Run the command `$ git push`.
 
+## Building vsix package
+
+Run task 'webpack-production' before you build vsix package.
+
 ## Contact
 
 Contact the project developers.
