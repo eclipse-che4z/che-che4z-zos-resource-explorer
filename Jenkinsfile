@@ -31,6 +31,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "pwd"
+                    sh "ls"
                     // sh "npm ci --no-bin-links"
                     // sh "npm i --no-bin-links"
                     sh "npm ci"
@@ -39,13 +40,13 @@ pipeline {
                     // sh "webpack --mode production"
                     // sh "npm install -g webpack"
                     // sh "npm run vscode:prepublish"
-                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd"
-                    // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
+                    // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd"
+                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
                     // sh "npm test"
-                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/node_modules/vsce/out/vsce package"
-                    // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
+                    // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/node_modules/vsce/out/vsce package"
+                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
                 }
             }
         }
