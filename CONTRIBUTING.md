@@ -44,7 +44,7 @@ To create a contribution, follow these steps:
 
 ## Building vsix package
 
-Run task 'webpack-production' before you build vsix package.
+Run task 'webpack-production' before building vsix package.
 
 ## Contact
 
