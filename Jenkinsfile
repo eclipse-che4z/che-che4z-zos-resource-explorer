@@ -36,7 +36,8 @@ pipeline {
                     sh "npm ci"
                     // sh 'ci-scripts/package.sh'
                     // sh "npm cache clean --force"
-                    sh "npm vscode:prepublish"
+                    sh "webpack --mode production"
+                    // sh "npm vscode:prepublish"
                     sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
                     // sh "npm rebuild"
                     // sh "npm i vsce"
