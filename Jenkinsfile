@@ -39,7 +39,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "pwd"
-                    // sh "wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix"
+                    sh "wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix"
                     // sh "npm ci"
                     // sh "npm test"
                     // sh "npm run webpack-production"
@@ -48,17 +48,15 @@ pipeline {
                 }
             }
         }
-        // if ("${branchName}" == "cicd-deploy") {
-            stage('Deploy') {
-                steps {
-                    script {
+        stage('Deploy') {
+            steps {
+                script {
                     if (env.BRANCH_NAME == 'master') {
                         echo 'I only execute on the master branch'
                     } else {
                         echo 'I execute elsewhere'
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                    // if ("${branchName}" == "cicd-deploy") {
                                 // branch = "${env.BRANCH_NAME}"
                                 sh "echo $branchName"
                                 sh "echo spravnabranch"
@@ -67,53 +65,19 @@ pipeline {
                                 // ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots                        
                                 // '''
 
-                                // sh '''
-                                // ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots
-                                // ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots
-                                // pwd
-                                // ls
-                                // scp -r /home/jenkins/agent/workspace/e4z-explorer-for-zos_cicd-deploy/*zosexplorer*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots
-                                // '''
-                            // }
+                                sh '''
+                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots
+                                ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots
+                                pwd
+                                ls
+                                scp -r /home/jenkins/agent/workspace/e4z-explorer-for-zos_cicd-deploy/*zosexplorer*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/${branchName}
+                                '''
                         }
                     }
-                    }
-                }
-
-
-
-
-
                 }
             }
-        // }
 
-        // if ("${branchName}" == "necojinyho") {
-        //     stage('Deploy') {
-        //         steps {
-        //             container('jnlp') {
-        //                 sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-        //                     // branch = "${env.BRANCH_NAME}"
-        //                     sh "echo necojinyho"
-        //                     // sh '''
-        //                     // ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots
-        //                     // ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots                        
-        //                     // '''
-
-        //                     // sh '''
-        //                     // ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots
-        //                     // ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots
-        //                     // pwd
-        //                     // ls
-        //                     // scp -r /home/jenkins/agent/workspace/e4z-explorer-for-zos_cicd-deploy/*zosexplorer*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots
-        //                     // '''
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-
-
+            }
+        }
     }
 }
