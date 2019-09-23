@@ -31,10 +31,11 @@ pipeline {
     }
     environment {
        branch = "${env.BRANCH_NAME}"
-       sh "echo $branch"
     }
     stages {
         stage('Compile & Test') {
+            sh "echo $branch"
+
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
             }
