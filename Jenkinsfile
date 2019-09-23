@@ -53,6 +53,7 @@ pipeline {
                 container('node') {
                     sh "pwd"
                     sh "npm run webpack-production"
+                    sh "sudo chown -R 1001140000:0 /.npm"
                     sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
                     sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
                 }
@@ -61,7 +62,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'development') {
+                    if (branchName == 'master' || branchName == 'development') {
                         echo 'deployment skipped'
                     } else {
                         container('jnlp') {
