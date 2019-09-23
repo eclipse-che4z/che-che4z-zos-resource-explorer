@@ -33,10 +33,12 @@ pipeline {
         stage('Compile & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
+                branchName = "${env.BRANCH_NAME}"
             }
             steps {
                 container('node') {
                     sh "pwd"
+                    sh "echo $branch"
                     // sh "wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix"
                     // sh "npm ci"
                     // sh "npm test"
@@ -50,7 +52,7 @@ pipeline {
             steps {
                 container('jnlp') {
                     sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                        branch = "${env.BRANCH_NAME}"
+                        // branch = "${env.BRANCH_NAME}"
                         sh "echo $branch"
                         // sh '''
                         // ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots
