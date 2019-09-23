@@ -29,7 +29,7 @@ pipeline {
         skipDefaultCheckout(true) 
     }
     environment {
-       branch = "${env.BRANCH_NAME}"
+       branchName = "${env.BRANCH_NAME}"
     }
     stages {
         stage('Compile & Test') {
@@ -55,7 +55,7 @@ pipeline {
                 if ("${branchName}" == "cicd-deploy") {
                         sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                             // branch = "${env.BRANCH_NAME}"
-                            sh "echo $branch"
+                            sh "echo $branchName"
                             sh "echo spravnabranch"
                             // sh '''
                             // ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots
