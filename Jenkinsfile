@@ -50,8 +50,8 @@ pipeline {
         }
         // if ("${branchName}" == "cicd-deploy") {
             stage('Deploy') {
-                if ("${branchName}" == "cicd-deploy") {
                 steps {
+                if ("${branchName}" == "cicd-deploy") {
                     container('jnlp') {
                         sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                             // branch = "${env.BRANCH_NAME}"
