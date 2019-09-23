@@ -51,9 +51,21 @@ pipeline {
         // if ("${branchName}" == "cicd-deploy") {
             stage('Deploy') {
                 steps {
+                    script {
+                    if (env.BRANCH_NAME == 'master') {
+                        echo 'I only execute on the master branch'
+                    } else {
+                        echo 'I execute elsewhere'
+                    }
+                }
+
+
+
+
+
                     container('jnlp') {
                         sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                if ("${branchName}" == "cicd-deploy") {
+                // if ("${branchName}" == "cicd-deploy") {
                             // branch = "${env.BRANCH_NAME}"
                             sh "echo $branchName"
                             sh "echo spravnabranch"
@@ -69,7 +81,7 @@ pipeline {
                             // ls
                             // scp -r /home/jenkins/agent/workspace/e4z-explorer-for-zos_cicd-deploy/*zosexplorer*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots
                             // '''
-                        }
+                        // }
                     }
                 }
                 }
