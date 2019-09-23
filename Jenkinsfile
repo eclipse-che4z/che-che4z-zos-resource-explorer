@@ -51,8 +51,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'master') {
-                        echo 'I only execute on the master branch'
+                    if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'cicd-deploy') {
+                        echo 'I only execute on the master/cicd-deploy branch'
                     } else {
                         echo 'I execute elsewhere'
                         container('jnlp') {
