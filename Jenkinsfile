@@ -26,7 +26,7 @@ pipeline {
         }
     }    
     options {
-        skipDefaultCheckout(true) 
+        skipDefaultCheckout(false) 
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
