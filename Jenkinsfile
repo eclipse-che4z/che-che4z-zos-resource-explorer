@@ -41,7 +41,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "pwd"
-                    sh "echo $branchName"
+                    sh "echo $branch"
                     // sh "wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix"
                     // sh "npm ci"
                     // sh "npm test"
