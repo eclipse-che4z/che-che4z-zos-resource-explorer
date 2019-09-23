@@ -39,12 +39,22 @@ pipeline {
             steps {
                 container('node') {
                     sh "pwd"
-                    sh "wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix"
-                    // sh "npm ci"
-                    // sh "npm test"
+                    // sh "wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix"
+                    sh "npm ci"
+                    sh "npm test"
                     // sh "npm run webpack-production"
                     // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
                     // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
+                }
+            }
+        }
+        stage('Packaging') {
+            steps {
+                container('node') {
+                    sh "pwd"
+                    sh "npm run webpack-production"
+                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
+                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
                 }
             }
         }
@@ -52,7 +62,7 @@ pipeline {
             steps {
                 script {
                     if (env.BRANCH_NAME == 'master' || env.BRANCH_NAME == 'development') {
-                        echo 'I only execute on the master/cicd-deploy branch'
+                        echo 'deployment skipped'
                     } else {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
