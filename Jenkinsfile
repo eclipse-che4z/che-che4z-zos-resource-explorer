@@ -50,7 +50,7 @@ pipeline {
             steps {
                 container('jnlp') {
                     sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                        branch = "${env.BRANCH_NAME}""
+                        branch = "${env.BRANCH_NAME}"
                         sh "echo $branch"
                         // sh '''
                         // ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots
