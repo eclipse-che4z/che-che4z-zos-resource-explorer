@@ -51,6 +51,9 @@ pipeline {
             }
         }
         stage('Packaging') {
+            environment {
+                npm_config_cache = "${env.WORKSPACE}"
+            }
             steps {
                 container('node') {
                     sh "pwd"
