@@ -13,7 +13,7 @@ spec:
 pipeline {
     agent {
         kubernetes {
-            label 'explorer-for-zos-pod'  
+            label 'explorer-for-zos-pod'
             yaml kubernetes_config
         }
     }
@@ -24,6 +24,7 @@ pipeline {
             }
             steps {
                 container('node') {
+                    sh "echo modifyingfile"
                     sh "npm ci"
                     sh "npm test"
                 }
