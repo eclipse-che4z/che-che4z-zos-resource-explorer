@@ -31,11 +31,12 @@ pipeline {
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
+       npm_config_cache = "${env.WORKSPACE}"
     }
     stages {
         stage('Compile & Test & Package') {
             environment {
-                npm_config_cache = "${env.WORKSPACE}"
+                // npm_config_cache = "${env.WORKSPACE}"
             }
             steps {
                 container('node') {
@@ -52,7 +53,7 @@ pipeline {
         }
         stage('Packaging') {
             environment {
-                npm_config_cache = "${env.WORKSPACE}"
+                // npm_config_cache = "${env.WORKSPACE}"
             }
             steps {
                 container('node') {
