@@ -41,6 +41,7 @@ pipeline {
                 container('node') {
                     sh "pwd"
                     sh "wget https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/csharp/1.3.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+                    sh "ls -a"
                     // sh "npm ci"
                     // sh "npm test"
                     // sh "npm run webpack-production"
