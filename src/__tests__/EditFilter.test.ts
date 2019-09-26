@@ -12,18 +12,15 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-jest.mock("vscode");
-jest.mock("../utils");
-jest.mock("../service/SettingsFacade");
-
 import * as vscode from "vscode";
 import { editFilter } from "../commands/EditFilter";
 import { SettingsFacade } from "../service/SettingsFacade";
+import { generateConnection } from "./utils/TestUtils";
 
 describe("Edit a Filter", () => {
     it("Edits a Filter", async () => {
         const args: any = {filter: {name: "", value: ""},
-        host: {name: "", url: "", username: ""}, type: "datasetsFilter"};
+        host: generateConnection(), type: "datasetsFilter"};
         vscode.window.showInputBox = jest.fn().mockReturnValue(Promise.resolve("NameOfMember"));
         SettingsFacade.editFilter = jest.fn();
         await editFilter(args);
@@ -32,8 +29,8 @@ describe("Edit a Filter", () => {
     });
     it("Tries to edit a non Filter node so it returns", async () => {
         jest.clearAllMocks();
-        const args: any = {filter: {name: "", value: ""},
-        host: {name: "", url: "", username: ""}, type: ""};
+        const args: any = { filter: {name: "", value: ""},
+        host: generateConnection(), type: ""};
         vscode.window.showInputBox = jest.fn().mockReturnValue(Promise.resolve("NameOfMember"));
         SettingsFacade.editFilter = jest.fn();
         await editFilter(args);
@@ -43,7 +40,7 @@ describe("Edit a Filter", () => {
     it("Does not edit the filter", async () => {
         jest.clearAllMocks();
         const args: any = {filter: {name: "", value: ""},
-        host: {name: "", url: "", username: ""},type: "datasetsFilter"};
+        host: generateConnection(), type: "datasetsFilter"};
         vscode.window.showInputBox = jest.fn().mockReturnValue(Promise.resolve(undefined));
         SettingsFacade.editFilter = jest.fn();
         await editFilter(args);

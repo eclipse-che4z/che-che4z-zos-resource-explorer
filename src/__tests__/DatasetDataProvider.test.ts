@@ -24,6 +24,8 @@ import {
     NodeType,
     ZDatasetFilterNode,
     ZDatasetNode,
+    ZEmptyDatasetNode,
+    ZEmptyNode,
     ZHostNode,
     ZMemberNode,
     ZSubsystemNode,
@@ -93,6 +95,13 @@ describe("DatasetDataProvider", () => {
             );
             expect(item.label).toBe(filter.name);
             expect(item.contextValue).toBe("datasetsFilter");
+        });
+
+        it("should map an empty filter node to a tree item", () => {
+            const filter: Filter = { name: "<Invalid Path>", value: "FFFF.*" };
+            const item: vscode.TreeItem = dsp.getTreeItem(new ZEmptyDatasetNode());
+            expect(item.label).toBe(filter.name);
+            expect(item.contextValue).toBe("none");
         });
 
         describe("Dataset nodes", () => {
@@ -210,6 +219,8 @@ describe("DatasetDataProvider", () => {
             generateDefaultFilter(connectionWithFilter),
             connectionWithFilter,
         );
+
+        const emptyNode: ZEmptyDatasetNode = new ZEmptyDatasetNode();
 
         const cache = {
             cache: jest.fn(),
@@ -340,6 +351,34 @@ describe("DatasetDataProvider", () => {
             ]);
         });
 
+        it("should return empty dataset under filter node", async () => {
+            const datasetService = {
+                listDatasets: jest.fn().mockReturnValue(Promise.resolve([])),
+            };
+            const dsp: DatasetDataProvider = new DatasetDataProvider(
+                context,
+                {} as any,
+                cache as any,
+                datasetService as any,
+            );
+            const nodesList = await dsp.getChildren(userNode);
+            expect(nodesList[0].path).toEqual("<Invalid Path>");
+            expect(nodesList[0].type).toEqual(NodeType.NONE);
+        });
+
+        it("should return empty list", async () => {
+            const datasetService = {
+                listDatasets: [],
+            };
+            const dsp: DatasetDataProvider = new DatasetDataProvider(
+                context,
+                {} as any,
+                cache as any,
+                datasetService as any,
+            );
+            expect(await dsp.getChildren(emptyNode)).toEqual([]);
+        });
+
         it("should return members under dataset node", async () => {
             const dataset: Dataset = createDummyDataset({
                 name: connectionWithoutFilter.username + ".DATASET",
@@ -369,6 +408,25 @@ describe("DatasetDataProvider", () => {
                     connectionWithFilter,
                     datasetNode.path,
                 ),
+            ]);
+        });
+
+        it("should return an empty member under dataset node", async () => {
+            const dataset: Dataset = createDummyDataset({ name: connectionWithoutFilter.username + ".DATASET" });
+            const member: Member = { name: "<Empty>" };
+            const datasetService = {
+                listMembers: jest.fn().mockReturnValue(Promise.resolve([])),
+            };
+            const dsp: DatasetDataProvider = new DatasetDataProvider(
+                context,
+                {} as any,
+                cache as any,
+                datasetService as any,
+            );
+            const prefix = createFilterPath(connectionWithFilter, filter);
+            const datasetNode: ZDatasetNode = new ZDatasetNode(dataset, connectionWithFilter, prefix);
+            expect(await dsp.getChildren(datasetNode)).toEqual([
+                new ZEmptyNode(dataset, member, connectionWithFilter),
             ]);
         });
     });

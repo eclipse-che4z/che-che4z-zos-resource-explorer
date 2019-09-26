@@ -24,6 +24,8 @@ import {
     NodeType,
     ZDatasetFilterNode,
     ZDatasetNode,
+    ZEmptyDatasetNode,
+    ZEmptyNode,
     ZHostNode,
     ZMemberNode,
     ZNode,
@@ -122,6 +124,11 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             // issue: https://github.com/theia-ide/theia/issues/5744
             // @ts-ignore
             node.command.id = "zosexplorer.createConnection";
+        }
+        if (NodeType.NONE === element.type) {
+            node.tooltip = "This dataset does not exist";
+            node.label = "<Invalid Path>";
+            node.collapsibleState = vscode.TreeItemCollapsibleState.None;
         }
         return { ...node, ...element };
     }
@@ -245,6 +252,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (result.length === 0) {
                 vscode.window.showWarningMessage("No dataset found.");
+                result.push(new ZEmptyDatasetNode());
             }
             return result;
         } catch (error) {
@@ -278,6 +286,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (resultNodes.length === 0) {
                 vscode.window.showInformationMessage("No member found.");
+                return [new ZEmptyNode(dataset, { name: "<Empty>" }, host)];
             }
             return resultNodes;
         } catch (error) {

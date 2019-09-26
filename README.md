@@ -1,6 +1,6 @@
-# Explorer for z/OS Extension
+# z/OS Resource Explorer Extension
 
-Explorer for z/OS allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the Eclipse Che4z Language Server Protocol.
+z/OS Resource Explorer allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the LSP for COBOL extension.
 
 ## **Contents**
 
@@ -16,13 +16,13 @@ Explorer for z/OS allows you to remotely view and edit the content of members of
 
 As a modern application developer, you can:
 
-- Use Explorer for z/OS to browse and edit mainframe data sets.
+- Use z/OS Resource Explorer to browse and edit mainframe data sets.
 - Copy and delete PDS members and allocate data sets using the parameters of an existing data set.
 - Create customizable filters including wildcards to produce lists of data sets that match the filter criteria.
 
 ## Prerequisites
 
-Before you install the extension for Explorer for z/OS, ensure that you meet the following prerequisites:
+Before you install the extension for z/OS Resource Explorer, ensure that you meet the following prerequisites:
 
 - Access to Mainframe
 - Access to [Zowe](https://www.zowe.org)
@@ -35,9 +35,9 @@ To be able to work with z/OS data sets, a host connection to z/OS is required.
 
 Follow these steps:
 
-1. In Explorer for z/OS, click Add connection.
+1. In z/OS Resource Explorer, click Add connection.
 2. Fill in the following fields:
-	- **URL** (in the format http://host:port or https://host:port)
+	- **URL** (in the format `http://host:port` or `https://host:port`)
 	- **Host name** (identifies the mainframe instance)
 		> **Note:** Ensure the connection name is unique
 	- Mainframe credentials (**username** and **password**)
@@ -54,7 +54,7 @@ The filter creates a new tree which lists all data sets that match the specified
 
 ### Actions
 
-You can perform the following actions in Explorer for z/OS:
+You can perform the following actions in z/OS Resource Explorer:
 
 - **Browse**
 	> Displays the content of a PDS member. You can edit the content but cannot save it.

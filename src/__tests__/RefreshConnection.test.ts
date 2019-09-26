@@ -23,6 +23,6 @@ describe("RefreshConnection command test", () => {
         const datasetDataProvider: any = { refresh: jest.fn() };
         await refreshConnection(cache, datasetDataProvider, connection);
         expect(cache.reset).toBeCalledWith(createHostPath(connection));
-        expect(datasetDataProvider.refresh).toHaveBeenCalledTimes(1);
+        expect(datasetDataProvider.refresh).toBeCalledTimes(1);
     });
 });
