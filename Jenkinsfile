@@ -67,7 +67,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    if (branchName == 'master' || branchName == 'development') {
+                    if (branchName == 'master' || branchName == 'development' || branchName == 'cicd-deploy') {
                         echo 'deployment skipped for branch: $branchName'
                     } else {
                         container('jnlp') {
