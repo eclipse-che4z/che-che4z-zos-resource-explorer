@@ -19,9 +19,9 @@ spec:
 """
 
 pipeline {
-    agent { label 'che4z_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+    agent {
         kubernetes {
-            label 'explorer-for-zos-pod'  
+            label 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
             yaml kubernetes_config
         }
     }    
