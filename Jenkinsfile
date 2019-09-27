@@ -46,7 +46,7 @@ pipeline {
                 }
             }
         }
-        stage('Packaging') {
+        stage('Package') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
             }
