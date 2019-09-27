@@ -17,6 +17,7 @@ import { Dataset, Filter } from "../model/DSEntities";
 import { DatasetCache, PATH_SEPARATOR } from "../service/DatasetCache";
 import { createFilterPath, ZDatasetNode, ZNode } from "../ui/tree/DatasetTreeModel";
 import { createDummyDataset } from "./utils/DatasetUtils";
+import { generateConnection } from "./utils/TestUtils";
 
 describe("DatasetCache", () => {
     describe("Base Logic", () => {
@@ -56,7 +57,7 @@ describe("DatasetCache", () => {
             username: "userName",
         };
         const prefix: string = createFilterPath(connection, filter);
-        const dataset: Dataset = createDummyDataset({ name: "TEST.DS"});
+        const dataset: Dataset = createDummyDataset({ name: "TEST.DS" });
         const datasetNode: ZDatasetNode = new ZDatasetNode(dataset, connection, prefix);
 
         it("should return cached object after invalidate if connection was not removed", () => {
@@ -76,6 +77,25 @@ describe("DatasetCache", () => {
             cache.cache(datasetNode.path + PATH_SEPARATOR, datasetNode);
             cache.resetFilter(connection, filter);
             expect(cache.loadFromCache(datasetNode.path)).toBeUndefined();
+        });
+        it("should return cached object after invalidate if new connection added", () => {
+            const c1 = generateConnection("c1");
+            const c2 = generateConnection("c1");
+            const c1dsNode: ZDatasetNode = new ZDatasetNode(dataset, c1, createFilterPath(c1, filter));
+            const c2dsNode: ZDatasetNode = new ZDatasetNode(dataset, c2, createFilterPath(c2, filter));
+            const cache: DatasetCache = new DatasetCache();
+            cache.cache(c1dsNode.path + PATH_SEPARATOR, c1dsNode);
+            cache.cache(c2dsNode.path + PATH_SEPARATOR, c2dsNode);
+            cache.invalidate([c1, c2]);
+            expect(cache.loadFromCache(createFilterPath(c1, filter) + PATH_SEPARATOR + dataset.name)).toEqual([
+                c1dsNode,
+            ]);
+            expect(cache.loadFromCache(createFilterPath(c2, filter) + PATH_SEPARATOR + dataset.name)).toEqual([
+                c2dsNode,
+            ]);
+            expect(
+                cache.loadFromCache(createFilterPath(connection, filter) + PATH_SEPARATOR + dataset.name),
+            ).toEqual(undefined);
         });
     });
 });

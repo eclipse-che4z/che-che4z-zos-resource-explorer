@@ -1,6 +1,6 @@
 # Change Log
 
-All notable changes to the "Explorer for z/OS" extension will be documented in this file.
+All notable changes to the "z/OS Resource Explorer" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 

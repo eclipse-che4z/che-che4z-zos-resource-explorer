@@ -17,6 +17,7 @@ import { browseMember } from "../commands/BrowseMember";
 import { Connection } from "../model/Connection";
 import { Member } from "../model/DSEntities";
 import { createDummyDataset } from "./utils/DatasetUtils";
+import { generateConnection } from "./utils/TestUtils";
 
 describe("BrowseMember Command", () => {
     const content = "Hello, World!";
@@ -25,7 +26,7 @@ describe("BrowseMember Command", () => {
     };
     const doc = {};
     vscode.workspace.openTextDocument = jest.fn().mockReturnValue(Promise.resolve(doc));
-    const connection: Connection = { name: "connection", url: "http://", username: "username" };
+    const connection: Connection = generateConnection();
 
     it("should browse dataset", async () => {
         const dataset = createDummyDataset();

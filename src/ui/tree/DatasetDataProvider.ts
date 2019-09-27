@@ -24,6 +24,8 @@ import {
     NodeType,
     ZDatasetFilterNode,
     ZDatasetNode,
+    ZEmptyDatasetNode,
+    ZEmptyNode,
     ZHostNode,
     ZMemberNode,
     ZNode,
@@ -110,12 +112,30 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             node.collapsibleState = vscode.TreeItemCollapsibleState.None;
         }
+        if (NodeType.CREATE_CONNECTION === element.type) {
+            node.label = "New connection";
+            node.collapsibleState = vscode.TreeItemCollapsibleState.None;
+            node.command = {
+                command: "zosexplorer.createConnection",
+                title: "New connection",
+            };
+            // TODO remove if Theis fix naming (theia/packages/plugin-ext/src/main/browser/view/tree-views-main.tsx)
+            // handleTreeEvents expect node.command.id with command id, but vscode - node.command.command
+            // issue: https://github.com/theia-ide/theia/issues/5744
+            // @ts-ignore
+            node.command.id = "zosexplorer.createConnection";
+        }
+        if (NodeType.NONE === element.type) {
+            node.tooltip = "This dataset does not exist";
+            node.label = "<Invalid Path>";
+            node.collapsibleState = vscode.TreeItemCollapsibleState.None;
+        }
         return { ...node, ...element };
     }
     public async getChildren(element?: ZNode): Promise<ZNode[]> {
         if (!element) {
             return new Promise((resolve) => {
-                const hostNodes: ZNode[] = [];
+                let hostNodes: ZNode[] = [];
                 SettingsFacade.listHosts().forEach((host) => {
                     hostNodes.push(new ZHostNode(host));
                 });
@@ -127,6 +147,9 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
                     }
                     return aVar > bVar ? 1 : -1;
                 });
+                const createConnectionNode = new ZNode(NodeType.CREATE_CONNECTION.toString());
+                createConnectionNode.type = NodeType.CREATE_CONNECTION;
+                hostNodes = [createConnectionNode, ...hostNodes];
                 resolve(hostNodes);
             });
         }
@@ -229,6 +252,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (result.length === 0) {
                 vscode.window.showWarningMessage("No dataset found.");
+                result.push(new ZEmptyDatasetNode());
             }
             return result;
         } catch (error) {
@@ -262,6 +286,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             }
             if (resultNodes.length === 0) {
                 vscode.window.showInformationMessage("No member found.");
+                return [new ZEmptyNode(dataset, { name: "<Empty>" }, host)];
             }
             return resultNodes;
         } catch (error) {

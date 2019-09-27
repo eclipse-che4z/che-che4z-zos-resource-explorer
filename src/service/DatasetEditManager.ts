@@ -39,9 +39,10 @@ export class DatasetEditManager {
         const dataSetwithMember = pathArray[pathArray.length - 1].split(
             SEPARATOR,
         );
+        const hostData = Buffer.from(pathArray[pathArray.length - 2], "base64");
         return {
             datasetName: dataSetwithMember[0],
-            hostName: pathArray[pathArray.length - 2],
+            hostName: hostData.toString("utf-8"),
             memberName: dataSetwithMember[1].split(".")[0],
         };
     }
@@ -369,9 +370,9 @@ export class DatasetEditManager {
         await SettingsFacade.requestCredentials(host);
         await this.datasetService.putContent(
             host,
-            content,
             memberQualifier.datasetName,
             memberQualifier.memberName,
+            content,
         );
     }
 }

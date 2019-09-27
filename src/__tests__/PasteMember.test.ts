@@ -12,43 +12,40 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-jest.mock("vscode");
-jest.mock("../utils");
-
 import * as vscode from "vscode";
 import { pasteMember } from "../commands/PasteMember";
 
 let cache: any;
 let datasetDataProvider: any;
-const args: any = {host: "", dataset: "", memberName: ""};
+const args: any = { host: "", dataset: "", memberName: "" };
 
 beforeEach(() => {
-        cache = {
-            resetDataset: jest.fn(),
-        };
-        datasetDataProvider = {
-            refresh: jest.fn(),
-        };
-    });
+    cache = {
+        resetDataset: jest.fn(),
+    };
+    datasetDataProvider = {
+        refresh: jest.fn(),
+    };
+});
 
 describe("Paste member", () => {
     it("Pastes a member", async () => {
-         const copyPasteService: any = {
-             canPaste: jest.fn().mockReturnValue(true),
-             getMemberName: jest.fn().mockReturnValue("member"),
-             paste: jest.fn(),
-             setMemberName: jest.fn(),
-         };
-         const datasetService: any = {
-             isMemberExists: jest.fn().mockReturnValue(false),
+        const copyPasteService: any = {
+            canPaste: jest.fn().mockReturnValue(true),
+            getMemberName: jest.fn().mockReturnValue("member"),
+            paste: jest.fn(),
+            setMemberName: jest.fn(),
         };
-         await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-         expect(copyPasteService.canPaste).toHaveReturned();
-         expect(datasetService.isMemberExists).toHaveReturned();
-         expect(copyPasteService.paste).toHaveReturned();
-         expect(cache.resetDataset).toHaveReturned();
-         expect(datasetDataProvider.refresh).toHaveReturned();
-     });
+        const datasetService: any = {
+            isMemberExists: jest.fn().mockReturnValue(false),
+        };
+        await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
+        expect(copyPasteService.canPaste).toBeCalled();
+        expect(datasetService.isMemberExists).toBeCalled();
+        expect(copyPasteService.paste).toBeCalled();
+        expect(cache.resetDataset).toBeCalled();
+        expect(datasetDataProvider.refresh).toBeCalled();
+    });
     it("Cannot copy", async () => {
         const copyPasteService: any = {
             canPaste: jest.fn().mockReturnValue(false),
@@ -58,14 +55,14 @@ describe("Paste member", () => {
         };
         const datasetService: any = {
             isMemberExists: jest.fn().mockReturnValue(false),
-       };
+        };
         await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-        expect(copyPasteService.canPaste).toHaveReturnedWith(false);
-        expect(datasetService.isMemberExists).toHaveReturnedTimes(0);
-        expect(copyPasteService.paste).toHaveReturnedTimes(0);
-        expect(cache.resetDataset).toHaveReturnedTimes(0);
-        expect(datasetDataProvider.refresh).toHaveReturnedTimes(0);
-     });
+        expect(copyPasteService.canPaste).toBeCalled();
+        expect(datasetService.isMemberExists).not.toBeCalled();
+        expect(copyPasteService.paste).not.toBeCalled();
+        expect(cache.resetDataset).not.toBeCalled();
+        expect(datasetDataProvider.refresh).not.toBeCalled();
+    });
     it("Throws error", async () => {
         const copyPasteService: any = {
             canPaste: jest.fn().mockReturnValue(true),
@@ -77,16 +74,16 @@ describe("Paste member", () => {
             isMemberExists: jest.fn().mockImplementation(() => {
                 throw new Error();
             }),
-       };
+        };
         const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
         await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-        expect(copyPasteService.canPaste).toHaveReturnedWith(true);
-        expect(datasetService.isMemberExists).toHaveReturnedTimes(0);
-        expect(copyPasteService.paste).toHaveReturnedTimes(0);
-        expect(showErrorMessageListener).toHaveReturned();
-        expect(cache.resetDataset).toHaveReturnedTimes(0);
-        expect(datasetDataProvider.refresh).toHaveReturnedTimes(0);
-     });
+        expect(copyPasteService.canPaste).toBeCalled();
+        expect(datasetService.isMemberExists).toBeCalled();
+        expect(copyPasteService.paste).not.toBeCalled();
+        expect(showErrorMessageListener).toBeCalled();
+        expect(cache.resetDataset).not.toBeCalled();
+        expect(datasetDataProvider.refresh).not.toBeCalled();
+    });
     it("Member already exists", async () => {
         const copyPasteService: any = {
             canPaste: jest.fn().mockReturnValue(true),
@@ -95,19 +92,20 @@ describe("Paste member", () => {
             setMemberName: jest.fn(),
         };
         const datasetService: any = {
-            isMemberExists: jest.fn()
-            .mockReturnValueOnce(true)
-            .mockReturnValueOnce(false),
-       };
+            isMemberExists: jest
+                .fn()
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(false),
+        };
         const showInputBoxListener = jest.spyOn(vscode.window, "showInputBox");
         const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
         await pasteMember(datasetService, copyPasteService, cache, datasetDataProvider, args);
-        expect(copyPasteService.canPaste).toHaveReturned();
-        expect(datasetService.isMemberExists).toHaveReturned();
-        expect(copyPasteService.paste).toHaveReturned();
+        expect(copyPasteService.canPaste).toBeCalled();
+        expect(datasetService.isMemberExists).toBeCalled();
+        expect(copyPasteService.paste).toBeCalled();
         expect(showInputBoxListener).toHaveReturned();
         expect(showErrorMessageListener).toHaveReturned();
-        expect(cache.resetDataset).toHaveReturned();
-        expect(datasetDataProvider.refresh).toHaveReturned();
-     });
- });
+        expect(cache.resetDataset).toBeCalled();
+        expect(datasetDataProvider.refresh).toBeCalled();
+    });
+});

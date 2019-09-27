@@ -12,45 +12,40 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-jest.mock("vscode");
-
 import * as vscode from "vscode";
 import { copyMember } from "../commands/CopyMember";
 
 describe("Copy Member", () => {
+    const emptyNode = { host: "", dataset: "", member: "" };
     it("Copies a member", async () => {
         const copyPasteService: any = {
-            canCopy : jest.fn().mockReturnValue(true),
-            copy : jest.fn().mockReturnValue(undefined),
+            canCopy: jest.fn().mockReturnValue(true),
+            copy: jest.fn().mockReturnValue(undefined),
         };
         const withProgressListener = jest.spyOn(vscode.window, "withProgress");
-        const canCopyListener = jest.spyOn(copyPasteService, "canCopy");
-        const copyListener = jest.spyOn(copyPasteService, "copy");
-        await copyMember(copyPasteService, {host: "", dataset: "", member: ""});
-        expect(canCopyListener).toHaveReturnedWith(true);
+        await copyMember(copyPasteService, emptyNode);
+        expect(copyPasteService.canCopy).toBeCalled();
         expect(withProgressListener).toHaveReturned();
-        expect(copyListener).toHaveReturned();
+        expect(copyPasteService.copy).toBeCalled();
     });
     it("Copies a member but fails", async () => {
         const copyPasteService: any = {
-            canCopy : jest.fn().mockReturnValue(true),
-            copy : jest.fn().mockImplementation(() => {
+            canCopy: jest.fn().mockReturnValue(true),
+            copy: jest.fn().mockImplementation(() => {
                 throw new Error();
             }),
         };
-        const showErrorMessageListener = jest.spyOn(vscode.window, "showErrorMessage");
-        await copyMember(copyPasteService, {host: "", dataset: "", member: ""});
-        expect(showErrorMessageListener).toBeCalledTimes(1);
+        vscode.window.showErrorMessage = jest.fn();
+        await copyMember(copyPasteService, emptyNode);
+        expect(vscode.window.showErrorMessage).toBeCalledTimes(1);
     });
     it("Cannot copy", async () => {
         const copyPasteService: any = {
-            canCopy : jest.fn().mockReturnValue(false),
-            copy : jest.fn().mockReturnValue(undefined),
+            canCopy: jest.fn().mockReturnValue(false),
+            copy: jest.fn().mockReturnValue(undefined),
         };
-        const canCopyListener = jest.spyOn(copyPasteService, "canCopy");
-        const copyListener = jest.spyOn(copyPasteService, "copy");
-        await copyMember(copyPasteService, {host: "", dataset: "", member: ""});
-        expect(canCopyListener).toHaveReturnedWith(false);
-        expect(copyListener).toBeCalledTimes(0);
+        await copyMember(copyPasteService, emptyNode);
+        expect(copyPasteService.canCopy).toHaveReturnedWith(false);
+        expect(copyPasteService.copy).toBeCalledTimes(0);
     });
- });
+});

@@ -12,6 +12,7 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
+// tslint:disable: no-namespace bool-param-default max-classes-per-file no-empty
 export enum TreeItemCollapsibleState {
     /**
      * Determines an item can be neither collapsed nor expanded. Implies it has no children.
@@ -27,7 +28,6 @@ export enum TreeItemCollapsibleState {
     Expanded = 2,
 }
 
-// tslint:disable-next-line: no-namespace
 export namespace commands {
     const commandMap = {};
 
@@ -108,7 +108,7 @@ export class Uri {
     }): any {
         return undefined;
     }
-    // tslint:disable-next-line: bool-param-default
+
     public toString(skipEncoding?: boolean): string {
         return this.path;
     }
@@ -128,7 +128,6 @@ export interface CancellationToken {
     onCancellationRequested: Event<any>;
 }
 
-// tslint:disable-next-line: no-namespace
 export namespace window {
     export function showInformationMessage(
         message: string,
@@ -179,9 +178,7 @@ export namespace window {
     }
 }
 
-// tslint:disable-next-line: max-classes-per-file
 export class Disposable {
-    // tslint:disable-next-line: no-empty
     constructor() {}
 }
 
@@ -201,7 +198,6 @@ export interface TreeDataProvider<T> {
     getParent?(element: T): ProviderResult<T>;
 }
 
-// tslint:disable-next-line: max-classes-per-file
 export class TreeItem {
     public label?: string;
 
@@ -217,60 +213,25 @@ export class TreeItem {
     }
 }
 
-// tslint:disable-next-line: max-classes-per-file
-// export class EventEmitter {
-//     public event: undefined;
-// }
-
-// tslint:disable-next-line: max-classes-per-file
 export class EventEmitter<T> {
-    /**
-     * The event listeners can subscribe to.
-     */
     public event: undefined;
 
-    /**
-     * Notify all subscribers of the [event](#EventEmitter.event). Failure
-     * of one or more listener will not fail this function call.
-     *
-     * @param data The event object.
-     */
-    // tslint:disable-next-line: no-empty
     public fire(data?: T): void {}
 
-    /**
-     * Dispose this object and free resources.
-     */
-    // tslint:disable-next-line: no-empty
     public dispose(): void {}
 }
 
 export interface TextDocumentChangeEvent {
-    /**
-     * The affected document.
-     */
     document: undefined;
-
-    /**
-     * An array of content changes.
-     */
     contentChanges: [];
 }
 
-// tslint:disable-next-line: max-classes-per-file
 export interface ConfigurationChangeEvent {
     affectsConfiguration(section: string, resource?): boolean;
 }
 
 export interface TextDocumentChangeEvent {
-    /**
-     * The affected document.
-     */
     document: undefined;
-
-    /**
-     * An array of content changes.
-     */
     contentChanges: [];
 }
 
@@ -294,7 +255,6 @@ export enum ConfigurationTarget {
     Global = 1,
 }
 
-// tslint:disable-next-line: no-namespace
 export namespace workspace {
     export function openTextDocument(fileName: string) {
         const document: any = {};
@@ -314,25 +274,26 @@ export namespace workspace {
 
     export function onDidChangeTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
-        // tslint:disable-next-line: no-empty
     ) {}
 
     export function onDidCloseTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
-        // tslint:disable-next-line: no-empty
     ) {}
 
     export function onWillSaveTextDocument(
         callback: (event: Event<TextDocumentChangeEvent>) => any,
-        // tslint:disable-next-line: no-empty
     ) {}
     export const onDidChangeConfiguration: Event<
         ConfigurationChangeEvent
     > = jest.fn();
 }
-// tslint:disable-next-line: max-classes-per-file
+
 export class ExtensionContext {
     public asAbsolutePath(relativePath: string): string {
         return "";
     }
+}
+
+export enum ViewColumn {
+    One,
 }

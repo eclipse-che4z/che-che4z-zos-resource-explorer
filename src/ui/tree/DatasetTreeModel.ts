@@ -26,6 +26,8 @@ export enum NodeType {
     USER_DATASETS = "userDatasets",
     DATASET = "dataset",
     MEMBER = "member",
+    CREATE_CONNECTION = "createConnection",
+    NONE = "none",
 }
 
 export class ZNode {
@@ -69,6 +71,13 @@ export class ZDatasetNode extends ZNode {
     }
 }
 
+export class ZEmptyDatasetNode extends ZNode {
+    constructor() {
+        super("<Invalid Path>");
+        this.type = NodeType.NONE;
+    }
+}
+
 export class ZMemberNode extends ZNode {
     constructor(public dataset: Dataset, public member: Member, public host: Connection, pathPrefix: string) {
         super(pathPrefix + PATH_SEPARATOR + member.name);
@@ -76,8 +85,15 @@ export class ZMemberNode extends ZNode {
     }
 }
 
+export class ZEmptyNode extends ZNode {
+    constructor(public dataset: Dataset, public member: Member, public host: Connection) {
+        super(member.name);
+        this.type = NodeType.MEMBER;
+    }
+}
+
 export function createHostPath(host: Connection): string {
-    return host.url + host.username;
+    return host.url + host.name + host.username;
 }
 
 export function createFilterPath(host: Connection, filter: Filter): string {
