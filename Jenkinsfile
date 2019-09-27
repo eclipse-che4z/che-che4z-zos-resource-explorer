@@ -68,7 +68,7 @@ pipeline {
             steps {
                 script {
                     if (branchName == 'master' || branchName == 'development' || branchName == 'cicd-deploy') {
-                        echo "deployment skipped for branch: $branchName"
+                        echo "Deployment skipped for branch: ${branchName}"
                     } else {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
