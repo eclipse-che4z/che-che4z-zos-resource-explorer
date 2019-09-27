@@ -26,7 +26,9 @@ pipeline {
         }
     }    
     options {
-        skipDefaultCheckout(false) 
+        timestamps()
+        timeout(time: 3, unit: 'HOURS')
+        skipDefaultCheckout(false)
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
@@ -43,7 +45,7 @@ pipeline {
                 }
             }
         }
-        stage('Packaging') {
+        stage('Package') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
             }
