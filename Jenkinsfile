@@ -33,7 +33,7 @@ pipeline {
        branchName = "${env.BRANCH_NAME}"
     }
     stages {
-        stage('Compile & Test') {
+        stage('Install & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
             }
@@ -43,10 +43,7 @@ pipeline {
                     sh "wget https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/csharp/1.3.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
                     // sh "ls -a"
                     // sh "npm ci"
-                    // sh "npm test"
-                    // sh "npm run webpack-production"
-                    // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
-                    // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
+                    // sh "npm test"                    
                 }
             }
         }
