@@ -26,8 +26,8 @@ pipeline {
         }
     }    
     options {
-        // skipDefaultCheckout(false) 
-        skipDefaultCheckout(true) 
+        skipDefaultCheckout(false) 
+        // skipDefaultCheckout(true) 
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
@@ -39,9 +39,9 @@ pipeline {
             }
             steps {
                 container('node') {
-                    // sh "pwd"
                     sh "wget https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/csharp/1.3.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
-                    // sh "ls -a"
+                    sh "pwd"
+                    sh "ls -a"
                     // sh "npm ci"
                     // sh "npm test"                    
                 }
@@ -53,8 +53,8 @@ pipeline {
             }
             steps {
                 container('node') {
-                    // sh "pwd"
-                    // sh "ls -a"
+                    sh "pwd"
+                    sh "ls -a"
 
                     // sh "npm run webpack-production"
                     // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
