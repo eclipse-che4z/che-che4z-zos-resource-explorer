@@ -42,8 +42,8 @@ pipeline {
                     sh "wget https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/csharp/1.3.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
                     sh "pwd"
                     sh "ls -a"
-                    // sh "npm ci"
-                    // sh "npm test"                    
+                    sh "npm ci"
+                    sh "npm test"                    
                 }
             }
         }
@@ -56,9 +56,9 @@ pipeline {
                     sh "pwd"
                     sh "ls -a"
 
-                    // sh "npm run webpack-production"
-                    // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
-                    // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
+                    sh "npm run webpack-production"
+                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
+                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
                 }
             }
         }
