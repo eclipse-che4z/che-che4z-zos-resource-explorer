@@ -26,6 +26,8 @@ pipeline {
         }
     }    
     options {
+        disableConcurrentBuilds()
+        timestamps()
         skipDefaultCheckout(false) 
     }
     environment {
