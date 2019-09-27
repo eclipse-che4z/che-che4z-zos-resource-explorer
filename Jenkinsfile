@@ -28,7 +28,8 @@ pipeline {
     options {
         disableConcurrentBuilds()
         timestamps()
-        skipDefaultCheckout(false) 
+        timeout(time: 3, unit: 'HOURS')
+        skipDefaultCheckout(false)
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
