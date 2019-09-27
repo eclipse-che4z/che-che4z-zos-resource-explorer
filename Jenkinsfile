@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "wget https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/csharp/1.3.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+                    // sh "wget https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/csharp/1.3.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
                     sh "pwd"
                     sh "ls -a"
                     sh "npm ci"
