@@ -41,7 +41,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm ci"
-                    sh "npm test"
+                    // sh "npm test"
                 }
             }
         }
@@ -52,8 +52,8 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm run webpack-production"
-                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools"
-                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
+                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
+                    // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/node_modules/vsce/out/vsce package"
                 }
             }
         }
