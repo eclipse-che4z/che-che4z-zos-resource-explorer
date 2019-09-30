@@ -61,6 +61,7 @@ pipeline {
             steps {
                 script {
                     if (branchName == 'master' || branchName == 'development') {
+                    } else {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
@@ -70,7 +71,6 @@ pipeline {
                                 '''
                             }
                         }
-                    } else {
                         echo "Deployment skipped for branch: ${branchName}"
                     }
                 }
