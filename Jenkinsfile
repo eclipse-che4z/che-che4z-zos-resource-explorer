@@ -28,7 +28,7 @@ pipeline {
     options {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
-        skipDefaultCheckout(false)
+        skipDefaultCheckout(true)
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
