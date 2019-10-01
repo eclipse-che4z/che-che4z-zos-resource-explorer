@@ -42,23 +42,9 @@ pipeline {
                 container('node') {
                     sh "pwd"
                     sh "ls"
+
                     sh "npm ci"
-                    // sh "npm test"
-
-                    // sh "npm i vsce"
-                    sh "ls"
-
-                    // sh "rm -rf _cacache"
-
-
-                    sh "npm run webpack-production"
-                    sh "ls"
-                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
-                    // sh "rm -rf _cacache"
-                    sh "ls"
-                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/lib/node_modules/vsce/out/vsce package"
-                    // sh "vsce package"
-                    sh "ls"
+                    sh "npm test"
                 }
             }
         }
@@ -68,7 +54,9 @@ pipeline {
             }
             steps {
                 container('node') {
-                    // sh "npm run webpack-production"
+                    sh "npm run webpack-production"
+                    sh "npm i vsce -prefix $HOME/agent/workspace/*/tools -g"
+                    sh "$HOME/agent/workspace/*/tools/lib/node_modules/vsce/out/vsce package"
                     // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
                     // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/lib/node_modules/vsce/out/vsce package"
                 }
