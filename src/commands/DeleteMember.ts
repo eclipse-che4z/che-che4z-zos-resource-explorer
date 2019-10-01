@@ -47,8 +47,8 @@ export async function deleteMember(
     }
     try {
         await datasetService.deleteMember(arg.host, memberNode.dataset.name, memberNode.member.name);
-        datasetEditManager.cleanEditedMember(arg.host, arg.dataset, arg.member);
-        datasetEditManager.unmarkMember(arg.host.name, memberNode.dataset.name, memberNode.member.name);
+        datasetEditManager.cleanEdited(arg.host, arg.dataset, arg.member);
+        datasetEditManager.unmark(arg.host.name, memberNode.dataset.name, memberNode.member.name);
     } catch (error) {
         vscode.window.showErrorMessage("Delete member error: " + error);
     }

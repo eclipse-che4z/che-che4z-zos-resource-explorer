@@ -190,13 +190,14 @@ export function ensureDirectoryExistence(filePath: string) {
 export function generateTempFileName(
     host: Connection,
     dataset: Dataset,
-    member: Member,
+    member: Member|undefined,
     tmpPrefix: string = path.join(os.tmpdir(), "zosExplorer"),
 ) {
     const dirPath = path.join(tmpPrefix, Buffer.from(host.name).toString("base64"));
     const dsnameSegments = dataset.name.split(".");
     const ext: string = mapToExtension(dsnameSegments[dsnameSegments.length - 1]);
-    return path.join(dirPath, dataset.name + SEPARATOR + member.name + "." + ext);
+    const memberSegment = member ? SEPARATOR + member.name : "";
+    return path.join(dirPath, dataset.name + memberSegment + "." + ext);
 }
 
 function mapToExtension(ext: string) {

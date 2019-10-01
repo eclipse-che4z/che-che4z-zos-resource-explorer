@@ -12,9 +12,9 @@
  *   Broadcom, Inc. - initial API and implementation
  */
 
-import fs = require("fs");
-import os = require("os");
-import path = require("path");
+import * as fs from "fs";
+import * as os from "os";
+import * as path from "path";
 import * as vscode from "vscode";
 import { Connection } from "../model/Connection";
 import { Dataset, Member } from "../model/DSEntities";
@@ -25,50 +25,65 @@ import { SettingsFacade } from "./SettingsFacade";
 
 const DEFAULT_ENCODING: string = "utf8";
 
-interface MemberQualifier {
+interface Qualifier {
     hostName: string;
     datasetName: string;
-    memberName: string;
+    memberName?: string;
 }
 
 export const SEPARATOR = "_";
 
 export class DatasetEditManager {
-    private static processFilePath(filePath: string): MemberQualifier {
+    private static processFilePath(filePath: string): Qualifier {
         const pathArray = filePath.split(path.sep);
-        const dataSetwithMember = pathArray[pathArray.length - 1].split(
+        const lastPathArray = pathArray[pathArray.length - 1];
+        const dataSetWithMember: string[] = lastPathArray.split(
             SEPARATOR,
         );
+        let datasetName;
+        let extIndex;
+        if (dataSetWithMember.length === 2) {
+            datasetName = dataSetWithMember[0];
+        } else {
+            extIndex = lastPathArray.lastIndexOf(".");
+            datasetName = lastPathArray.slice(0, extIndex);
+        }
         const hostData = Buffer.from(pathArray[pathArray.length - 2], "base64");
-        return {
-            datasetName: dataSetwithMember[0],
+        const memberName = dataSetWithMember.length === 2 ? dataSetWithMember[1].split(".")[0] : undefined;
+        let qualifier: Qualifier;
+        qualifier = {
+            datasetName,
             hostName: hostData.toString("utf-8"),
-            memberName: dataSetwithMember[1].split(".")[0],
+            memberName,
         };
+        return qualifier;
     }
-    private editedMemList = {};
+    private editedList = {};
 
-    constructor(private datasetService: DatasetService) {}
+    constructor(private datasetService: DatasetService) { }
 
     public register(
         subscriptions: vscode.Disposable[],
         dataProvider: DatasetDataProvider,
     ) {
         subscriptions.push(
-            vscode.commands.registerCommand("zosexplorer.edit", async (arg) => {
-                try {
-                    await this.editMember(
-                        arg.host,
-                        arg.dataset,
-                        arg.member,
-                        dataProvider,
-                    );
-                } catch (error) {
-                    vscode.window.showErrorMessage(
-                        "Edit member error: " + error,
-                    );
-                }
-            }),
+            vscode.commands.registerCommand(
+                "zosexplorer.edit",
+                async (arg) => {
+                    try {
+                        await this.edit(
+                            arg.host,
+                            arg.dataset,
+                            arg.member,
+                            dataProvider,
+                        );
+                    } catch (error) {
+                        vscode.window.showErrorMessage(
+                            "Edit error: " + error,
+                        );
+                    }
+                },
+            ),
         );
         subscriptions.push(
             vscode.workspace.onDidChangeTextDocument(
@@ -76,7 +91,7 @@ export class DatasetEditManager {
                     if (
                         this.isDataSetFile(event.document.fileName) &&
                         event.document.isDirty &&
-                        this.markedMember(
+                        this.marked(
                             DatasetEditManager.processFilePath(
                                 event.document.fileName,
                             ),
@@ -115,7 +130,7 @@ export class DatasetEditManager {
         if (message === "Save") {
             try {
                 await this.uploadtoMainframe(filePath);
-                this.unmarkEditedMember(
+                this.unmarkEdited(
                     DatasetEditManager.processFilePath(filePath),
                 );
                 return true;
@@ -131,28 +146,28 @@ export class DatasetEditManager {
         return false;
     }
 
-    public isEditedMember(
+    public isEdited(
         hostName: string,
         dataSetName: string,
         memberName?: string,
     ): boolean {
-        if (!this.editedMemList[hostName]) {
+        if (!this.editedList[hostName]) {
             return false;
         }
-        const editedMembers = this.editedMemList[hostName];
-        if (!editedMembers[dataSetName]) {
+        const edited = this.editedList[hostName];
+        if (!edited[dataSetName]) {
             return false;
         }
         if (memberName) {
-            return editedMembers[dataSetName].has(memberName);
+            return edited[dataSetName].has(memberName);
         }
         return true;
     }
 
-    public cleanEditedMember(
+    public cleanEdited(
         host: Connection,
         dataSet: Dataset,
-        member: Member,
+        member: Member | undefined,
     ): boolean {
         const filePath: string = generateTempFileName(host, dataSet, member);
         if (!fs.existsSync(filePath)) {
@@ -167,15 +182,16 @@ export class DatasetEditManager {
         return true;
     }
 
-    public unmarkMember(
+    public unmark(
         hostName: string,
         datasetName: string,
-        memberName: string,
+        memberName: string | undefined,
     ) {
-        this.unmarkEditedMember({ datasetName, hostName, memberName });
+        this.unmarkEdited({ datasetName, hostName, memberName });
     }
-    public markedMember(memberQualifier: MemberQualifier): boolean {
-        return this.markEditedMember(memberQualifier);
+
+    public marked(qualifier: Qualifier): boolean {
+        return this.markEdited(qualifier);
     }
 
     public closeFileDocument(closedDocument: vscode.TextDocument) {
@@ -189,15 +205,15 @@ export class DatasetEditManager {
         return this.saveDocument(savedDoc, dataProvider);
     }
 
-    private async editMember(
+    private async edit(
         host: Connection,
         dataset: Dataset,
-        member: Member,
+        member: Member | undefined,
         dataProvider: DatasetDataProvider,
     ) {
+        const name = member ? `${dataset.name}(${member.name})` : `${dataset.name}`;
         const content = await this.datasetService.getContent(
-            host,
-            `${dataset.name}(${member.name})`,
+            host, name,
         );
         const filePath: string = generateTempFileName(host, dataset, member);
         ensureDirectoryExistence(filePath);
@@ -212,7 +228,7 @@ export class DatasetEditManager {
             );
             if (open !== "Yes") {
                 fs.writeFileSync(filePath, content, DEFAULT_ENCODING);
-                this.unmarkEditedMember(
+                this.unmarkEdited(
                     DatasetEditManager.processFilePath(filePath),
                 );
                 dataProvider.refresh();
@@ -230,14 +246,14 @@ export class DatasetEditManager {
         savedDoc: vscode.TextDocument,
         dataProvider: DatasetDataProvider,
     ) {
-        const memberQualifier: MemberQualifier = DatasetEditManager.processFilePath(
+        const qualifier: Qualifier = DatasetEditManager.processFilePath(
             savedDoc.fileName,
         );
         if (
-            this.isEditedMember(
-                memberQualifier.hostName,
-                memberQualifier.datasetName,
-                memberQualifier.memberName,
+            this.isEdited(
+                qualifier.hostName,
+                qualifier.datasetName,
+                qualifier.memberName,
             ) &&
             (await this.saveToMainframe(savedDoc.fileName))
         ) {
@@ -274,14 +290,14 @@ export class DatasetEditManager {
         if (!this.isDataSetFile(fileName)) {
             return;
         }
-        const memberQualifier: MemberQualifier = DatasetEditManager.processFilePath(
+        const qualifier: Qualifier = DatasetEditManager.processFilePath(
             fileName,
         );
         if (
-            !this.isEditedMember(
-                memberQualifier.hostName,
-                memberQualifier.datasetName,
-                memberQualifier.memberName,
+            !this.isEdited(
+                qualifier.hostName,
+                qualifier.datasetName,
+                qualifier.memberName,
             ) &&
             fs.existsSync(fileName)
         ) {
@@ -293,28 +309,31 @@ export class DatasetEditManager {
         }
     }
 
-    private markEditedMember(memberQualifier: MemberQualifier): boolean {
-        if (!this.editedMemList[memberQualifier.hostName]) {
-            this.editedMemList[memberQualifier.hostName] = {};
+    private markEdited(qualifier: Qualifier): boolean {
+        if (!this.editedList[qualifier.hostName]) {
+            this.editedList[qualifier.hostName] = {};
         }
 
-        const editedMembers = this.editedMemList[memberQualifier.hostName];
+        const edited = this.editedList[qualifier.hostName];
 
-        if (!editedMembers[memberQualifier.datasetName]) {
-            editedMembers[memberQualifier.datasetName] = new Set();
-            editedMembers[memberQualifier.datasetName].add(
-                memberQualifier.memberName,
+        if (qualifier.memberName === undefined) {
+            qualifier.memberName = qualifier.datasetName;
+        }
+        if (!edited[qualifier.datasetName]) {
+            edited[qualifier.datasetName] = new Set();
+            edited[qualifier.datasetName].add(
+                qualifier.memberName,
             );
             return true;
         }
 
         if (
-            !editedMembers[memberQualifier.datasetName].has(
-                memberQualifier.memberName,
+            !edited[qualifier.datasetName].has(
+                qualifier.memberName,
             )
         ) {
-            editedMembers[memberQualifier.datasetName].add(
-                memberQualifier.memberName,
+            edited[qualifier.datasetName].add(
+                qualifier.memberName,
             );
             return true;
         }
@@ -322,56 +341,57 @@ export class DatasetEditManager {
         return false;
     }
 
-    private unmarkEditedMember(memberQualifier: MemberQualifier) {
+    private unmarkEdited(qualifier: Qualifier) {
         if (
-            !this.isEditedMember(
-                memberQualifier.hostName,
-                memberQualifier.datasetName,
-                memberQualifier.memberName,
+            !this.isEdited(
+                qualifier.hostName,
+                qualifier.datasetName,
+                qualifier.memberName,
             )
         ) {
             return;
         }
 
-        this.editedMemList[memberQualifier.hostName][
-            memberQualifier.datasetName
-        ].delete(memberQualifier.memberName);
+        this.editedList[qualifier.hostName][
+            qualifier.datasetName
+        ].delete(qualifier.memberName === undefined ? qualifier.datasetName : qualifier.memberName);
+
         if (
-            this.editedMemList[memberQualifier.hostName][
-                memberQualifier.datasetName
+            this.editedList[qualifier.hostName][
+                qualifier.datasetName
             ].size === 0
         ) {
-            delete this.editedMemList[memberQualifier.hostName][
-                memberQualifier.datasetName
+            delete this.editedList[qualifier.hostName][
+                qualifier.datasetName
             ];
         }
         if (
-            Object.keys(this.editedMemList[memberQualifier.hostName]).length ===
+            Object.keys(this.editedList[qualifier.hostName]).length ===
             0
         ) {
-            delete this.editedMemList[memberQualifier.hostName];
+            delete this.editedList[qualifier.hostName];
         }
     }
 
     private async uploadtoMainframe(filePath: string) {
         const content = fs.readFileSync(filePath, DEFAULT_ENCODING);
-        const memberQualifier: MemberQualifier = DatasetEditManager.processFilePath(
+        const qualifier: Qualifier = DatasetEditManager.processFilePath(
             filePath,
         );
         const host: Connection | undefined = SettingsFacade.findHostByName(
-            memberQualifier.hostName,
+            qualifier.hostName,
             SettingsFacade.listHosts(),
         );
         if (host === undefined) {
             throw new Error(
-                `hostName ${memberQualifier.hostName} is not define`,
+                `hostName ${qualifier.hostName} is not defined`,
             );
         }
         await SettingsFacade.requestCredentials(host);
         await this.datasetService.putContent(
             host,
-            memberQualifier.datasetName,
-            memberQualifier.memberName,
+            qualifier.datasetName,
+            qualifier.memberName,
             content,
         );
     }

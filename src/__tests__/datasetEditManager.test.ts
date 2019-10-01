@@ -34,7 +34,7 @@ beforeEach(() => {
     require("fs");
 });
 
-describe("DatasetEditMember", () => {
+describe("DatasetEditMemberTest", () => {
     const connection: Connection = {
         name: "Mocky",
         url: "https://mock.com",
@@ -67,17 +67,17 @@ describe("DatasetEditMember", () => {
     });
 
     it("Mark Member", () => {
-        const mark1 = datasetEditManager.markedMember({
+        const mark1 = datasetEditManager.marked({
             datasetName: "Mark_Member",
             hostName: "MyHost",
             memberName: "Member1",
         });
-        const mark2 = datasetEditManager.markedMember({
+        const mark2 = datasetEditManager.marked({
             datasetName: "Mark_Member",
             hostName: "MyHost",
             memberName: "Member2",
         });
-        const mark3 = datasetEditManager.markedMember({
+        const mark3 = datasetEditManager.marked({
             datasetName: "Mark_Member",
             hostName: "MyHost",
             memberName: "Member2",
@@ -86,6 +86,35 @@ describe("DatasetEditMember", () => {
         expect(mark1).toEqual(true);
         expect(mark2).toEqual(true);
         expect(mark3).toEqual(false);
+    });
+
+    it("Mark PS", () => {
+        const markPS1 = datasetEditManager.marked({
+            datasetName: "Mark_PS",
+            hostName: "MyHost",
+            memberName: undefined,
+        });
+        expect(markPS1).toEqual(true);
+
+        const markPS2 = datasetEditManager.marked({
+            datasetName: "Mark_PS",
+            hostName: "MyHost",
+            memberName: undefined,
+        });
+        expect(markPS2).toEqual(false);
+
+        datasetEditManager.unmark(
+            "MyHost",
+            "Mark_PS",
+            undefined,
+        );
+
+        const markPS3 = datasetEditManager.marked({
+            datasetName: "Mark_PS",
+            hostName: "MyHost",
+            memberName: undefined,
+        });
+        expect(markPS3).toEqual(true);
     });
 
     it("Save to Mainframe with no marked dataset", async () => {
@@ -102,7 +131,7 @@ describe("DatasetEditMember", () => {
     });
 
     it("Save to Mainframe with marked dataset", async () => {
-        datasetEditManager.markedMember({
+        datasetEditManager.marked({
             datasetName: "DATASET",
             hostName: connection.name,
             memberName: "FILE",
@@ -125,10 +154,19 @@ describe("DatasetEditMember", () => {
 
     it("Clean edited member", () => {
         const utils = require("../utils");
-        const cleanMember = jest.spyOn(datasetEditManager, "cleanEditedMember");
+        const cleanMember = jest.spyOn(datasetEditManager, "cleanEdited");
         jest.spyOn(utils, "generateTempFileName");
-        datasetEditManager.cleanEditedMember(connection, dataset, member);
+        datasetEditManager.cleanEdited(connection, dataset, member);
         expect(cleanMember).toReturnWith(true);
+        expect(generateTempFileName).toReturn();
+    });
+
+    it("Clean edited PS", () => {
+        const utils = require("../utils");
+        const cleanPS = jest.spyOn(datasetEditManager, "cleanEdited");
+        jest.spyOn(utils, "generateTempFileName");
+        datasetEditManager.cleanEdited(connection, dataset, undefined);
+        expect(cleanPS).toReturnWith(true);
         expect(generateTempFileName).toReturn();
     });
 
