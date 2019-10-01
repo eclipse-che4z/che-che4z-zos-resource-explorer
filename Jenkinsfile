@@ -40,8 +40,16 @@ pipeline {
             }
             steps {
                 container('node') {
+                    sh "pwd"
+                    sh "ls"
                     sh "npm ci"
                     // sh "npm test"
+
+                    sh "npm i vsce"
+                    sh "ls"
+                    // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
+                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/lib/node_modules/vsce/out/vsce package"
+                    sh "ls"
                 }
             }
         }
@@ -51,30 +59,30 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm run webpack-production"
-                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
-                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/lib/node_modules/vsce/out/vsce package"
+                    // sh "npm run webpack-production"
+                    // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
+                    // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/lib/node_modules/vsce/out/vsce package"
                 }
             }
         }
-        stage('Deploy') {
-            steps {
-                script {
-                    if (branchName == 'master' || branchName == 'development') {
-                        container('jnlp') {
-                            sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                                sh '''
-                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
-                                ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
-                                scp -r /home/jenkins/agent/workspace/*/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
-                                '''
-                            }
-                        }
-                    } else {
-                        echo "Deployment skipped for branch: ${branchName}"
-                    }
-                }
-            }
-        }
+        // stage('Deploy') {
+        //     steps {
+        //         script {
+        //             if (branchName == 'master' || branchName == 'development') {
+        //                 container('jnlp') {
+        //                     sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
+        //                         sh '''
+        //                         ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
+        //                         ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
+        //                         scp -r /home/jenkins/agent/workspace/*/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
+        //                         '''
+        //                     }
+        //                 }
+        //             } else {
+        //                 echo "Deployment skipped for branch: ${branchName}"
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
