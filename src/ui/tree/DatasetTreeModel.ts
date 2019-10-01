@@ -28,6 +28,7 @@ export enum NodeType {
     MEMBER = "member",
     CREATE_CONNECTION = "createConnection",
     NONE = "none",
+    CREATE_CONNECTION = "createConnection",
 }
 
 export class ZNode {
