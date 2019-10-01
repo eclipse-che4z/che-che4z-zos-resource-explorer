@@ -130,6 +130,19 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             node.label = "<Invalid Path>";
             node.collapsibleState = vscode.TreeItemCollapsibleState.None;
         }
+        if (NodeType.CREATE_CONNECTION === element.type) {
+            node.label = "New connection";
+            node.collapsibleState = vscode.TreeItemCollapsibleState.None;
+            node.command = {
+                command: "zosexplorer.createConnection",
+                title: "New connection",
+            };
+            // TODO remove if Theis fix naming (theia/packages/plugin-ext/src/main/browser/view/tree-views-main.tsx)
+            // handleTreeEvents expect node.command.id with command id, but vscode - node.command.command
+            // issue: https://github.com/theia-ide/theia/issues/5744
+            // @ts-ignore
+            node.command.id = "zosexplorer.createConnection";
+        }
         return { ...node, ...element };
     }
     public async getChildren(element?: ZNode): Promise<ZNode[]> {
