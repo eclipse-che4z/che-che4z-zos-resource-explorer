@@ -52,7 +52,7 @@ pipeline {
 
                     // sh "ls"
 
-
+                    sh "npm run webpack-production"
                     sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
                     // sh "rm -rf _cacache"
                     sh "ls"
