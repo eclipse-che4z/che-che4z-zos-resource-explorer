@@ -44,8 +44,8 @@ describe("Delete a member", () => {
             deleteMember: jest.fn(),
         };
         const datasetEditManager: any = {
-            cleanEditedMember: jest.fn(),
-            unmarkMember: jest.fn(),
+            cleanEdited: jest.fn(),
+            unmark: jest.fn(),
         };
         SettingsFacade.listHosts = jest.fn().mockReturnValue([args.host]);
         const showWarningMessageListener = jest.spyOn(
@@ -64,8 +64,8 @@ describe("Delete a member", () => {
             args,
         );
         expect(datasetService.deleteMember).toHaveReturned();
-        expect(datasetEditManager.cleanEditedMember).toHaveReturned();
-        expect(datasetEditManager.unmarkMember).toHaveReturned();
+        expect(datasetEditManager.cleanEdited).toHaveReturned();
+        expect(datasetEditManager.unmark).toHaveReturned();
         expect(cache.resetMember).toHaveReturned();
         expect(datasetDataProvider.refresh).toHaveReturned();
         expect(showWarningMessageListener).toHaveReturnedTimes(1);
@@ -77,8 +77,8 @@ describe("Delete a member", () => {
             deleteMember: jest.fn(),
         };
         const datasetEditManager: any = {
-            cleanEditedMember: jest.fn(),
-            unmarkMember: jest.fn(),
+            cleanEdited: jest.fn(),
+            unmark: jest.fn(),
         };
         await deleteMember(
             datasetService,
@@ -88,8 +88,8 @@ describe("Delete a member", () => {
             { type: "notMember" },
         );
         expect(datasetService.deleteMember).toHaveReturnedTimes(0);
-        expect(datasetEditManager.cleanEditedMember).toHaveReturnedTimes(0);
-        expect(datasetEditManager.unmarkMember).toHaveReturnedTimes(0);
+        expect(datasetEditManager.cleanEdited).toHaveReturnedTimes(0);
+        expect(datasetEditManager.unmark).toHaveReturnedTimes(0);
     });
     it("Simulates a delete member error", async () => {
         const datasetService: any = {
@@ -98,8 +98,8 @@ describe("Delete a member", () => {
             }),
         };
         const datasetEditManager: any = {
-            cleanEditedMember: jest.fn(),
-            unmarkMember: jest.fn(),
+            cleanEdited: jest.fn(),
+            unmark: jest.fn(),
         };
 
         SettingsFacade.listHosts = jest.fn().mockReturnValue([args.host]);
@@ -124,8 +124,8 @@ describe("Delete a member", () => {
             deleteMember: jest.fn(),
         };
         const datasetEditManager: any = {
-            cleanEditedMember: jest.fn(),
-            unmarkMember: jest.fn(),
+            cleanEdited: jest.fn(),
+            unmark: jest.fn(),
         };
         const argument: any = {
             dataset: createDummyDataset(),

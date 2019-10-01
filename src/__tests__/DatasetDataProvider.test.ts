@@ -44,7 +44,7 @@ describe("DatasetDataProvider", () => {
                 .mockReturnValue(vscode.TreeItemCollapsibleState.Collapsed),
         };
         const editorManager = {
-            isEditedMember: jest.fn().mockReturnValue(false),
+            isEdited: jest.fn().mockReturnValue(false),
         };
 
         const dsp: DatasetDataProvider = new DatasetDataProvider(

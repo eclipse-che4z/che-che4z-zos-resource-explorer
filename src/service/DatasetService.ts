@@ -34,7 +34,7 @@ export class DatasetService {
     }
 
     // TODO PO support
-    public async putContent(connection: Connection, datasetName: string, memberName: string, data: string) {
+    public async putContent(connection: Connection, datasetName: string, memberName: string|undefined, data: string) {
         return this.rest.putContent(connection, data, datasetName, memberName);
     }
 

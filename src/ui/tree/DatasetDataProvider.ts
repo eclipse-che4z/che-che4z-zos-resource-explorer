@@ -88,7 +88,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             if (!this.canExpandDataset(znode)) {
                 node.collapsibleState = vscode.TreeItemCollapsibleState.None;
             }
-            if (this.datasetEditorManager.isEditedMember(znode.host.name, znode.dataset.name)) {
+            if (this.datasetEditorManager.isEdited(znode.host.name, znode.dataset.name)) {
                 node.tooltip = "Dataset Member in Edit Mode";
             }
         }
@@ -96,7 +96,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
             const memberNode: ZMemberNode = element as ZMemberNode;
             node.label = memberNode.member.name;
             if (
-                this.datasetEditorManager.isEditedMember(
+                this.datasetEditorManager.isEdited(
                     memberNode.host.name,
                     memberNode.dataset.name,
                     memberNode.member.name,
@@ -199,7 +199,7 @@ export class DatasetDataProvider implements vscode.TreeDataProvider<ZNode> {
     }
 
     private getDatasetIcon(dsNode: ZDatasetNode): {} {
-        if (this.datasetEditorManager.isEditedMember(dsNode.host.name, dsNode.dataset.name)) {
+        if (this.datasetEditorManager.isEdited(dsNode.host.name, dsNode.dataset.name)) {
             return this.editDatasetIcons;
         } else {
             let dsOrg = dsNode.dataset.dataSetOrganization ? dsNode.dataset.dataSetOrganization : "dataset";
