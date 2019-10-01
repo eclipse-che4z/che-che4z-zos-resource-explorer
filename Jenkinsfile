@@ -47,9 +47,16 @@ pipeline {
 
                     // sh "npm i vsce"
                     sh "ls"
-                    // sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
-                    // sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/lib/node_modules/vsce/out/vsce package"
-                    sh "vsce package"
+
+                    sh "rm -rf _cacache"
+
+                    sh "ls"
+
+
+                    sh "npm i vsce -prefix $HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools -g"
+                    sh "ls"
+                    sh "$HOME/agent/workspace/che-che4z-explorer-for-zos_cicd/tools/lib/node_modules/vsce/out/vsce package"
+                    // sh "vsce package"
                     sh "ls"
                 }
             }
