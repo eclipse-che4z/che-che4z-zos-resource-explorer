@@ -18,14 +18,18 @@ spec:
       name: known-hosts
 """
 
+def kubeLabel= 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+
 pipeline {
     agent {
         kubernetes {
-            label 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+            label kubeLabel
+            // label 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
             yaml kubernetes_config
         }
     }    
     options {
+        // disableConcurrentBuilds()
         timestamps()
         timeout(time: 3, unit: 'HOURS')
         skipDefaultCheckout(false)
