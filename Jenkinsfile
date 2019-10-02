@@ -24,7 +24,6 @@ pipeline {
     agent {
         kubernetes {
             label kubeLabel
-            // label 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
             yaml kubernetes_config
         }
     }    
@@ -37,21 +36,18 @@ pipeline {
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
-       dirPath = "${env.WORKSPACE}"
+       workspace = "${env.WORKSPACE}"
     }
     stages {
         stage('Install & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
-                    dirPath = "${env.WORKSPACE}"
             }
             steps {
                 container('node') {
-                    sh "echo ${dirPath}"
-                    sh "echo $npm_config_cache"
-                    sh "echo ${env.WORKSPACE}"
+                    sh "echo ${workspace}"
                     sh "npm ci"
-                    // sh "npm test"
+                    sh "npm test"
                 }
             }
         }
@@ -89,7 +85,7 @@ pipeline {
                                 sh '''
                                 ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                scp -r $dirPath/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
+                                scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 '''
                             }
                         }
