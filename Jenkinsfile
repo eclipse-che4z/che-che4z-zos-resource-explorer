@@ -37,7 +37,7 @@ pipeline {
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
-       dirPath = kubeLabel
+       dirPath = "${kubeLabel}"
     }
     stages {
         stage('Install & Test') {
