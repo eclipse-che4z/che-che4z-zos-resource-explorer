@@ -45,10 +45,11 @@ pipeline {
                 npm_config_cache = "${env.WORKSPACE}"
             }
             steps {
+                    dirPath = "${PWD}"
                 container('node') {
                     sh "echo ${dirPath}"
-                    dirPath = "${PWD}"
-                    sh "echo ${dirPath}"
+                    sh "echo $npm_config_cache"
+                    sh "echo ${env.WORKSPACE}"
                     sh "npm ci"
                     // sh "npm test"
                 }
