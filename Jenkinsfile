@@ -31,8 +31,8 @@ pipeline {
         // disableConcurrentBuilds()
         timestamps()
         timeout(time: 3, unit: 'HOURS')
-        skipDefaultCheckout(false)
-        // skipDefaultCheckout(true)
+        // skipDefaultCheckout(false)
+        skipDefaultCheckout(true)
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
@@ -45,9 +45,8 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "echo ${workspace}"
-                    sh "npm ci"
-                    sh "npm test"
+                    // sh "npm ci"
+                    // sh "npm test"
                 }
             }
         }
@@ -57,11 +56,9 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm run webpack-production"
-                    sh "npm i vsce -prefix $HOME/agent/workspace/$kubeLabel/tools -g"
-                    sh "$HOME/agent/workspace/$kubeLabel/tools/lib/node_modules/vsce/out/vsce package"
-                    // sh "npm i vsce -prefix $HOME/agent/workspace/*/tools -g"
-                    // sh "$HOME/agent/workspace/*/tools/lib/node_modules/vsce/out/vsce package"
+                    // sh "npm run webpack-production"
+                    // sh "npm i vsce -prefix $HOME/agent/workspace/$kubeLabel/tools -g"
+                    // sh "$HOME/agent/workspace/$kubeLabel/tools/lib/node_modules/vsce/out/vsce package"
                 }
             }
         }
@@ -84,8 +81,6 @@ pipeline {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
                                 ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 '''
                             }
                         }
