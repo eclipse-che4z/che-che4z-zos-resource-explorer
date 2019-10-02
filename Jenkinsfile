@@ -43,9 +43,9 @@ pipeline {
         stage('Install & Test') {
             environment {
                 npm_config_cache = "${env.WORKSPACE}"
+                    dirPath = "${env.WORKSPACE}"
             }
             steps {
-                    dirPath = "${PWD}"
                 container('node') {
                     sh "echo ${dirPath}"
                     sh "echo $npm_config_cache"
