@@ -46,6 +46,9 @@ pipeline {
             }
             steps {
                 container('node') {
+                    sh "echo ${dirPath}"
+                    dirPath = "${PWD}"
+                    sh "echo ${dirPath}"
                     sh "npm ci"
                     // sh "npm test"
                 }
@@ -85,7 +88,7 @@ pipeline {
                                 sh '''
                                 ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                scp -r /home/jenkins/agent/workspace/$dirPath/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
+                                scp -r $dirPath/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 '''
                             }
                         }
