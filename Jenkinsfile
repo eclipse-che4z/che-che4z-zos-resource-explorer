@@ -8,6 +8,13 @@ spec:
   - name: node
     image: node:12.10.0-alpine
     tty: true
+    resources:
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+      requests:
+        memory: "4Gi"
+        cpu: "2"
   - name: jnlp
     volumeMounts:
     - name: volume-known-hosts
@@ -18,7 +25,7 @@ spec:
       name: known-hosts
 """
 
-def kubeLabel= 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+def kubeLabel = 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
 
 pipeline {
     agent {
