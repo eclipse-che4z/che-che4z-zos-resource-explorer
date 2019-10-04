@@ -1,6 +1,6 @@
 # z/OS Resource Explorer Extension
 
-z/OS Resource Explorer allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the LSP for COBOL extension.
+z/OS Resource Explorer allows you to remotely view and edit the content of members of partitioned data sets (PDS) within a modern, user-friendly IDE. You can create, copy and delete PDS members, and allocate new data sets copying the parameters of a model data set. You can also configure filters to enable fast indexing of large numbers of data sets, and enable syntax awareness for COBOL text by installing the COBOL Language Support extension.
 
 ## **Contents**
 
