@@ -67,7 +67,8 @@ pipeline {
                 container('node') {
                     // sh "npm run webpack-production"
                     // sh '''
-                    //     npx vsce package
+                    //     #npx vsce package
+                    //     wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix
                     //     mv zosexplorer*.vsix zosexplorer_latest.vsix
                     // '''
                 }
@@ -75,11 +76,13 @@ pipeline {
         }
         stage('Deploy') {
             environment {
-                path = "download.eclipse.org/che4z/snapshots/${projectName}"
+                url = "download.eclipse.org/che4z/snapshots/${projectName}"
+                sshChe4z = "genie.che4z@projects-storage.eclipse.org"
+                webroot = "/home/data/httpd"
             }
             steps {
                 script {
-                    echo path
+                    echo url
                     if (branchName == 'master' || branchName == 'development') {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
@@ -96,10 +99,10 @@ pipeline {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
-                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/$path/$branchName
+                                ssh $sshChe4z rm -rf $webroot/$url/$branchName
                                 
                                 '''
-                                echo "Deployed to https://$path/$branchName"
+                                echo "Deployed to https://$url/$branchName"
                             }
                         }
                     }
