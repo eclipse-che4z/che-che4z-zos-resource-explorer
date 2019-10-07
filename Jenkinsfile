@@ -40,7 +40,6 @@ pipeline {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
         skipDefaultCheckout(false)
-        // skipDefaultCheckout(true)
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
     }
     environment {
@@ -76,7 +75,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    echo projectName
                     if (branchName == 'master' || branchName == 'development') {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
