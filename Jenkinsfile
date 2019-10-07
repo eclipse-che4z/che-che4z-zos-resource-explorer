@@ -66,21 +66,20 @@ pipeline {
             steps {
                 container('node') {
                     // sh "npm run webpack-production"
-                    // sh '''
+                    sh '''
                     //     #npx vsce package
-                    //     wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix
-                    //     mv zosexplorer*.vsix zosexplorer_latest.vsix
-                    // '''
+                        wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix
+                        mv zosexplorer*.vsix zosexplorer_latest.vsix
+                    '''
                 }
             }
         }
         stage('Deploy') {
             environment {
                 sshChe4z = "genie.che4z@projects-storage.eclipse.org"
-                webroot = "/home/data/httpd"
                 project = "download.eclipse.org/che4z/snapshots/$projectName"
                 url = "$project/$branchName"
-                deployPath = "$webroot/$url"
+                deployPath = "/home/data/httpd/$url"
             }
             steps {
                 script {
