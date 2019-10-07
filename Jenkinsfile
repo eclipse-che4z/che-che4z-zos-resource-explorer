@@ -107,7 +107,7 @@ pipeline {
                                  echo ${projectName}
                                 '''
                                 sh '''
-                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
+                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/cicd-build
                                 '''
                                 echo "Deployed to https://download.eclipse.org/che4z/snapshots/$projectName/$branchName"
                             }
