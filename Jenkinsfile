@@ -78,8 +78,8 @@ pipeline {
             environment {
                 sshChe4z = "genie.che4z@projects-storage.eclipse.org"
                 webroot = "/home/data/httpd"
-                url = "download.eclipse.org/che4z/snapshots/${projectName}"
-                deployPath = $webroot + '/' + url + '/' + branchName
+                url = "download.eclipse.org/che4z/snapshots/$projectName"
+                deployPath = "$webroot + '/' + $url + '/' + $branchName"
             }
             steps {
                 script {
