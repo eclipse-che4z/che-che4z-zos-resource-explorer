@@ -76,6 +76,7 @@ pipeline {
             steps {
                 script {
                     path = 'download.eclipse.org/che4z/snapshots/' + projectName
+                    echo path
                     if (branchName == 'master' || branchName == 'development') {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
