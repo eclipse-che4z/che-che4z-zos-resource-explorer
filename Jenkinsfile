@@ -8,6 +8,13 @@ spec:
   - name: node
     image: node:12.10.0-alpine
     tty: true
+    resources:
+      limits:
+        memory: "4Gi"
+        cpu: "2"
+      requests:
+        memory: "4Gi"
+        cpu: "2"
   - name: jnlp
     volumeMounts:
     - name: volume-known-hosts
@@ -18,7 +25,7 @@ spec:
       name: known-hosts
 """
 
-def kubeLabel= 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+def kubeLabel = 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
 
 pipeline {
     agent {
@@ -32,7 +39,7 @@ pipeline {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
         skipDefaultCheckout(false)
-        // skipDefaultCheckout(true)
+        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
     }
     environment {
        branchName = "${env.BRANCH_NAME}"
@@ -57,8 +64,10 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm run webpack-production"
-                    sh "npm i vsce -prefix $HOME/agent/workspace/$kubeLabel/tools -g"
-                    sh "$HOME/agent/workspace/$kubeLabel/tools/lib/node_modules/vsce/out/vsce package"
+                    sh '''
+                        npx vsce package
+                        mv zosexplorer*.vsix zosexplorer_latest.vsix
+                    '''
                 }
             }
         }
@@ -73,6 +82,7 @@ pipeline {
                                 ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 '''
+                                echo "Deployed to https://download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName"
                             }
                         }
                     } else {
