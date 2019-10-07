@@ -54,7 +54,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm ci"
-                    // sh "npm test"
+                    sh "npm test"
                 }
             }
         }
@@ -92,10 +92,8 @@ pipeline {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
                                 ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
+                                
                                 '''
-                                echo "Deployed to https://download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName"
                             }
                         }
                     }
