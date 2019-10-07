@@ -54,7 +54,7 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm ci"
-                    // sh "npm test"
+                    sh "npm test"
                 }
             }
         }
@@ -65,12 +65,10 @@ pipeline {
             steps {
                 container('node') {
                     sh "npm run webpack-production"
-                    // sh "npm i vsce -prefix $HOME/agent/workspace/$kubeLabel/tools -g"
-                    // sh "$HOME/agent/workspace/$kubeLabel/tools/lib/node_modules/vsce/out/vsce package"
-
                     sh '''
-                            npx vsce package
-                        '''
+                        npx vsce package
+                        mv zosexplorer*.vsix zosexplorer_latest.vsix
+                    '''
                 }
             }
         }
