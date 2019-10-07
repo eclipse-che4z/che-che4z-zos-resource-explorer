@@ -45,12 +45,12 @@ pipeline {
     }
     environment {
        branchName = "$env.BRANCH_NAME"
-       workspace = "${env.WORKSPACE}"
+       workspace = "$env.WORKSPACE"
     }
     stages {
         stage('Install & Test') {
             environment {
-                npm_config_cache = "${env.WORKSPACE}"
+                npm_config_cache = "$env.WORKSPACE"
             }
             steps {
                 container('node') {
@@ -61,7 +61,7 @@ pipeline {
         }
         stage('Package') {
             environment {
-                npm_config_cache = "${env.WORKSPACE}"
+                npm_config_cache = "$env.WORKSPACE"
             }
             steps {
                 container('node') {
@@ -97,7 +97,7 @@ pipeline {
                             }
                         }
                     } else {
-                        echo "Deployment skipped for branch: ${branchName}"
+                        echo "Deployment skipped for branch: $branchName"
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
