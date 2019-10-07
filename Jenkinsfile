@@ -69,7 +69,7 @@ pipeline {
                     sh '''
                         #npx vsce package
                         wget https://github.com/tomascechatbroadcomcom/che-devfile/releases/download/ZE_0.8.0/broadcomMFD.zosexplorer-0.8.0.vsix
-                        mv zosexplorer*.vsix zosexplorer_latest.vsix
+                        mv *zosexplorer*.vsix zosexplorer_latest.vsix
                     '''
                 }
             }
