@@ -47,31 +47,31 @@ pipeline {
        workspace = "${env.WORKSPACE}"
     }
     stages {
-        stage('Install & Test') {
-            environment {
-                npm_config_cache = "${env.WORKSPACE}"
-            }
-            steps {
-                container('node') {
-                    sh "npm ci"
-                    sh "npm test"
-                }
-            }
-        }
-        stage('Package') {
-            environment {
-                npm_config_cache = "${env.WORKSPACE}"
-            }
-            steps {
-                container('node') {
-                    sh "npm run webpack-production"
-                    sh '''
-                        npx vsce package
-                        mv zosexplorer*.vsix zosexplorer_latest.vsix
-                    '''
-                }
-            }
-        }
+        // stage('Install & Test') {
+        //     environment {
+        //         npm_config_cache = "${env.WORKSPACE}"
+        //     }
+        //     steps {
+        //         container('node') {
+        //             sh "npm ci"
+        //             sh "npm test"
+        //         }
+        //     }
+        // }
+        // stage('Package') {
+        //     environment {
+        //         npm_config_cache = "${env.WORKSPACE}"
+        //     }
+        //     steps {
+        //         container('node') {
+        //             sh "npm run webpack-production"
+        //             sh '''
+        //                 npx vsce package
+        //                 mv zosexplorer*.vsix zosexplorer_latest.vsix
+        //             '''
+        //         }
+        //     }
+        // }
         stage('Deploy') {
             steps {
                 script {
@@ -91,8 +91,7 @@ pipeline {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
                                 ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
+                                
                                 '''
                             }
                         }
