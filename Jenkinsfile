@@ -76,9 +76,10 @@ pipeline {
         }
         stage('Deploy') {
             environment {
-                url = "download.eclipse.org/che4z/snapshots/${projectName}"
                 sshChe4z = "genie.che4z@projects-storage.eclipse.org"
                 webroot = "/home/data/httpd"
+                url = "download.eclipse.org/che4z/snapshots/${projectName}"
+                deployPath = webroot + '/' + url + '/' + branchName
             }
             steps {
                 script {
@@ -99,8 +100,9 @@ pipeline {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
-                                ssh $sshChe4z rm -rf $webroot/$url/$branchName
-                                
+                                ssh $sshChe4z rm -rf $deployPath
+                                #ssh $sshChe4z mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
+                                #scp -r $workspace/*.vsix $sshChe4z:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
                                 '''
                                 echo "Deployed to https://$url/$branchName"
                             }
