@@ -36,8 +36,8 @@ pipeline {
         }
     }    
     options {
-        disableConcurrentBuilds()
         timestamps()
+        // disableConcurrentBuilds()
         timeout(time: 3, unit: 'HOURS')
         // skipDefaultCheckout(false)
         skipDefaultCheckout(true)
@@ -74,9 +74,11 @@ pipeline {
             }
         }
         stage('Deploy') {
+            environment {
+                path = 'download.eclipse.org/che4z/snapshots/' + projectName
+            }
             steps {
                 script {
-                    path = 'download.eclipse.org/che4z/snapshots/' + projectName
                     echo path
                     if (branchName == 'master' || branchName == 'development') {
                         container('jnlp') {
