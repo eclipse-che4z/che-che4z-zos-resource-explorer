@@ -44,7 +44,7 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
     }
     environment {
-       branchName = "${env.BRANCH_NAME}"
+       branchName = "$env.BRANCH_NAME"
        workspace = "${env.WORKSPACE}"
     }
     stages {
