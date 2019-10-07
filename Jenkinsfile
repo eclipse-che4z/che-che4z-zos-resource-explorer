@@ -75,6 +75,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
+                    path = 'download.eclipse.org/che4z/snapshots/' + projectName
                     if (branchName == 'master' || branchName == 'development') {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
@@ -88,6 +89,15 @@ pipeline {
                         }
                     } else {
                         echo "Deployment skipped for branch: ${branchName}"
+                        container('jnlp') {
+                            sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
+                                sh '''
+                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/$path/$branchName
+                                
+                                '''
+                                echo "Deployed to https://$path/$branchName"
+                            }
+                        }
                     }
                 }
             }
