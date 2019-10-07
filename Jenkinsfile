@@ -106,11 +106,9 @@ pipeline {
                                  echo $projectName
                                  echo ${projectName}
                                 '''
-                                // sh '''
-                                // ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/$projectName/$branchName
-                                // ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/$projectName/$branchName
-                                // scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/$projectName/$branchName
-                                // '''
+                                sh '''
+                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
+                                
                                 echo "Deployed to https://download.eclipse.org/che4z/snapshots/$projectName/$branchName"
                             }
                         }
