@@ -108,7 +108,7 @@ pipeline {
                                 '''
                                 sh '''
                                 ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/$branchName
-                                
+                                '''
                                 echo "Deployed to https://download.eclipse.org/che4z/snapshots/$projectName/$branchName"
                             }
                         }
