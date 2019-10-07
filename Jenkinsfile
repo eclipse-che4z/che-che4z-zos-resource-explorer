@@ -75,7 +75,7 @@ pipeline {
         }
         stage('Deploy') {
             environment {
-                path = 'download.eclipse.org/che4z/snapshots/' + projectName
+                path = 'download.eclipse.org/che4z/snapshots/' + ${projectName}
             }
             steps {
                 script {
