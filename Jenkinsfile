@@ -10,11 +10,11 @@ spec:
     tty: true
     resources:
       limits:
-        memory: "4Gi"
-        cpu: "2"
+        memory: "2Gi"
+        cpu: "1"
       requests:
-        memory: "4Gi"
-        cpu: "2"
+        memory: "2Gi"
+        cpu: "1"
   - name: jnlp
     volumeMounts:
     - name: volume-known-hosts
@@ -25,7 +25,8 @@ spec:
       name: known-hosts
 """
 
-def kubeLabel = 'explorer-for-zos-pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+def projectName = 'zos-resource-explorer'
+def kubeLabel = projectName + '_pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
 
 pipeline {
     agent {
