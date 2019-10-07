@@ -35,11 +35,10 @@ pipeline {
         }
     }    
     options {
-        // disableConcurrentBuilds()
+        disableConcurrentBuilds()
         timestamps()
         timeout(time: 3, unit: 'HOURS')
         skipDefaultCheckout(false)
-        // skipDefaultCheckout(true)
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
     }
     environment {
@@ -88,14 +87,6 @@ pipeline {
                         }
                     } else {
                         echo "Deployment skipped for branch: ${branchName}"
-                        container('jnlp') {
-                            sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                                sh '''
-                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                
-                                '''
-                            }
-                        }
                     }
                 }
             }
