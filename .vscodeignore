@@ -27,3 +27,4 @@ _cacache
 _locks
 anonymous-cli-metrics.json
 _npx
+Jenkinsfile
