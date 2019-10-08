@@ -38,7 +38,7 @@ pipeline {
     options {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
-        skipDefaultCheckout(false)
+        // skipDefaultCheckout(false)
         // skipDefaultCheckout(true)
         // disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
@@ -54,8 +54,8 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm ci"
-                    sh "npm test"
+                    // sh "npm ci"
+                    // sh "npm test"
                 }
             }
         }
@@ -65,9 +65,9 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm run webpack-production"
-                    sh "npx vsce package"
-                    sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
+                    // sh "npm run webpack-production"
+                    // sh "npx vsce package"
+                    // sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
                 }
             }
         }
@@ -80,7 +80,6 @@ pipeline {
             }
             steps {
                 script {
-                    echo deployPath
                     if (branchName == 'master' || branchName == 'development') {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
@@ -98,8 +97,8 @@ pipeline {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
                                 ssh $sshChe4z rm -rf $deployPath
-                                ssh $sshChe4z mkdir -p $deployPath
-                                scp -r $workspace/*.vsix $sshChe4z:$deployPath
+                                // ssh $sshChe4z mkdir -p $deployPath
+                                // scp -r $workspace/*.vsix $sshChe4z:$deployPath
                                 '''
                                 echo "Deployed to https://$url"
                             }
