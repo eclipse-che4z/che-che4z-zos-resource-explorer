@@ -36,20 +36,20 @@ pipeline {
         }
     }    
     options {
-        disableConcurrentBuilds()
         timestamps()
         timeout(time: 3, unit: 'HOURS')
         skipDefaultCheckout(false)
+        disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
     }
     environment {
-       branchName = "${env.BRANCH_NAME}"
-       workspace = "${env.WORKSPACE}"
+       branchName = "$env.BRANCH_NAME"
+       workspace = "$env.WORKSPACE"
     }
     stages {
         stage('Install & Test') {
             environment {
-                npm_config_cache = "${env.WORKSPACE}"
+                npm_config_cache = "$env.WORKSPACE"
             }
             steps {
                 container('node') {
@@ -60,34 +60,38 @@ pipeline {
         }
         stage('Package') {
             environment {
-                npm_config_cache = "${env.WORKSPACE}"
+                npm_config_cache = "$env.WORKSPACE"
             }
             steps {
                 container('node') {
                     sh "npm run webpack-production"
-                    sh '''
-                        npx vsce package
-                        mv zosexplorer*.vsix zosexplorer_latest.vsix
-                    '''
+                    sh "npx vsce package"
+                    sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
                 }
             }
         }
         stage('Deploy') {
+            environment {
+                sshChe4z = "genie.che4z@projects-storage.eclipse.org"
+                project = "download.eclipse.org/che4z/snapshots/$projectName"
+                url = "$project/$branchName"
+                deployPath = "/home/data/httpd/$url"
+            }
             steps {
                 script {
                     if (branchName == 'master' || branchName == 'development') {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
-                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
+                                ssh $sshChe4z rm -rf $deployPath
+                                ssh $sshChe4z mkdir -p $deployPath
+                                scp -r $workspace/*.vsix $sshChe4z:$deployPath
                                 '''
-                                echo "Deployed to https://download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName"
+                                echo "Deployed to https://$url"
                             }
                         }
                     } else {
-                        echo "Deployment skipped for branch: ${branchName}"
+                        echo "Deployment skipped for branch: $branchName"
                     }
                 }
             }
