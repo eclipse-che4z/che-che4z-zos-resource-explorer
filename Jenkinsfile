@@ -38,9 +38,8 @@ pipeline {
     options {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
-        // skipDefaultCheckout(false)
-        // skipDefaultCheckout(true)
-        // disableConcurrentBuilds()
+        skipDefaultCheckout(false)
+        disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
     }
     environment {
@@ -54,8 +53,8 @@ pipeline {
             }
             steps {
                 container('node') {
-                    // sh "npm ci"
-                    // sh "npm test"
+                    sh "npm ci"
+                    sh "npm test"
                 }
             }
         }
@@ -65,9 +64,9 @@ pipeline {
             }
             steps {
                 container('node') {
-                    // sh "npm run webpack-production"
-                    // sh "npx vsce package"
-                    // sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
+                    sh "npm run webpack-production"
+                    sh "npx vsce package"
+                    sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
                 }
             }
         }
@@ -84,25 +83,15 @@ pipeline {
                         container('jnlp') {
                             sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                                 sh '''
-                                ssh genie.che4z@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                ssh genie.che4z@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                scp -r $workspace/*.vsix genie.che4z@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName
-                                '''
-                                echo "Deployed to https://download.eclipse.org/che4z/snapshots/zos-resource-explorer/$branchName"
-                            }
-                        }
-                    } else {
-                        echo "Deployment skipped for branch: $branchName"
-                        container('jnlp') {
-                            sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                                sh '''
                                 ssh $sshChe4z rm -rf $deployPath
-                                // ssh $sshChe4z mkdir -p $deployPath
-                                // scp -r $workspace/*.vsix $sshChe4z:$deployPath
+                                ssh $sshChe4z mkdir -p $deployPath
+                                scp -r $workspace/*.vsix $sshChe4z:$deployPath
                                 '''
                                 echo "Deployed to https://$url"
                             }
                         }
+                    } else {
+                        echo "Deployment skipped for branch: $branchName"
                     }
                 }
             }
