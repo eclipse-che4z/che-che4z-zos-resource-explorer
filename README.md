@@ -1,6 +1,6 @@
 <div id="header" align="center">
 
-[![Build Status](https://ci.eclipse.org/buildStatus/icon?job=development)](https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/development)
+[![Build Status](https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/development)](https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/development)
 
 </div>
 
