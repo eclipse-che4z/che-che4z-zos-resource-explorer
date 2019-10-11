@@ -1,6 +1,7 @@
 <div id="header" align="center">
 
-[![Build Status](https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/development)](https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/development)
+[![Build Status](https://ci.eclipse.org/codewind/buildStatus/icon?job=Codewind%2Fcodewind%2Fmaster)](https://ci.eclipse.org/codewind/job/Codewind/job/codewind/job/master/)
+[![Build Status](https://ci.eclipse.org/che4z/buildStatus/icon?job=che-che4z-explorer-for-zos%2Fdevelopment)](https://ci.eclipse.org/che4z/job/che-che4z-explorer-for-zos/job/development/)
 
 </div>
 
