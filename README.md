@@ -1,6 +1,7 @@
 <div id="header" align="center">
 
 [![Build Status](https://ci.eclipse.org/che4z/buildStatus/icon?job=che-che4z-explorer-for-zos%2Fdevelopment)](https://ci.eclipse.org/che4z/job/che-che4z-explorer-for-zos/job/development/)
+[![slack](https://img.shields.io/badge/chat-on%20Slack-blue)](https://join.slack.com/t/che4z/shared_invite/enQtNzk0MzA4NDMzOTIwLWIzMjEwMjJlOGMxNmMyNzQ1NWZlMzkxNmQ3M2VkYWNjMmE0MGQ0MjIyZmY3MTdhZThkZDg3NGNhY2FmZTEwNzQ)
 
 </div>
 
