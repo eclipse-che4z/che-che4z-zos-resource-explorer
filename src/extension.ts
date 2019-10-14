@@ -37,6 +37,7 @@ import { DatasetDataProvider } from "./ui/tree/DatasetDataProvider";
 import { ZNode } from "./ui/tree/DatasetTreeModel";
 
 export function activate(context: vscode.ExtensionContext) {
+    
     const rest: ZoweRestClient = new ZoweRestClient(new DefaultCredentialsService());
     const datasetService: DatasetService = new DatasetService(rest);
     const cache: DatasetCache = new DatasetCache();
