@@ -73,7 +73,7 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 container('node') {
-                    archiveArtifacts 'artifacts/coverage/**'
+                    archiveArtifacts '*.vsix'
                 }
             }
         }
