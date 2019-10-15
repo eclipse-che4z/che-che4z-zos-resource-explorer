@@ -69,6 +69,7 @@ pipeline {
                     // sh "npm run webpack-production"
                     // sh "npx vsce package"
                     sh "wget http://download.eclipse.org/che4z/snapshots/zos-resource-explorer/development/zosexplorer_latest.vsix -O zosexplorer-0.8.0.vsix"
+                    sh "mkdir archive"
                     sh "cp *zosexplorer*.vsix archive/"
                     sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
                 }
