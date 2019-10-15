@@ -39,15 +39,15 @@ pipeline {
     options {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
-        skipDefaultCheckout(true)
-        // skipDefaultCheckout(false)
+        // skipDefaultCheckout(true)
+        skipDefaultCheckout(false)
         // disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '3'))
     }
     environment {
        branchName = "$env.BRANCH_NAME"
        workspace = "$env.WORKSPACE"
-       artifactsDir = "artifactsDir"
+       artifactsDir = "artifacts"
     }
     stages {
         stage('Install & Test') {
@@ -56,8 +56,8 @@ pipeline {
             }
             steps {
                 container('node') {
-                    // sh "npm ci"
-                    // sh "npm test"
+                    sh "npm ci"
+                    sh "npm test"
                 }
             }
         }
@@ -67,12 +67,10 @@ pipeline {
             }
             steps {
                 container('node') {
-                    // sh "npm run webpack-production"
-                    // sh "npx vsce package"
-                    sh "wget http://download.eclipse.org/che4z/snapshots/zos-resource-explorer/development/zosexplorer_latest.vsix -O zosexplorer-0.8.0.vsix"
-                    sh "ls"
+                    sh "npm run webpack-production"
+                    sh "npx vsce package"
+                    // sh "wget http://download.eclipse.org/che4z/snapshots/zos-resource-explorer/development/zosexplorer_latest.vsix -O zosexplorer-0.8.0.vsix"
                     sh "mkdir $artifactsDir"
-                    sh "pwd"
                     sh "cp *zosexplorer*.vsix $artifactsDir/"
                     sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
                 }
