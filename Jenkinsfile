@@ -67,6 +67,7 @@ pipeline {
                 container('node') {
                     sh "npm run webpack-production"
                     sh "npx vsce package"
+                    sh "mv *zosexplorer*.vsix archive/"
                     sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
                     // sh "wget https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/release-0.8.3/lastSuccessfulBuild/artifact/clients/cobol-lsp-vscode-extension/cobol-language-support_latest.vsix"
                 }
@@ -75,7 +76,7 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 container('node') {
-                    archiveArtifacts '*.vsix'
+                    archiveArtifacts 'archive/*.vsix'
                 }
             }
         }
