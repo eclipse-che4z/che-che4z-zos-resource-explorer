@@ -38,8 +38,9 @@ pipeline {
     options {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
-        skipDefaultCheckout(false)
-        disableConcurrentBuilds()
+        skipDefaultCheckout(true)
+        // skipDefaultCheckout(false)
+        // disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
     }
     environment {
@@ -53,8 +54,8 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm ci"
-                    sh "npm test"
+                    // sh "npm ci"
+                    // sh "npm test"
                 }
             }
         }
@@ -64,9 +65,10 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm run webpack-production"
-                    sh "npx vsce package"
-                    sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
+                    // sh "npm run webpack-production"
+                    // sh "npx vsce package"
+                    // sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
+                    sh "wget https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/release-0.8.3/lastSuccessfulBuild/artifact/clients/cobol-lsp-vscode-extension/cobol-language-support_latest.vsix"
                 }
             }
         }
