@@ -42,7 +42,7 @@ pipeline {
         skipDefaultCheckout(true)
         // skipDefaultCheckout(false)
         // disableConcurrentBuilds()
-        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '10'))
+        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '3'))
     }
     environment {
        branchName = "$env.BRANCH_NAME"
@@ -63,6 +63,7 @@ pipeline {
         stage('Package') {
             environment {
                 npm_config_cache = "$env.WORKSPACE"
+                artifacts = 'artifacts'
             }
             steps {
                 container('node') {
@@ -70,9 +71,9 @@ pipeline {
                     // sh "npx vsce package"
                     sh "wget http://download.eclipse.org/che4z/snapshots/zos-resource-explorer/development/zosexplorer_latest.vsix -O zosexplorer-0.8.0.vsix"
                     sh "ls"
-                    sh "mkdir archive"
+                    sh "mkdir $artifacts"
                     sh "pwd"
-                    sh "cp *zosexplorer*.vsix archive/"
+                    sh "cp *zosexplorer*.vsix $artifacts/"
                     sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
                 }
             }
@@ -80,7 +81,7 @@ pipeline {
         stage('Archive Artifacts') {
             steps {
                 container('node') {
-                    archiveArtifacts 'archive/*.vsix'
+                    archiveArtifacts "$artifacts/*.vsix"
                 }
             }
         }
