@@ -70,6 +70,13 @@ pipeline {
                 }
             }
         }
+        stage('Archive Artifacts') {
+            steps {
+                container('node') {
+                    archiveArtifacts 'artifacts/coverage/**'
+                }
+            }
+        }
         stage('Deploy') {
             environment {
                 sshChe4z = "genie.che4z@projects-storage.eclipse.org"
