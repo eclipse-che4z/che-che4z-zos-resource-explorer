@@ -26,7 +26,8 @@ spec:
 """
 
 def projectName = 'zos-resource-explorer'
-def kubeLabel = projectName + '_pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+def kubeLabel = projectName + '_pod_'  + env.BUILD_NUMBER + '_' + env.BRANCH_NAME
+kubeLabel = kubeLabel.replaceAll(/[^a-zA-Z0-9._-]+/,"")
 
 pipeline {
     agent {
@@ -40,11 +41,12 @@ pipeline {
         timeout(time: 3, unit: 'HOURS')
         skipDefaultCheckout(false)
         disableConcurrentBuilds()
-        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
+        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '3'))
     }
     environment {
        branchName = "$env.BRANCH_NAME"
        workspace = "$env.WORKSPACE"
+       artifactsDir = "artifacts"
     }
     stages {
         stage('Install & Test') {
@@ -60,13 +62,22 @@ pipeline {
         }
         stage('Package') {
             environment {
-                npm_config_cache = "$env.WORKSPACE"
+                npm_config_cache = "$env.WORKSPACE"                
             }
             steps {
                 container('node') {
                     sh "npm run webpack-production"
                     sh "npx vsce package"
+                    sh "mkdir $artifactsDir"
+                    sh "cp *zosexplorer*.vsix $artifactsDir/"
                     sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
+                }
+            }
+        }
+        stage('Archive Artifacts') {
+            steps {
+                container('node') {
+                    archiveArtifacts "$artifactsDir/*.vsix"
                 }
             }
         }
