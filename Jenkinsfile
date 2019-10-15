@@ -46,7 +46,6 @@ pipeline {
     environment {
        branchName = "$env.BRANCH_NAME"
        workspace = "$env.WORKSPACE"
-       artifactsDir = "artifacts"
     }
     stages {
         stage('Install & Test') {
@@ -68,16 +67,8 @@ pipeline {
                 container('node') {
                     sh "npm run webpack-production"
                     sh "npx vsce package"
-                    sh "mkdir $artifactsDir"
-                    sh "cp *zosexplorer*.vsix $artifactsDir/"
+                    archiveArtifacts "*.vsix"                    
                     sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
-                }
-            }
-        }
-        stage('Archive Artifacts') {
-            steps {
-                container('node') {
-                    archiveArtifacts "$artifactsDir/*.vsix"
                 }
             }
         }
