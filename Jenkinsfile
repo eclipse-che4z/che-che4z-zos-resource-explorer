@@ -26,7 +26,8 @@ spec:
 """
 
 def projectName = 'zos-resource-explorer'
-def kubeLabel = projectName + '_pod_' + env.BRANCH_NAME + '_' + env.BUILD_NUMBER
+def kubeLabel = projectName + '_pod_'  + env.BUILD_NUMBER + '_' + env.BRANCH_NAME
+kubeLabel = kubeLabel.replaceAll(/[^a-zA-Z0-9._-]+/,"")
 
 pipeline {
     agent {
@@ -38,10 +39,10 @@ pipeline {
     options {
         timestamps()
         timeout(time: 3, unit: 'HOURS')
-        // skipDefaultCheckout(true)
-        skipDefaultCheckout(false)
+        skipDefaultCheckout(true)
+        // skipDefaultCheckout(false)
         // disableConcurrentBuilds()
-        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '30'))
+        buildDiscarder(logRotator(numToKeepStr: '30', artifactNumToKeepStr: '10'))
     }
     environment {
        branchName = "$env.BRANCH_NAME"
@@ -54,8 +55,8 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm ci"
-                    sh "npm test"
+                    // sh "npm ci"
+                    // sh "npm test"
                 }
             }
         }
@@ -65,11 +66,11 @@ pipeline {
             }
             steps {
                 container('node') {
-                    sh "npm run webpack-production"
-                    sh "npx vsce package"
-                    sh "mv *zosexplorer*.vsix archive/"
+                    // sh "npm run webpack-production"
+                    // sh "npx vsce package"
+                    sh "wget http://download.eclipse.org/che4z/snapshots/zos-resource-explorer/development/zosexplorer_latest.vsix -O zosexplorer-0.8.0.vsix"
+                    sh "cp *zosexplorer*.vsix archive/"
                     sh "mv *zosexplorer*.vsix zosexplorer_latest.vsix"
-                    // sh "wget https://ci.eclipse.org/che4z/job/LSP%20for%20COBOL/job/release-0.8.3/lastSuccessfulBuild/artifact/clients/cobol-lsp-vscode-extension/cobol-language-support_latest.vsix"
                 }
             }
         }
