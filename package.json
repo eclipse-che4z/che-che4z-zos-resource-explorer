@@ -271,7 +271,7 @@
         "typescript": "^3.5.3",
         "vscode": "^1.1.33",
         "webpack": "^4.39.2",
-        "webpack-cli": "^3.3.7"
+        "webpack-cli": "^3.3.12"
     },
     "dependencies": {
         "request": "^2.88.0"
