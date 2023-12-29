@@ -245,7 +245,7 @@
             "zos-container": [
                 {
                     "id": "zosexplorer",
-                    "name": "z/OS Resource Explorer"
+                    "name": ""
                 }
             ]
         }
